@@ -10,6 +10,7 @@ import com.shareanycar.dao.CustomerDao;
 import com.shareanycar.dao.OwnerDao;
 import com.shareanycar.model.Customer;
 import com.shareanycar.model.Owner;
+import com.shareanycar.util.MiscUtils;
 
 public class AuthService {
 	
@@ -19,11 +20,8 @@ public class AuthService {
 	@Inject
 	public CustomerDao customerDao;
 	
-	private String generateToken(){
-		Random random = new SecureRandom();
-		String token = new BigInteger(130, random).toString(32);
-		return token;
-	}
+	@Inject
+	public MiscUtils miscUtils;
 	
 	public Owner authenticateOwner(String token){
 		Owner owner = ownerDao.findOwnerByToken(token);
@@ -42,7 +40,7 @@ public class AuthService {
 		
 		if(owner.getEmail().equals(email) && owner.getPassword().equals(password)){
 			if(owner.getToken() == null){
-				owner.setToken(generateToken());
+				owner.setToken(miscUtils.randonString());
 				ownerDao.save(owner);
 			}
 			
@@ -59,7 +57,7 @@ public class AuthService {
 		
 		if(customer.getEmail().equals(email) && customer.getPassword().equals(password)){
 			if(customer.getToken() == null){
-				customer.setToken(generateToken());
+				customer.setToken(miscUtils.randonString());
 				customerDao.save(customer);
 			}
 			return customer;

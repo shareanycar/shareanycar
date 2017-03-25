@@ -2,6 +2,7 @@ package com.shareanycar.dao;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
 import org.hibernate.Session;
@@ -17,37 +18,25 @@ public class LocationDao extends BasicDao<Location> {
 		super("Location");
 	}
 
-	public Location findByCountryAndCity(String country, String city){
-		Session session = SessionUtil.getSession();
-		Query<Location> query = session.createQuery("from Location where country = :country and city = :city");
-		query.setParameter("country", country);
-		query.setParameter("city", city);
-		Location location;
-		try{
-			location = (Location) query.getSingleResult();
-		}catch(NoResultException e){
-			location = null;
+	@Inject
+	public ExtDao<?> extDao;
+
+	public Location findByCountryAndCity(String country, String city) {
+		try {
+			return (Location) extDao.findOneByParams("from Location where country = :country and city = :city",
+					new String[] { "country", "city" }, new Object[] { country, city });
+		} catch (Exception e) {
+			return null;
 		}
-		session.close();
-		return location;
 	}
 
 	public List<Location> findByCountry(String country) {
-		Session session = SessionUtil.getSession();
-		Query<Location> query = session.createQuery("from Location where country = :country");
-		query.setParameter("country", country);
-		List<Location> locations = (List<Location>) query.getResultList();
-		session.close();
-		return locations;
+		return (List<Location>) extDao.findListByParam("from Location where country = :country", "country", country);
 	}
 
-	public List<Location> findByCity(String city) {
-		Session session = SessionUtil.getSession();
-		Query<Location> query = session.createQuery("from Location where city = :city");
-		query.setParameter("city", city);
-		List<Location> locations = (List<Location>) query.getResultList();
-		session.close();
-		return locations;
+	public List<Location> findByCity(String city){
+		return (List<Location>) extDao.findListByParam("from Location where city = :city", "city", city);
+
 	}
 
 }

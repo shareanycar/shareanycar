@@ -13,11 +13,13 @@ import com.shareanycar.dao.BookingDao;
 import com.shareanycar.dao.BrandDao;
 import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.CustomerDao;
+import com.shareanycar.dao.ExtDao;
 import com.shareanycar.dao.ImageDao;
 import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.MessageDao;
 import com.shareanycar.dao.ModelDao;
 import com.shareanycar.dao.OwnerDao;
+import com.shareanycar.model.Owner;
 import com.shareanycar.service.AuthService;
 import com.shareanycar.service.BookingService;
 import com.shareanycar.service.BrandService;
@@ -28,6 +30,7 @@ import com.shareanycar.service.MessageService;
 import com.shareanycar.service.ModelService;
 import com.shareanycar.service.OwnerService;
 import com.shareanycar.util.ContextUtil;
+import com.shareanycar.util.MiscUtils;
 
 public class CustomBinder extends AbstractBinder{
 
@@ -43,6 +46,8 @@ public class CustomBinder extends AbstractBinder{
 		bind(ModelDao.class).to(ModelDao.class).in(Singleton.class);
 		bind(MessageDao.class).to(MessageDao.class).in(Singleton.class);
 		bind(ImageDao.class).to(ImageDao.class).in(Singleton.class);
+		bind(ExtDao.class).to(ExtDao.class).in(Singleton.class);
+
 		
 		bind(OwnerService.class).to(OwnerService.class).in(Singleton.class);		
 		bind(CustomerService.class).to(CustomerService.class).in(Singleton.class);
@@ -55,6 +60,8 @@ public class CustomBinder extends AbstractBinder{
 		bind(ModelService.class).to(ModelService.class).in(Singleton.class);
 		bind(ContextUtil.class).to(ContextUtil.class).in(Singleton.class);
 		bind(AppConfig.class).to(AppConfig.class).in(Singleton.class);
+		bind(MiscUtils.class).to(MiscUtils.class).in(Singleton.class);
+
 		
 		bind(LoggerFactory.getLogger(SimpleLogger.class)).to(Logger.class);
 		//bind(SimpleLogger.class).to(Logger.class).in(Singleton.class);
