@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+     <!-- Database connection settings -->
+        <property name="connection.driver_class">org.hsqldb.jdbcDriver</property>
+        <property name="connection.url">jdbc:hsqldb:mem:testdb</property>
+        <property name="connection.username">sa</property>
+        <property name="connection.password"></property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">10</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property> 
+
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hbm2ddl.auto">create</property>
+
+  		<mapping class="com.shareanycar.model.Brand"/>
+		<mapping class="com.shareanycar.model.Model"/>
+  		<mapping class="com.shareanycar.model.Owner"/>
+  		<mapping class="com.shareanycar.model.Customer"/>
+  		<mapping class="com.shareanycar.model.Car"/>
+  		<mapping class="com.shareanycar.model.Location"/>
+  		<mapping class="com.shareanycar.model.Booking"/>
+  		<mapping class="com.shareanycar.model.Conversation"/>
+  		<mapping class="com.shareanycar.model.Message"/> 		
+  		<mapping class="com.shareanycar.model.Comment"/>
+  		<mapping class="com.shareanycar.model.Image"/>
+  		
+  		
+  </session-factory>
+</hibernate-configuration>
