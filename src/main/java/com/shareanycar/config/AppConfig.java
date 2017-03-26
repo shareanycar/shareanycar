@@ -4,8 +4,8 @@ import org.jvnet.hk2.annotations.Service;
 
 @Service
 public class AppConfig {
-	private String imageLocation = "/Users/slava/Documents/workspace/upload/";
-	private String urlPrefix = "http://localhost:8080/imgs/";
+	private String imageLocation = "/Users/slava/Documents/workspace/shareanycar-ui/src/assets/upload/";
+	private String urlPrefix = "http://localhost:4200/assets/upload/";
 	
 	public String getImageLocation(){
 		return imageLocation;
