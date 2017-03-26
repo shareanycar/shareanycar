@@ -33,15 +33,15 @@ public class OwnerService {
 	@Inject
 	public ImageDao imageDao ;
 
-	public Owner create(String firstName, String lastName, String country, String city, String phone, String email,
-			String password) {
+	public Long create(String firstName, String lastName, String country, String city, String phone, String email,
+			String password) throws Exception {
 
 		
 		
 		Owner owner = ownerDao.findOwnerByEmail(email);
 
 		if (owner != null) {
-			throw new IllegalArgumentException("user with such email already exists");
+			throw new Exception("user with such email already exists");
 		}
 
 		Location location = locationService.prepare(country, city);
@@ -56,13 +56,13 @@ public class OwnerService {
 		owner.setLocation(location);
 		owner = ownerDao.save(owner);
 
-		return owner;
+		return owner.getId();
 	}
 
-	public Owner update(Long ownerId, String firstName, String lastName, String country, String city, String phone){
+	public void update(Long ownerId, String firstName, String lastName, String country, String city, String phone) throws Exception{
 		Owner owner = ownerDao.findOne(ownerId);
 		if(owner == null){
-			throw new IllegalArgumentException("can not find owner with id:" + ownerId);
+			throw new Exception("can not find owner with id:" + ownerId);
 		}
 		
 		Location loc;
@@ -78,70 +78,27 @@ public class OwnerService {
 		owner.setPhone(phone);
 		
 		ownerDao.save(owner);
-		return owner;
+		
 	}
 	
-	public Owner updatePassword(Long ownerId, String oldPassword, String newPassword){
+	public void updatePassword(Long ownerId, String oldPassword, String newPassword) throws Exception{
 		Owner owner = ownerDao.findOne(ownerId);
 		if(owner == null){
-			throw new IllegalArgumentException("can not find owner with id:" + ownerId);
+			throw new Exception("can not find owner with id:" + ownerId);
 		}
 		
 		if(!owner.getPassword().equals(oldPassword)){
-			throw new IllegalArgumentException("wrong password");
+			throw new Exception("wrong password");
 		}
 		
 		owner.setPassword(newPassword);
 		ownerDao.save(owner);
-		
-		return owner;
+			
 	}
 	
 	
 
-	public Image createCarImage(Long ownerId, Long carId, String url) {
-		Owner owner = ownerDao.findOne(ownerId);
-		Car car = carDao.findOne(carId);
-		
-		if(owner == null || car == null){
-			throw new IllegalArgumentException("can not find owner with id: " + ownerId + " or car with id: " + carId);
-		}
-		
-		for (Car c : owner.getCars()) {
-			if (c.getId() == car.getId()) {
-				Image image = new Image();
-				image.setCar(car);
-				image.setUrl(url);
-				image = imageDao.save(image);
-				return image;
-			}
-		}
-		return null;
-	}
 	
-	public boolean removeImage(Long ownerId, Long carId, Long imageId){
-		
-		Owner owner = ownerDao.findOne(ownerId);
-		Car car = carDao.findOne(carId);
-		Image image = imageDao.findOne(imageId);
-		
-		if(owner == null || car == null || image == null){
-			throw new IllegalArgumentException("can not find owner with id: " + ownerId + 
-					" or car with id: " + carId + " or image with id: " + imageId);
-		}
-		
-		for(Car c : owner.getCars()){
-			if(c.getId() == car.getId()){
-				for(Image i : c.getImages()){
-					if(i.getId() == image.getId()){
-						imageDao.delete(image);
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
 
 	public Car changeCarStatus(Long ownerId, Long carId, boolean newCarStatus) {
 		Owner owner = ownerDao.findOne(ownerId); 

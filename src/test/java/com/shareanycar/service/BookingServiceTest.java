@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -64,62 +65,84 @@ public class BookingServiceTest extends HK2Runner{
 
 	@Test
 	public void bookCarTest() {
-		Owner owner = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77",
-				"test@test.com", "letmein");
+		Long owid;
+		try {
+			owid = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77",
+					"test@test.com", "letmein");
+			Owner owner = ownerService.findOwnerById(owid);
 
-		Car car = carService.create(owner.getId(), "brand name", "model name", "BMW", "new car", 2016, null, null);
+			Long id = carService.create(owner.getId(), "brand name", "model name", "BMW", "new car", 2016, null, null);
+			Car car = carService.findCarById(id);
 
-		owner = ownerService.findOwnerByEmail("test@test.com");
-		Customer customer = customerService.createCustomer("FirstName", "LastName", "7(777)777-77-77", "test@test.com",
-				"letmein");
+			owner = ownerService.findOwnerByEmail("test@test.com");
+			Customer customer = customerService.createCustomer("FirstName", "LastName", "7(777)777-77-77", "test@test.com",
+					"letmein");
 
-		Booking booking = bookingService.bookCar(customer, car, new Date(), new Date());
+			Booking booking = bookingService.bookCar(customer, car, new Date(), new Date());
 
-		assertNotNull(booking);
+			assertNotNull(booking);
 
-		owner = ownerService.findOwnerByEmail("test@test.com");
-		assertEquals("1 booking for a car", 1, owner.getCars().iterator().next().getBookings().size());
-
+			owner = ownerService.findOwnerByEmail("test@test.com");
+			assertEquals("1 booking for a car", 1, owner.getCars().iterator().next().getBookings().size());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 	@Test
 	public void confirmBookingTest() {
-		Owner owner = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77",
-				"test@test.com", "letmein");
+		Long owid;
+		try {
+			owid = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77",
+					"test@test.com", "letmein");
+			Owner owner = ownerService.findOwnerById(owid);
 
-		Car car = carService.create(owner.getId(),"brand name", "model name", "BMW", "new car", 2016, null, null);
+			Long id = carService.create(owner.getId(),"brand name", "model name", "BMW", "new car", 2016, null, null);
+			Car car = carService.findCarById(id);
 
-		owner = ownerService.findOwnerByEmail("test@test.com");
-		Customer customer = customerService.createCustomer("FirstName", "LastName", "7(777)777-77-77", "test@test.com",
-				"letmein");
+			owner = ownerService.findOwnerByEmail("test@test.com");
+			Customer customer = customerService.createCustomer("FirstName", "LastName", "7(777)777-77-77", "test@test.com",
+					"letmein");
+			
+			Booking booking = bookingService.bookCar(customer, car, new Date(), new Date());
+			
+			assertFalse("not confirmed", booking.isConfirmed());
+			
+			owner = ownerService.findOwnerByEmail("test@test.com");
+			customer = customerService.findCustomerByEmail("test@test.com");
+			
+			booking = bookingService.confirmBooking(owner, customer, owner.getCars().iterator().next());
+			assertTrue("booking confirmed", booking.isConfirmed());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 		
-		Booking booking = bookingService.bookCar(customer, car, new Date(), new Date());
-		
-		assertFalse("not confirmed", booking.isConfirmed());
-		
-		owner = ownerService.findOwnerByEmail("test@test.com");
-		customer = customerService.findCustomerByEmail("test@test.com");
-		
-		booking = bookingService.confirmBooking(owner, customer, owner.getCars().iterator().next());
-		assertTrue("booking confirmed", booking.isConfirmed());
 	}
 	
 	@Test
 	public void disableBooking(){
-		Owner owner = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77",
-				"test@test.com", "letmein");
+		Long owid;
+		try {
+			owid = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77",
+					"test@test.com", "letmein");
+			Owner owner = ownerService.findOwnerById(owid);
+			
+			Long id = carService.create(owner.getId(),"brand name", "model name", "BMW", "new car", 2016, null, null);
+			Car car = carService.findCarById(id);
 
-		Car car = carService.create(owner.getId(),"brand name", "model name", "BMW", "new car", 2016, null, null);
-
-		owner = ownerService.findOwnerByEmail("test@test.com");
-		Customer customer = customerService.createCustomer("FirstName", "LastName", "7(777)777-77-77", "test@test.com",
-				"letmein");
+			owner = ownerService.findOwnerByEmail("test@test.com");
+			Customer customer = customerService.createCustomer("FirstName", "LastName", "7(777)777-77-77", "test@test.com",
+					"letmein");
+			
+			Booking booking = bookingService.bookCar(customer, car, new Date(), new Date());
+			assertTrue("booking is active", booking.isActive());
+			
+			booking = bookingService.disableBooking(customer, car);
+			assertFalse("booking is not active", booking.isActive());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 		
-		Booking booking = bookingService.bookCar(customer, car, new Date(), new Date());
-		assertTrue("booking is active", booking.isActive());
-		
-		booking = bookingService.disableBooking(customer, car);
-		assertFalse("booking is not active", booking.isActive());
 	}
 }
 

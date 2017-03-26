@@ -7,10 +7,12 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.shareanycar.dao.CarDao;
+import com.shareanycar.dao.ImageDao;
 import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.OwnerDao;
 import com.shareanycar.model.Brand;
 import com.shareanycar.model.Car;
+import com.shareanycar.model.Image;
 import com.shareanycar.model.Location;
 import com.shareanycar.model.Model;
 import com.shareanycar.model.Owner;
@@ -21,42 +23,44 @@ public class CarService {
 	public OwnerDao ownerDao;
 
 	@Inject
-	public CarDao carDao ;
-	
+	public CarDao carDao;
+
 	@Inject
 	public LocationService locationService;
-	
+
 	@Inject
 	public LocationDao locationDao;
-	
+
 	@Inject
 	public BrandService brandService;
-	
+
 	@Inject
 	public ModelService modelService;
 
-	public Car create(Long ownerId, String brandName, String modelName, String name, String description, Integer year, String country,
-			String city) {
-		
+	@Inject
+	public ImageDao imageDao;
+	
+	public Long create(Long ownerId, String brandName, String modelName, String name, String description, Integer year,
+			String country, String city) throws Exception {
+
 		Owner owner = ownerDao.findOne(ownerId);
-		
-		if(owner == null){
-			throw new IllegalArgumentException("can not find owner with id: "+ ownerId);
+
+		if (owner == null) {
+			throw new Exception("can not find owner with id: " + ownerId);
 		}
-		
+
 		Car car = new Car();
-		Location loc ;
-		
-		if(country == null || city == null){
+		Location loc;
+
+		if (country == null || city == null) {
 			loc = owner.getLocation();
-		}else{
+		} else {
 			loc = locationService.prepare(country, city);
 		}
-		
+
 		Brand brand = brandService.prepare(brandName);
 		Model model = modelService.prepare(modelName, brand);
-		
-		
+
 		car.setName(name);
 		car.setDescription(description);
 		car.setYear(year);
@@ -64,100 +68,111 @@ public class CarService {
 		car.setOwner(owner);
 		car.setBrand(brand);
 		car.setModel(model);
-		
-		
+
 		car = carDao.save(car);
-		
-		return car;
-	}
-	
-	public Car update(Long ownerId, Long id,String brandName, String modelName, String name, String description,Integer year, String country, String city) {
-		Owner owner = ownerDao.findOne(ownerId);
-		
-		Car car = carDao.findOne(id);
-		
-		if(owner == null || car == null){
-			throw new IllegalArgumentException("can not find owner with id: " + ownerId + " or car with id: " + id);
-		}
-		
-		for (Car c : owner.getCars()) {
-			if (c.getId() == car.getId()) {
-				Location loc;
-				if(country == null || city == null){
-					loc = c.getLocation();
-				}else{
-					loc = locationService.prepare(country, city);
-				}
-				
-				Brand brand = brandService.prepare(brandName);
-				Model model = modelService.prepare(modelName, brand);
-				
-				car.setName(name);
-				car.setDescription(description);
-				car.setLocation(loc);
-				car.setYear(year);
-				car.setBrand(brand);
-				car.setModel(model);
-				
-				car = carDao.save(car);
-				return car;
-			}
-		}
 
-		return null;
+		return car.getId();
 	}
-	
-	public boolean delete(Long ownerId, Long carId) {
-		Owner owner = ownerDao.findOne(ownerId); 
+
+	public void update(Long ownerId, Long carId, String brandName, String modelName, String name, String description,
+			Integer year, String country, String city) throws Exception {
+
 		Car car = carDao.findOne(carId);
-		
-		if(owner == null || car == null){
-			throw new IllegalArgumentException("can not find owner with id: " + ownerId + " or car with id: " + carId);
+
+		if (car.getOwner().getId() != ownerId) {
+			throw new Exception("car does not belong to current owner id:" + ownerId);
+		}
+
+		Location loc;
+		if (country == null || city == null) {
+			loc = car.getLocation();
+		} else {
+			loc = locationService.prepare(country, city);
+		}
+
+		Brand brand = brandService.prepare(brandName);
+		Model model = modelService.prepare(modelName, brand);
+
+		car.setName(name);
+		car.setDescription(description);
+		car.setLocation(loc);
+		car.setYear(year);
+		car.setBrand(brand);
+		car.setModel(model);
+
+		car = carDao.save(car);
+
+	}
+
+	public void delete(Long ownerId, Long carId) throws Exception {
+		Car car = carDao.findOne(carId);
+
+		if (car.getOwner().getId() != ownerId) {
+			throw new Exception("car does not belong to current owner id:" + ownerId);
+		}
+
+		carDao.delete(car);
+
+	}
+
+	public void updateMainImage(Long imageId, Long carId, Long ownerId) throws Exception {
+		Image image = imageDao.findOne(imageId);
+		if (image == null) {
+			throw new Exception("can not find image with id:" + imageId);
+		}
+
+		if(image.getCar().getOwner().getId() != ownerId){
+			throw new Exception("image does not belong to current owner id:" + imageId);
 		}
 		
-		for (Car c : owner.getCars()) {
-			if (c.getId() == car.getId()) {
-				carDao.delete(car);
-				return true;
-			}
+		Car car = carDao.findOne(carId);
+
+		if (car == null) {
+			throw new Exception("can not find car with id:" + carId);
 
 		}
-		return false;
+
+		if (car.getOwner().getId() != ownerId) {
+			throw new Exception("car does not belong to current owner id:" + ownerId);
+		}
+
+		car.setMainImageUrl(image.getUrl());
+
 	}
-	
-	public List<Car> findCarByOwnerId(Long ownerId){	
+
+	public List<Car> findCarByOwnerId(Long ownerId) {
 		return carDao.findCarByOwnerId(ownerId);
 	}
-	
-	public Car findCarById(Long id){
+
+	public Car findCarById(Long id) {
 		return carDao.findOne(id);
 	}
 
-	public Set<Car> findCarByCountryAndCity(String country, String city){
+	public Set<Car> findCarByCountryAndCity(String country, String city) {
 		country = country.trim().toUpperCase().replaceAll("\\s+", " ");
 		city = city.trim().toUpperCase().replaceAll("\\s+", " ");
 
 		Location loc = locationDao.findByCountryAndCity(country, city);
 		return loc.getCars();
 	}
-	
-	public Set<Car> findCarByCountry(String country){
+
+	public Set<Car> findCarByCountry(String country) {
 		country = country.trim().toUpperCase().replaceAll("\\s+", " ");
 		Set<Car> cars = new HashSet<>();
-		
+
 		List<Location> locs = locationDao.findByCountry(country);
-		for(Location l : locs){
+		for (Location l : locs) {
 			cars.addAll(l.getCars());
 		}
 		return cars;
 	}
-	
-	public Set<Car> findCarByCity(String city){
+
+	public Set<Car> findCarByCity(String city) {
 		city = city.trim().toUpperCase().replaceAll("\\s+", " ");
 		Set<Car> cars = new HashSet<>();
-		
+
 		List<Location> locs = locationDao.findByCity(city);
-		for(Location l : locs){
+		for (Location l : locs) {
 			cars.addAll(l.getCars());
 		}
 		return cars;
