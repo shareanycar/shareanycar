@@ -73,6 +73,18 @@ public class ImageService {
 	}
 	
 	public boolean deleteImage(Long id){
-		return true;
+		Image image = imageDao.findOne(id);
+		if(image == null){
+			return false;
+		}
+		
+		File f = new File(appConfig.getImageLocation() + image.getName());
+		if(f.delete()){
+			imageDao.delete(image);
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
 }

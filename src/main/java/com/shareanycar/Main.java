@@ -33,9 +33,7 @@ public class Main {
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
-
    
-    
     /**
      * Main method.
      * @param args
