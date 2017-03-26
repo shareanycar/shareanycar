@@ -13,6 +13,7 @@ public class CarDto {
 		private int year;
 		private String country;
 		private String city;
+		private String mainImageUrl;
 		
 		public CarDto(){}
 		
@@ -28,6 +29,28 @@ public class CarDto {
 			this.model = model;
 		}
 		
+
+		public CarDto(Long id, String name, String brand, String model, String description, int year, String country,
+				String city, String mainImageUrl) {
+			this.id = id;
+			this.name = name;
+			this.brand = brand;
+			this.model = model;
+			this.description = description;
+			this.year = year;
+			this.country = country;
+			this.city = city;
+			this.mainImageUrl = mainImageUrl;
+		}
+
+		public String getMainImageUrl() {
+			return mainImageUrl;
+		}
+
+		public void setMainImageUrl(String mainImageUrl) {
+			this.mainImageUrl = mainImageUrl;
+		}
+
 		public Long getId() {
 			return id;
 		}
@@ -65,8 +88,6 @@ public class CarDto {
 			this.city = city;
 		}
 
-		
-
 		public String getBrand() {
 			return brand;
 		}
@@ -92,6 +113,7 @@ public class CarDto {
 			result = prime * result + ((country == null) ? 0 : country.hashCode());
 			result = prime * result + ((description == null) ? 0 : description.hashCode());
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			result = prime * result + ((mainImageUrl == null) ? 0 : mainImageUrl.hashCode());
 			result = prime * result + ((model == null) ? 0 : model.hashCode());
 			result = prime * result + ((name == null) ? 0 : name.hashCode());
 			result = prime * result + year;
@@ -132,6 +154,11 @@ public class CarDto {
 					return false;
 			} else if (!id.equals(other.id))
 				return false;
+			if (mainImageUrl == null) {
+				if (other.mainImageUrl != null)
+					return false;
+			} else if (!mainImageUrl.equals(other.mainImageUrl))
+				return false;
 			if (model == null) {
 				if (other.model != null)
 					return false;
@@ -150,10 +177,9 @@ public class CarDto {
 		@Override
 		public String toString() {
 			return "CarDto [id=" + id + ", name=" + name + ", brand=" + brand + ", model=" + model + ", description="
-					+ description + ", year=" + year + ", country=" + country + ", city=" + city + "]";
+					+ description + ", year=" + year + ", country=" + country + ", city=" + city + ", mainImageUrl="
+					+ mainImageUrl + "]";
 		}
-
-		
 		
 				
 }

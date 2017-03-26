@@ -19,7 +19,7 @@ public class ImageDao extends BasicDao<Image>{
 	}
 	
 	public List<Image> findImageByCarId(Long id){
-		return (List<Image>) extDao.findListByParam("from Image where car_id = :id", "car_id", id);
+		return (List<Image>) extDao.findListByParam("from Image where car_id = :id", "id", id);
 	}
 
 }

@@ -74,6 +74,12 @@ public class ImageService {
 		image.setCar(car);
 
 		image = imageDao.save(image);
+		
+		if(car.getMainImageUrl() == null){
+			car.setMainImageUrl(appConfig.getUrlPrefix() + fileName);
+			carDao.save(car);
+		}
+		
 		return image;
 	}
 

@@ -42,7 +42,7 @@ public class ImageController {
 	
 	@GET
 	@Path("car/{id}")
-	@SecuredOwner
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response carImages(@PathParam("id") Long id){
 		try{
 			List<ImageDto> images = new LinkedList<>();

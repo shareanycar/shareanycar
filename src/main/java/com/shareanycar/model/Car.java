@@ -32,6 +32,8 @@ public class Car  {
 	
 	@NotNull
 	private boolean status;
+	
+	private String mainImageUrl;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "brand_id")
@@ -152,6 +154,14 @@ public class Car  {
 
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public String getMainImageUrl() {
+		return mainImageUrl;
+	}
+
+	public void setMainImageUrl(String mainImageUrl) {
+		this.mainImageUrl = mainImageUrl;
 	}
 
 		

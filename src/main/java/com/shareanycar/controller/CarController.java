@@ -146,7 +146,7 @@ public class CarController {
 			Set<CarDto> carDtos = new HashSet<>();
 			
 			for(Car car : owner.getCars()){
-				carDtos.add(new CarDto(car.getId(), car.getBrand().getName(), car.getModel().getName(), car.getName(), car.getDescription(), car.getYear(), car.getLocation().getCountry(), car.getLocation().getCity()));
+				carDtos.add(new CarDto(car.getId(), car.getBrand().getName(), car.getModel().getName(), car.getName(), car.getDescription(), car.getYear(), car.getLocation().getCountry(), car.getLocation().getCity(),car.getMainImageUrl()));
 			}
 						
 			return Response.ok(carDtos).build();
