@@ -36,65 +36,65 @@ public class ImageController {
 
 	@Inject
 	public ContextUtil contextUtil;
-	
+
 	@Inject
 	public Logger logger;
-	
+
 	@GET
 	@Path("car/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response carImages(@PathParam("id") Long id){
-		try{
+	public Response carImages(@PathParam("id") Long id) {
+		try {
 			List<ImageDto> images = new LinkedList<>();
-			
-			for(Image image : imageService.findImageByCarId(id)){
-				images.add(new ImageDto(image.getId(), image.getName(), image.getUrl()));
+
+			for (Image image : imageService.findImageByCarId(id)) {
+				images.add(new ImageDto(image.getId(), image.getCar().getId(), image.getName(), image.getUrl()));
 			}
 			return Response.ok(images).build();
-		}catch(Exception e){
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-	
+
 	@POST
 	@Path("car/{id}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredOwner
 	public Response uploadCarImage(@FormDataParam("file") InputStream is,
-			@FormDataParam("file") FormDataContentDisposition fileDetail, @PathParam("id") Long id, @Context SecurityContext securityContext) {
-		
-		try{
+			@FormDataParam("file") FormDataContentDisposition fileDetail, @PathParam("id") Long id,
+			@Context SecurityContext securityContext) {
+
+		try {
 			Owner owner = contextUtil.getCurrentOwner(securityContext);
-			imageService.uploadImage(id,owner.getId(), is);
+			imageService.uploadImage(id, owner.getId(), is);
 			return Response.ok().build();
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			logger.error("can not upload image for car with id:" + id + "; " + e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-	
-	
+
 	@DELETE
-	@Path("{id}")
+	@Path("/car/{carId}/image/{imageId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredOwner
-	public Response deleteCarImage(@PathParam("id") Long id, @Context SecurityContext securityContext){
-		try{
-			
+	public Response deleteCarImage(@PathParam("carId") Long carId, @PathParam("imageId") Long imageId,
+			@Context SecurityContext securityContext) {
+		try {
+
 			Owner owner = contextUtil.getCurrentOwner(securityContext);
-			
-			if(!imageService.deleteImage(id,owner.getId())){
+
+			if (!imageService.deleteImage(imageId, owner.getId())) {
 				throw new Exception("can not delete image");
 			}
-						return Response.ok().build();
-		}catch(Exception e){
-			logger.error("can not delete image for car with id:" + id +"; " + e.getMessage());
+			return Response.ok().build();
+		} catch (Exception e) {
+			logger.error("can not delete image for car with id:" + imageId + "; " + e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-	
-	
+
 }

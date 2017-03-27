@@ -1,11 +1,14 @@
 package com.shareanycar.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
 import org.jvnet.hk2.annotations.Service;
@@ -52,6 +55,31 @@ public class ImageService {
 		return fileName;
 	}
 
+	public void reduceImg(String imgsrc, String imgdist, String type, int widthdist, int heightdist) {
+		try {
+			File srcfile = new File(imgsrc);
+			if (!srcfile.exists()) {
+				return;
+			}
+
+			java.awt.Image src = javax.imageio.ImageIO.read(srcfile);
+
+			BufferedImage tag = new BufferedImage((int) widthdist, (int) heightdist, BufferedImage.TYPE_INT_RGB);
+
+			tag.getGraphics().drawImage(src.getScaledInstance(widthdist, heightdist, java.awt.Image.SCALE_SMOOTH), 0, 0,
+					null);
+			// tag.getGraphics().drawImage(src.getScaledInstance(widthdist,
+			// heightdist, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+
+			FileOutputStream out = new FileOutputStream(imgdist);
+			ImageIO.write(tag, type, out);
+			out.close();
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	public Image uploadImage(Long carId, Long ownerId, InputStream is) throws Exception {
 
 		Car car = carDao.findOne(carId);
@@ -74,12 +102,12 @@ public class ImageService {
 		image.setCar(car);
 
 		image = imageDao.save(image);
-		
-		if(car.getMainImageUrl() == null){
+
+		if (car.getMainImageUrl() == null) {
 			car.setMainImageUrl(appConfig.getUrlPrefix() + fileName);
 			carDao.save(car);
 		}
-		
+
 		return image;
 	}
 
@@ -102,8 +130,8 @@ public class ImageService {
 			return false;
 		}
 	}
-	
-	public List<Image> findImageByCarId(Long carId){
+
+	public List<Image> findImageByCarId(Long carId) {
 		return imageDao.findImageByCarId(carId);
 	}
 }

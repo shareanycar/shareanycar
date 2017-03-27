@@ -118,7 +118,6 @@ public class OwnerService {
 		return null;
 	}
 
-	
 
 	public Owner findOwnerByEmail(String email) {
 		return ownerDao.findOwnerByEmail(email);

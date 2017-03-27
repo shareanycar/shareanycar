@@ -5,12 +5,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ImageDto {
 	private Long id;
+	private Long carId;
 	private String fileName;
 	private String url;
 	
-	public ImageDto(Long id, String fileName, String url) {
+	public ImageDto(){}
+
+	public ImageDto(Long id, Long carId, String fileName, String url) {
 		super();
 		this.id = id;
+		this.carId = carId;
 		this.fileName = fileName;
 		this.url = url;
 	}
@@ -39,47 +43,14 @@ public class ImageDto {
 		this.url = url;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((url == null) ? 0 : url.hashCode());
-		return result;
+	public Long getCarId() {
+		return carId;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ImageDto other = (ImageDto) obj;
-		if (fileName == null) {
-			if (other.fileName != null)
-				return false;
-		} else if (!fileName.equals(other.fileName))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (url == null) {
-			if (other.url != null)
-				return false;
-		} else if (!url.equals(other.url))
-			return false;
-		return true;
+	public void setCarId(Long carId) {
+		this.carId = carId;
 	}
 
-	@Override
-	public String toString() {
-		return "ImageDto [id=" + id + ", fileName=" + fileName + ", url=" + url + "]";
-	}
 	
 	
 	
