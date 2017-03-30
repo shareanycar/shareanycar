@@ -29,6 +29,8 @@ public class CarService {
 	@Inject
 	public LocationDao locationDao;
 
+	@Inject
+	public ImageService imageService;
 		
 
 	@Inject
@@ -102,12 +104,15 @@ public class CarService {
 		if (car.getOwner().getId() != ownerId) {
 			throw new Exception("car does not belong to current owner id:" + ownerId);
 		}
-
+		
+		for(Image image: car.getImages()){
+			imageService.delete(image.getId(), car.getId(), ownerId, false);
+		}
 		carDao.delete(car);
 
 	}
 
-	public void updateMainImage(Long imageId, Long carId, Long ownerId) throws Exception {
+	public void setDefaultImage(Long imageId, Long carId, Long ownerId) throws Exception {
 		Image image = imageDao.findOne(imageId);
 		if (image == null) {
 			throw new Exception("can not find image with id:" + imageId);
@@ -128,7 +133,7 @@ public class CarService {
 			throw new Exception("car does not belong to current owner id:" + ownerId);
 		}
 
-		car.setMainImageUrl(image.getUrlSmall());
+		car.setDefaultImageUrl(image.getUrlSmall());
 
 	}
 

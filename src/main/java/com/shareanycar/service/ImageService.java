@@ -55,7 +55,7 @@ public class ImageService {
 		return fileName;
 	}
 
-	public void reduceImg(String imgsrc, String imgdist, String type, int widthdist, int heightdist) {
+	private void reduceImg(String imgsrc, String imgdist, String type, int widthdist, int heightdist) {
 		try {
 			File srcfile = new File(imgsrc);
 			if (!srcfile.exists()) {
@@ -110,26 +110,40 @@ public class ImageService {
 
 		image = imageDao.save(image);
 
-		if (car.getMainImageUrl() == null) {
-			car.setMainImageUrl(appConfig.getUrlPrefixSmall() + fileName);
+		if (car.getDefaultImageUrl() == null) {
+			car.setDefaultImageUrl(appConfig.getUrlPrefixSmall() + fileName);
 			carDao.save(car);
 		}
 
 		return image;
 	}
 
-	
-	
-	public void deleteImage(Long imageId, Long ownerId) throws Exception {
-		Image image = imageDao.findOne(imageId);
-		if (image == null) {
-			throw new Exception("can not find image with id:" + imageId);
+	private void validateImage(Image image, Long carId, Long ownerId) throws Exception{
+		if(image == null){
+			throw new Exception("can not find image" );
 		}
-
+		
+		if(image.getCar().getId() != carId){
+			throw new Exception("image does not belong to car");
+		}
+		
 		if (image.getCar().getOwner().getId() != ownerId) {
 			throw new Exception("image belongs to car that does not belong to current owner id:" + ownerId
-					+ "; image id" + imageId);
+					+ "; image id" + image.getId());
 		}
+	}
+	public void setAsDefault(Long imageId, Long carId, Long ownerId) throws Exception{
+		Image image = imageDao.findOne(imageId);
+		validateImage(image, carId, ownerId);
+		
+		Car car = image.getCar();
+		car.setDefaultImageUrl(image.getUrlSmall());
+		carDao.save(car);
+	}
+	
+	public void delete(Long imageId,Long carId, Long ownerId, boolean clearTable) throws Exception {
+		Image image = imageDao.findOne(imageId);
+		validateImage(image,carId,ownerId);
 
 		File f = new File(appConfig.getImageLocationOrig() + image.getName());
 		f.delete(); 
@@ -140,9 +154,9 @@ public class ImageService {
 		f = new File(appConfig.getImageLocationLarge() + image.getName());
 		f.delete();
 		
-		imageDao.delete(image);
-			
-		
+		if(clearTable){
+			imageDao.delete(image);
+		}
 	}
 
 	public List<Image> findImageByCarId(Long carId) {

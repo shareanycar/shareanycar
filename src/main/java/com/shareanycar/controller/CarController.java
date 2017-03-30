@@ -152,7 +152,7 @@ public class CarController {
 
 				carDtos.add(new CarDto(car.getId(), car.getName(), car.getDescription(), car.getYear(),
 						car.getLocation().getCountry(), car.getLocation().getCity(), car.getTransmissionType(),
-						car.getCarType(), car.getNumberOfSeats(), car.getMainImageUrl()));
+						car.getCarType(), car.getNumberOfSeats(), car.getDefaultImageUrl()));
 			}
 
 			return Response.ok(carDtos).build();

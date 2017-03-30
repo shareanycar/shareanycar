@@ -26,6 +26,14 @@ public class Car  {
 
 	@NotEmpty
 	private String description;
+	
+	private Integer milage;
+	
+	private String features;
+	
+	private String fuelType;
+	
+	private Double price;
 
 	@NotNull
 	private Integer year;
@@ -40,7 +48,7 @@ public class Car  {
 	@NotNull
 	private Integer numberOfSeats;
 	
-	private String mainImageUrl;
+	private String defaultImageUrl;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id")
@@ -140,12 +148,12 @@ public class Car  {
 		this.comments = comments;
 	}
 
-	public String getMainImageUrl() {
-		return mainImageUrl;
+	public String getDefaultImageUrl() {
+		return defaultImageUrl;
 	}
 
-	public void setMainImageUrl(String mainImageUrl) {
-		this.mainImageUrl = mainImageUrl;
+	public void setDefaultImageUrl(String defaultImageUrl) {
+		this.defaultImageUrl = defaultImageUrl;
 	}
 
 	public String getTransmissionType() {
@@ -172,7 +180,36 @@ public class Car  {
 		this.numberOfSeats = numberOfSeats;
 	}
 
-	
+	public Integer getMilage() {
+		return milage;
+	}
 
-		
+	public String getFeatures() {
+		return features;
+	}
+
+	public String getFuelType() {
+		return fuelType;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setMilage(Integer milage) {
+		this.milage = milage;
+	}
+
+	public void setFeatures(String features) {
+		this.features = features;
+	}
+
+	public void setFuelType(String fuelType) {
+		this.fuelType = fuelType;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	
 }
