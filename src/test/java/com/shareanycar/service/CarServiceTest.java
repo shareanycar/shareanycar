@@ -54,12 +54,11 @@ public class CarServiceTest extends HK2Runner {
 			id = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77", "test@test.com",
 					"letmein");
 			Owner owner = ownerService.findOwnerById(id);
-
-			Long id1 = carService.create(owner.getId(), "brand name", "model name", "toyota camry",
-					"one of best cars ever", 1999, "USA", "New York");
+			Long id1 = carService.create(owner.getId(), "toyota camry",
+					"one of best cars ever", 1999, "mechanic","sedan",6, "USA", "New York");
 			Car car1 = carService.findCarById(id1);
-			Long id2 = carService.create(owner.getId(), "brand name", "model name", "mercedes", "another great car",
-					2005, "USA", "New York");
+			Long id2 = carService.create(owner.getId(), "mercedes", "another great car",
+					2005, "mechanic", "sedan", 6, "USA", "New York");
 			Car car2 = carService.findCarById(id2);
 
 			assertNotNull("First car", car1);
@@ -81,7 +80,7 @@ public class CarServiceTest extends HK2Runner {
 					"test@test1.com", "letmein");
 			Owner owner = ownerService.findOwnerById(owid);
 
-			Long id = carService.create(owner.getId(), "brand name", "model name", "BMW", "DESC", 2011, "USA",
+			Long id = carService.create(owner.getId(), "BMW", "DESC", 2011,"mechanic", "sedan", 6, "USA",
 					"Chicago");
 			Car car = carService.findCarById(id);
 
@@ -89,8 +88,8 @@ public class CarServiceTest extends HK2Runner {
 			assertEquals("car desc DESC", "DESC", car.getDescription());
 
 			owner = ownerService.findOwnerByEmail("test@test1.com");
-
-			carService.update(owner.getId(), car.getId(), "model name", "brand name", "BMWUPD", "DESCUPD", 2011, "USA",
+			
+			carService.update(owner.getId(), car.getId(),  "BMWUPD", "DESCUPD", 2011, "mechanic", "sedan", 6, "USA",
 					"Chicago");
 
 			car = carService.findCarById(car.getId());
@@ -111,7 +110,7 @@ public class CarServiceTest extends HK2Runner {
 					"test@test1.com", "letmein");
 			Owner owner = ownerService.findOwnerById(owid);
 
-			Long id = carService.create(owner.getId(), "brand name", "model name", "BMW", "DESC", 2011, "USA",
+			Long id = carService.create(owner.getId(),  "BMW", "DESC", 2011, "mechanic", "sedan",6 , "USA",
 					"Chicago");
 			Car car = carService.findCarById(id);
 

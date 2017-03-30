@@ -33,15 +33,14 @@ public class Car  {
 	@NotNull
 	private boolean status;
 	
-	private String mainImageUrl;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "brand_id")
-	private Brand brand;
+	private String transmissionType; // mechanic, automatic
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "model_id")
-	private Model model;
+	private String carType; // sedan, suv, minivan
+	
+	@NotNull
+	private Integer numberOfSeats;
+	
+	private String mainImageUrl;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id")
@@ -100,22 +99,7 @@ public class Car  {
 		this.status = status;
 	}
 
-	public Brand getBrand() {
-		return brand;
-	}
-
-	public void setBrand(Brand brand) {
-		this.brand = brand;
-	}
-
-	public Model getModel() {
-		return model;
-	}
-
-	public void setModel(Model model) {
-		this.model = model;
-	}
-
+	
 	public Owner getOwner() {
 		return owner;
 	}
@@ -163,6 +147,32 @@ public class Car  {
 	public void setMainImageUrl(String mainImageUrl) {
 		this.mainImageUrl = mainImageUrl;
 	}
+
+	public String getTransmissionType() {
+		return transmissionType;
+	}
+
+	public String getCarType() {
+		return carType;
+	}
+
+	public void setTransmissionType(String transmissionType) {
+		this.transmissionType = transmissionType;
+	}
+
+	public void setCarType(String carType) {
+		this.carType = carType;
+	}
+
+	public Integer getNumberOfSeats() {
+		return numberOfSeats;
+	}
+
+	public void setNumberOfSeats(Integer numberOfSeats) {
+		this.numberOfSeats = numberOfSeats;
+	}
+
+	
 
 		
 }

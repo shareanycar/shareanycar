@@ -46,7 +46,7 @@ public class CarController {
 
 	@Inject
 	public CarService carService;
-	
+
 	@Inject
 	Logger logger;
 
@@ -59,8 +59,9 @@ public class CarController {
 
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
 
-			carService.create(owner.getId(), carDto.getBrand(), carDto.getModel(), carDto.getName(),
-					carDto.getDescription(), carDto.getYear(), carDto.getCountry(), carDto.getCity());
+			carService.create(owner.getId(), carDto.getName(), carDto.getDescription(), carDto.getYear(),
+					carDto.getTransmissionType(), carDto.getCarType(), carDto.getNumberOfSeats(), carDto.getCountry(),
+					carDto.getCity());
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error("error creating car: " + carDto);
@@ -78,8 +79,9 @@ public class CarController {
 			if (car == null) {
 				throw new Exception("error finding car:" + id);
 			}
-			CarDto carDto = new CarDto(id, car.getBrand().getName(), car.getModel().getName(), car.getName(),
-					car.getDescription(), car.getYear(), car.getLocation().getCountry(), car.getLocation().getCity());
+			CarDto carDto = new CarDto(id, car.getName(), car.getDescription(), car.getYear(),
+					car.getLocation().getCountry(), car.getLocation().getCity(), car.getTransmissionType(),
+					car.getCarType(), car.getNumberOfSeats());
 			return Response.ok(carDto).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -104,8 +106,9 @@ public class CarController {
 				throw new Exception("car does not belong to current user");
 			}
 
-			carService.update(owner.getId(), car.getId(), carDto.getBrand(), carDto.getModel(), carDto.getName(),
-					carDto.getDescription(), carDto.getYear(), carDto.getCountry(), carDto.getCity());
+			carService.update(owner.getId(), car.getId(), carDto.getName(), carDto.getDescription(), carDto.getYear(),
+					carDto.getTransmissionType(), carDto.getCarType(), carDto.getNumberOfSeats(), carDto.getCountry(),
+					carDto.getCity());
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -140,15 +143,18 @@ public class CarController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@SecuredOwner
-	public Response all( @Context SecurityContext securityContext) {
+	public Response all(@Context SecurityContext securityContext) {
 		try {
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
 			Set<CarDto> carDtos = new HashSet<>();
-			
-			for(Car car : owner.getCars()){
-				carDtos.add(new CarDto(car.getId(), car.getBrand().getName(), car.getModel().getName(), car.getName(), car.getDescription(), car.getYear(), car.getLocation().getCountry(), car.getLocation().getCity(),car.getMainImageUrl()));
+
+			for (Car car : owner.getCars()) {
+
+				carDtos.add(new CarDto(car.getId(), car.getName(), car.getDescription(), car.getYear(),
+						car.getLocation().getCountry(), car.getLocation().getCity(), car.getTransmissionType(),
+						car.getCarType(), car.getNumberOfSeats(), car.getMainImageUrl()));
 			}
-						
+
 			return Response.ok(carDtos).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());

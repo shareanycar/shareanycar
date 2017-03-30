@@ -39,7 +39,7 @@ public class ImageController {
 
 	@Inject
 	public Logger logger;
-
+	
 	@GET
 	@Path("car/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -48,7 +48,7 @@ public class ImageController {
 			List<ImageDto> images = new LinkedList<>();
 
 			for (Image image : imageService.findImageByCarId(id)) {
-				images.add(new ImageDto(image.getId(), image.getCar().getId(), image.getName(), image.getUrl()));
+				images.add(new ImageDto(image.getId(), image.getCar().getId(), image.getName(), image.getUrlSmall(), image.getUrlLarge(), image.getUrlOrig()));
 			}
 			return Response.ok(images).build();
 		} catch (Exception e) {
@@ -77,8 +77,28 @@ public class ImageController {
 		}
 	}
 
+	@GET
+	@Path("/{imageId}/car/{carId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response carImage(@PathParam("carId") Long carId, @PathParam("imageId") Long imageId){
+		try{
+			Image image = imageService.findImageById(imageId);
+			if(carId != image.getCar().getId()){
+				throw new Exception("image with id:" + imageId + " does not belong to car with id:" + carId);
+			}
+			
+			ImageDto imageDto = new ImageDto(image.getId(), image.getCar().getId(), image.getName(), image.getUrlSmall(), image.getUrlLarge(), image.getUrlOrig());
+			return Response.ok(imageDto).build();
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		
+	}
+	
+	
 	@DELETE
-	@Path("/car/{carId}/image/{imageId}")
+	@Path("/{imageId}/car/{carId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredOwner
 	public Response deleteCarImage(@PathParam("carId") Long carId, @PathParam("imageId") Long imageId,
@@ -87,9 +107,8 @@ public class ImageController {
 
 			Owner owner = contextUtil.getCurrentOwner(securityContext);
 
-			if (!imageService.deleteImage(imageId, owner.getId())) {
-				throw new Exception("can not delete image");
-			}
+			imageService.deleteImage(imageId, owner.getId());
+			
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error("can not delete image for car with id:" + imageId + "; " + e.getMessage());

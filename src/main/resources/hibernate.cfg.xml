@@ -21,8 +21,7 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
 
-  		<mapping class="com.shareanycar.model.Brand"/>
-		<mapping class="com.shareanycar.model.Model"/>
+
   		<mapping class="com.shareanycar.model.Owner"/>
   		<mapping class="com.shareanycar.model.Customer"/>
   		<mapping class="com.shareanycar.model.Car"/>

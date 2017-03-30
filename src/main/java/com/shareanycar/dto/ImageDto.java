@@ -7,48 +7,68 @@ public class ImageDto {
 	private Long id;
 	private Long carId;
 	private String fileName;
-	private String url;
+	private String urlSmall;
+	private String urlLarge;
+	private String urlOrig;
 	
 	public ImageDto(){}
 
-	public ImageDto(Long id, Long carId, String fileName, String url) {
+	public ImageDto(Long id, Long carId, String fileName, String urlSmall, String urlLarge, String urlOrig) {
 		super();
 		this.id = id;
 		this.carId = carId;
 		this.fileName = fileName;
-		this.url = url;
+		this.urlSmall = urlSmall;
+		this.urlLarge = urlLarge;
+		this.urlOrig = urlOrig;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Long getCarId() {
+		return carId;
 	}
 
 	public String getFileName() {
 		return fileName;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public String getUrlSmall() {
+		return urlSmall;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getUrlLarge() {
+		return urlLarge;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public String getUrlOrig() {
+		return urlOrig;
 	}
 
-	public Long getCarId() {
-		return carId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void setCarId(Long carId) {
 		this.carId = carId;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public void setUrlSmall(String urlSmall) {
+		this.urlSmall = urlSmall;
+	}
+
+	public void setUrlLarge(String urlLarge) {
+		this.urlLarge = urlLarge;
+	}
+
+	public void setUrlOrig(String urlOrig) {
+		this.urlOrig = urlOrig;
 	}
 
 	

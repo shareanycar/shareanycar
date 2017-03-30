@@ -10,24 +10,20 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.impl.SimpleLogger;
 
 import com.shareanycar.dao.BookingDao;
-import com.shareanycar.dao.BrandDao;
 import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.CustomerDao;
 import com.shareanycar.dao.ExtDao;
 import com.shareanycar.dao.ImageDao;
 import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.MessageDao;
-import com.shareanycar.dao.ModelDao;
 import com.shareanycar.dao.OwnerDao;
 import com.shareanycar.service.AuthService;
 import com.shareanycar.service.BookingService;
-import com.shareanycar.service.BrandService;
 import com.shareanycar.service.CarService;
 import com.shareanycar.service.CustomerService;
 import com.shareanycar.service.ImageService;
 import com.shareanycar.service.LocationService;
 import com.shareanycar.service.MessageService;
-import com.shareanycar.service.ModelService;
 import com.shareanycar.service.OwnerService;
 import com.shareanycar.util.ContextUtil;
 import com.shareanycar.util.MiscUtils;
@@ -42,8 +38,7 @@ public class CustomBinder extends AbstractBinder{
 		bind(LocationDao.class).to(LocationDao.class).in(Singleton.class);
 		bind(BookingDao.class).to(BookingDao.class).in(Singleton.class);
 		bind(CarDao.class).to(CarDao.class).in(Singleton.class);
-		bind(BrandDao.class).to(BrandDao.class).in(Singleton.class);
-		bind(ModelDao.class).to(ModelDao.class).in(Singleton.class);
+		
 		bind(MessageDao.class).to(MessageDao.class).in(Singleton.class);
 		bind(ImageDao.class).to(ImageDao.class).in(Singleton.class);
 		bind(ExtDao.class).to(ExtDao.class).in(Singleton.class);
@@ -56,8 +51,7 @@ public class CustomBinder extends AbstractBinder{
 		bind(CarService.class).to(CarService.class).in(Singleton.class);
 		bind(MessageService.class).to(MessageService.class).in(Singleton.class);
 		bind(AuthService.class).to(AuthService.class).in(Singleton.class);
-		bind(BrandService.class).to(BrandService.class).in(Singleton.class);
-		bind(ModelService.class).to(ModelService.class).in(Singleton.class);
+		
 		bind(ImageService.class).to(ImageService.class).in(Singleton.class);
 		bind(ContextUtil.class).to(ContextUtil.class).in(Singleton.class);
 		bind(AppConfig.class).to(AppConfig.class).in(Singleton.class);

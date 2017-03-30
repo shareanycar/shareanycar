@@ -10,11 +10,9 @@ import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.ImageDao;
 import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.OwnerDao;
-import com.shareanycar.model.Brand;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.Image;
 import com.shareanycar.model.Location;
-import com.shareanycar.model.Model;
 import com.shareanycar.model.Owner;
 
 public class CarService {
@@ -31,16 +29,13 @@ public class CarService {
 	@Inject
 	public LocationDao locationDao;
 
-	@Inject
-	public BrandService brandService;
-
-	@Inject
-	public ModelService modelService;
+		
 
 	@Inject
 	public ImageDao imageDao;
 	
-	public Long create(Long ownerId, String brandName, String modelName, String name, String description, Integer year,
+	public Long create(Long ownerId,  String name, String description, Integer year, String transmissionType,
+			String carType, Integer numberOfSeats,
 			String country, String city) throws Exception {
 
 		Owner owner = ownerDao.findOne(ownerId);
@@ -58,24 +53,23 @@ public class CarService {
 			loc = locationService.prepare(country, city);
 		}
 
-		Brand brand = brandService.prepare(brandName);
-		Model model = modelService.prepare(modelName, brand);
-
 		car.setName(name);
 		car.setDescription(description);
 		car.setYear(year);
 		car.setLocation(loc);
 		car.setOwner(owner);
-		car.setBrand(brand);
-		car.setModel(model);
-
+		car.setNumberOfSeats(numberOfSeats);
+		car.setTransmissionType(transmissionType);
+		car.setCarType(carType);
+		
 		car = carDao.save(car);
 
 		return car.getId();
 	}
 
-	public void update(Long ownerId, Long carId, String brandName, String modelName, String name, String description,
-			Integer year, String country, String city) throws Exception {
+	public void update(Long ownerId, Long carId,  String name, String description,
+			Integer year,  String transmissionType,
+			String carType, Integer numberOfSeats, String country, String city) throws Exception {
 
 		Car car = carDao.findOne(carId);
 
@@ -89,17 +83,15 @@ public class CarService {
 		} else {
 			loc = locationService.prepare(country, city);
 		}
-
-		Brand brand = brandService.prepare(brandName);
-		Model model = modelService.prepare(modelName, brand);
-
+		
 		car.setName(name);
 		car.setDescription(description);
 		car.setLocation(loc);
 		car.setYear(year);
-		car.setBrand(brand);
-		car.setModel(model);
-
+		car.setCarType(carType);
+		car.setTransmissionType(transmissionType);
+		car.setNumberOfSeats(numberOfSeats);
+		
 		car = carDao.save(car);
 
 	}
@@ -136,7 +128,7 @@ public class CarService {
 			throw new Exception("car does not belong to current owner id:" + ownerId);
 		}
 
-		car.setMainImageUrl(image.getUrl());
+		car.setMainImageUrl(image.getUrlSmall());
 
 	}
 

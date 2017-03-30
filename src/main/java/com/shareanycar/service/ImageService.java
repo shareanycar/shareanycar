@@ -37,7 +37,7 @@ public class ImageService {
 
 	private String saveFile(InputStream is) throws Exception {
 
-		String uploadedFileLocation = appConfig.getImageLocation();
+		String uploadedFileLocation = appConfig.getImageLocationOrig();
 		String fileName = miscUtils.randonString();
 
 		OutputStream out = new FileOutputStream(new File(uploadedFileLocation + fileName));
@@ -94,24 +94,33 @@ public class ImageService {
 		}
 
 		String fileName = saveFile(is);
+		reduceImg(appConfig.getImageLocationOrig() + fileName, appConfig.getImageLocationLarge() + fileName, "jpg",
+				appConfig.getLargeWidth(), appConfig.getLargeHeight());
+
+		reduceImg(appConfig.getImageLocationOrig() + fileName, appConfig.getImageLocationSmall() + fileName, "jpg",
+				appConfig.getSmallWidth(), appConfig.getSmallHeight());
 
 		Image image = new Image();
 
 		image.setName(fileName);
-		image.setUrl(appConfig.getUrlPrefix() + fileName);
+		image.setUrlLarge(appConfig.getUrlPrefixLarge() + fileName);
+		image.setUrlSmall(appConfig.getUrlPrefixSmall() + fileName);
+		image.setUrlOrig(appConfig.getUrlPrefixOrig() + fileName);
 		image.setCar(car);
 
 		image = imageDao.save(image);
 
 		if (car.getMainImageUrl() == null) {
-			car.setMainImageUrl(appConfig.getUrlPrefix() + fileName);
+			car.setMainImageUrl(appConfig.getUrlPrefixSmall() + fileName);
 			carDao.save(car);
 		}
 
 		return image;
 	}
 
-	public boolean deleteImage(Long imageId, Long ownerId) throws Exception {
+	
+	
+	public void deleteImage(Long imageId, Long ownerId) throws Exception {
 		Image image = imageDao.findOne(imageId);
 		if (image == null) {
 			throw new Exception("can not find image with id:" + imageId);
@@ -122,16 +131,25 @@ public class ImageService {
 					+ "; image id" + imageId);
 		}
 
-		File f = new File(appConfig.getImageLocation() + image.getName());
-		if (f.delete()) {
-			imageDao.delete(image);
-			return true;
-		} else {
-			return false;
-		}
+		File f = new File(appConfig.getImageLocationOrig() + image.getName());
+		f.delete(); 
+		
+		f = new File(appConfig.getImageLocationSmall() + image.getName());
+		f.delete();
+		
+		f = new File(appConfig.getImageLocationLarge() + image.getName());
+		f.delete();
+		
+		imageDao.delete(image);
+			
+		
 	}
 
 	public List<Image> findImageByCarId(Long carId) {
 		return imageDao.findImageByCarId(carId);
+	}
+	
+	public Image findImageById(Long id){
+		return imageDao.findOne(id);
 	}
 }

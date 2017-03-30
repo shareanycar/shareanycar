@@ -19,12 +19,18 @@ public class Image {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "car_id")
 	private Car car;
-
-	@NotEmpty
-	private String url;
 	
 	@NotEmpty
 	private String name;
+	
+	@NotEmpty
+	private String urlSmall;
+	@NotEmpty
+	private String urlLarge;
+	
+	@NotEmpty
+	private String urlOrig;
+	
 
 	public Long getId() {
 		return id;
@@ -42,20 +48,37 @@ public class Image {
 		this.car = car;
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getUrlSmall() {
+		return urlSmall;
+	}
+
+	public String getUrlLarge() {
+		return urlLarge;
+	}
+
+	public String getUrlOrig() {
+		return urlOrig;
+	}
+
+	public void setUrlSmall(String urlSmall) {
+		this.urlSmall = urlSmall;
+	}
+
+	public void setUrlLarge(String urlLarge) {
+		this.urlLarge = urlLarge;
+	}
+
+	public void setUrlOrig(String urlOrig) {
+		this.urlOrig = urlOrig;
 	}
 
 	
