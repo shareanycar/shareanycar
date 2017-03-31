@@ -15,8 +15,8 @@
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
 
-        <!-- Echo all executed SQL to stdout
-        <property name="show_sql">true</property>  -->
+        <!-- Echo all executed SQL to stdout 
+        <property name="show_sql">true</property> -->
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
@@ -25,6 +25,9 @@
   		<mapping class="com.shareanycar.model.Owner"/>
   		<mapping class="com.shareanycar.model.Customer"/>
   		<mapping class="com.shareanycar.model.Car"/>
+  		<mapping class="com.shareanycar.model.CarType"/>
+  		<mapping class="com.shareanycar.model.FuelType"/>
+  		<mapping class="com.shareanycar.model.TransmissionType"/>
   		<mapping class="com.shareanycar.model.Location"/>
   		<mapping class="com.shareanycar.model.Booking"/>
   		<mapping class="com.shareanycar.model.Conversation"/>

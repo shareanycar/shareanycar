@@ -78,7 +78,6 @@ public class CarController {
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response detail(@PathParam("id") Long id) {
 		try {
 			Car car = carService.findCarById(id);

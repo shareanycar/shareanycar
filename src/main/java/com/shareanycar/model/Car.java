@@ -31,7 +31,7 @@ public class Car  {
 	
 	private String features;
 	
-	private String fuelType;
+	
 	
 	private Double price;
 
@@ -41,9 +41,18 @@ public class Car  {
 	@NotNull
 	private boolean status;
 	
-	private String transmissionType; // mechanic, automatic
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "carType_id")
+	private CarType carType;
 	
-	private String carType; // sedan, suv, minivan
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "fuelType_id")
+	private FuelType fuelType;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "transmissionType_id")
+	private TransmissionType transmissionType; 
+	
 	
 	@NotNull
 	private Integer numberOfSeats;
@@ -156,21 +165,7 @@ public class Car  {
 		this.defaultImageUrl = defaultImageUrl;
 	}
 
-	public String getTransmissionType() {
-		return transmissionType;
-	}
-
-	public String getCarType() {
-		return carType;
-	}
-
-	public void setTransmissionType(String transmissionType) {
-		this.transmissionType = transmissionType;
-	}
-
-	public void setCarType(String carType) {
-		this.carType = carType;
-	}
+	
 
 	public Integer getNumberOfSeats() {
 		return numberOfSeats;
@@ -188,10 +183,6 @@ public class Car  {
 		return features;
 	}
 
-	public String getFuelType() {
-		return fuelType;
-	}
-
 	public Double getPrice() {
 		return price;
 	}
@@ -204,27 +195,48 @@ public class Car  {
 		this.features = features;
 	}
 
-	public void setFuelType(String fuelType) {
-		this.fuelType = fuelType;
-	}
-
 	public void setPrice(Double price) {
 		this.price = price;
 	}
 	
 	
+	public CarType getCarType() {
+		return carType;
+	}
+
+	public FuelType getFuelType() {
+		return fuelType;
+	}
+
+	public TransmissionType getTransmissionType() {
+		return transmissionType;
+	}
+
+	public void setCarType(CarType carType) {
+		this.carType = carType;
+	}
+
+	public void setFuelType(FuelType fuelType) {
+		this.fuelType = fuelType;
+	}
+
+	public void setTransmissionType(TransmissionType transmissionType) {
+		this.transmissionType = transmissionType;
+	}
+
+
 	public static class Builder{
 		
 		private String name;
 		private String description;
 		private Integer mileage;
 		private String features;
-		private String fuelType;
 		private Double price;
 		private Integer year;
 		private boolean status;
-		private String transmissionType; 
-		private String carType; 
+		private TransmissionType transmissionType; 
+		private CarType carType; 
+		private FuelType fuelType;
 		private Integer numberOfSeats;
 		private String defaultImageUrl;
 		
@@ -244,7 +256,7 @@ public class Car  {
 			this.features = features;
 			return this;
 		}
-		public Builder setFuelType(String fuelType) {
+		public Builder setFuelType(FuelType fuelType) {
 			this.fuelType = fuelType;
 			return this;
 		}
@@ -260,14 +272,16 @@ public class Car  {
 			this.status = status;
 			return this;
 		}
-		public Builder setTransmissionType(String transmissionType) {
+		public Builder setTransmissionType(TransmissionType transmissionType) {
 			this.transmissionType = transmissionType;
 			return this;
 		}
-		public Builder setCarType(String carType) {
+		
+		public Builder setCarType(CarType carType) {
 			this.carType = carType;
 			return this;
 		}
+		
 		public Builder setNumberOfSeats(Integer numberOfSeats) {
 			this.numberOfSeats = numberOfSeats;
 			return this;

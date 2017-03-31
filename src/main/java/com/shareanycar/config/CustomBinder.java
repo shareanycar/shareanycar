@@ -12,12 +12,15 @@ import org.slf4j.impl.SimpleLogger;
 
 import com.shareanycar.dao.BookingDao;
 import com.shareanycar.dao.CarDao;
+import com.shareanycar.dao.CarTypeDao;
 import com.shareanycar.dao.CustomerDao;
 import com.shareanycar.dao.ExtDao;
+import com.shareanycar.dao.FuelTypeDao;
 import com.shareanycar.dao.ImageDao;
 import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.MessageDao;
 import com.shareanycar.dao.OwnerDao;
+import com.shareanycar.dao.TransmissionTypeDao;
 import com.shareanycar.service.AuthService;
 import com.shareanycar.service.BookingService;
 import com.shareanycar.service.CarService;
@@ -39,6 +42,9 @@ public class CustomBinder extends AbstractBinder{
 		bind(LocationDao.class).to(LocationDao.class).in(Singleton.class);
 		bind(BookingDao.class).to(BookingDao.class).in(Singleton.class);
 		bind(CarDao.class).to(CarDao.class).in(Singleton.class);
+		bind(CarTypeDao.class).to(CarTypeDao.class).in(Singleton.class);
+		bind(TransmissionTypeDao.class).to(TransmissionTypeDao.class).in(Singleton.class);
+		bind(FuelTypeDao.class).to(FuelTypeDao.class).in(Singleton.class);
 		
 		bind(MessageDao.class).to(MessageDao.class).in(Singleton.class);
 		bind(ImageDao.class).to(ImageDao.class).in(Singleton.class);
@@ -60,7 +66,6 @@ public class CustomBinder extends AbstractBinder{
 
 		bind(ModelMapper.class).to(ModelMapper.class).in(Singleton.class);
 		bind(LoggerFactory.getLogger(SimpleLogger.class)).to(Logger.class);
-		//bind(SimpleLogger.class).to(Logger.class).in(Singleton.class);
 
 		
 		
