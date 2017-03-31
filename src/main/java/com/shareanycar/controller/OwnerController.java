@@ -16,11 +16,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 
 import com.shareanycar.annotation.SecuredOwner;
 import com.shareanycar.dto.OwnerDto;
 import com.shareanycar.dto.PasswordDto;
+import com.shareanycar.model.Location;
 import com.shareanycar.model.Owner;
 import com.shareanycar.service.CarService;
 import com.shareanycar.service.OwnerService;
@@ -50,7 +52,9 @@ public class OwnerController {
 	
 	@Inject
 	public Logger logger ;
-	
+
+	@Inject
+	public ModelMapper modelMapper;
 
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON})
@@ -58,9 +62,11 @@ public class OwnerController {
 	public  Response create(OwnerDto ownerDto) {
 
 		try{
-			ownerService.create(ownerDto.getFirstName(), ownerDto.getLastName(), ownerDto.getCountry(),
-				ownerDto.getCity(), ownerDto.getPhone(), ownerDto.getEmail(), ownerDto.getPassword());
-		
+			Owner owner = modelMapper.map(ownerDto, Owner.class);
+			Location location = modelMapper.map(ownerDto, Location.class);
+			
+			ownerService.create(owner, location);
+			
 			return Response.ok().build();
 		}catch(Exception e){
 			logger.error("error creating owner:" + ownerDto);
@@ -76,8 +82,8 @@ public class OwnerController {
 	public Response details(@Context SecurityContext securityContext) {
 		try{
 			Owner owner = context.getCurrentOwner(securityContext);
-			OwnerDto ownerDto = new OwnerDto(owner.getId(), owner.getFirstName(), owner.getLastName(),
-					owner.getLocation().getCountry(), owner.getLocation().getCity(), owner.getPhone(), owner.getEmail());
+			OwnerDto ownerDto = modelMapper.map(owner, OwnerDto.class);
+			
 			return Response.ok(ownerDto).build();
 		}catch(Exception e){
 			logger.error("error getting owner details");
@@ -94,7 +100,12 @@ public class OwnerController {
 	public  Response update(OwnerDto ownerDto, @Context SecurityContext securityContext) {
 		try{
 			Owner owner = context.getCurrentOwner(securityContext);
-			ownerService.update(owner.getId(), ownerDto.getFirstName(), ownerDto.getLastName(), ownerDto.getCountry(), ownerDto.getCity(), ownerDto.getPhone());
+			
+			Owner updateOwner = modelMapper.map(ownerDto, Owner.class);
+			Location updateLocation = modelMapper.map(ownerDto, Location.class);
+			
+			ownerService.update(owner.getId(), updateOwner, updateLocation);
+			
 			return Response.ok().build();
 		}catch(Exception e){
 			logger.error("error updating owner:" + ownerDto);
@@ -119,37 +130,6 @@ public class OwnerController {
 	}
 
 	
-	@GET @Path("/country/{country}/city/{city}")
-	@Produces({MediaType.APPLICATION_JSON})
-	public  Set<OwnerDto> ownersInLocation(@PathParam("country") String country, @PathParam("city") String city) {
-		Set<OwnerDto> owners = new HashSet<>();
-		for (Owner o : ownerService.findOwnersByCountryAndCity(country, city)) {
-			owners.add(new OwnerDto(o.getId(), o.getFirstName(), o.getLastName(), o.getLocation().getCountry(),
-					o.getLocation().getCity(), o.getPhone(), o.getEmail()));
-		}
-		return owners;
-	}
-
-	@GET @Path( "/country/{country}")
-	@Produces({MediaType.APPLICATION_JSON})
-	public  Set<OwnerDto> ownersInCountry(@PathParam("country") String country) {
-		Set<OwnerDto> owners = new HashSet<>();
-		for (Owner o : ownerService.findOwnersByCountry(country)) {
-			owners.add(new OwnerDto(o.getId(), o.getFirstName(), o.getLastName(), o.getLocation().getCountry(),
-					o.getLocation().getCity(), o.getPhone(), o.getEmail()));
-		}
-		return owners;
-	}
-
-	@GET @Path("/city/{city}")
-	@Produces({MediaType.APPLICATION_JSON})
-	public  Set<OwnerDto> ownersInCity(@PathParam("city") String city) {
-		Set<OwnerDto> owners = new HashSet<>();
-		for (Owner o : ownerService.findOwnersByCity(city)) {
-			owners.add(new OwnerDto(o.getId(), o.getFirstName(), o.getLastName(), o.getLocation().getCountry(),
-					o.getLocation().getCity(), o.getPhone(), o.getEmail()));
-		}
-		return owners;
-	}
+	
 
 }

@@ -9,45 +9,19 @@ public class CarDto {
 		private String name;
 		private String description;
 		private int year;
-		private String country;
-		private String city;
 		private String transmissionType;
-		private String carType;
+		private String fuelType;
 		private int numberOfSeats;
+		private String carType;
+		private String features;
+		private int mileage;
+		private int price;
+		private String locationCountry;
+		private String locationCity;
 		
-		private String mainImageUrl;
+		private String defaultImageUrl;
 
-		public CarDto(){}
 		
-		public CarDto(Long id, String name, String description, int year, String country, String city,
-				String transmissionType, String carType, int numberOfSeats) {
-			super();
-			this.id = id;
-			this.name = name;
-			this.description = description;
-			this.year = year;
-			this.country = country;
-			this.city = city;
-			this.transmissionType = transmissionType;
-			this.carType = carType;
-			this.numberOfSeats = numberOfSeats;
-		}
-
-		public CarDto(Long id, String name, String description, int year, String country, String city,
-				String transmissionType, String carType, int numberOfSeats, String mainImageUrl) {
-			super();
-			this.id = id;
-			this.name = name;
-			this.description = description;
-			this.year = year;
-			this.country = country;
-			this.city = city;
-			this.transmissionType = transmissionType;
-			this.carType = carType;
-			this.numberOfSeats = numberOfSeats;
-			this.mainImageUrl = mainImageUrl;
-		}
-
 		public Long getId() {
 			return id;
 		}
@@ -64,14 +38,6 @@ public class CarDto {
 			return year;
 		}
 
-		public String getCountry() {
-			return country;
-		}
-
-		public String getCity() {
-			return city;
-		}
-
 		public String getTransmissionType() {
 			return transmissionType;
 		}
@@ -84,8 +50,8 @@ public class CarDto {
 			return numberOfSeats;
 		}
 
-		public String getMainImageUrl() {
-			return mainImageUrl;
+		public String getDefaultImageUrl() {
+			return defaultImageUrl;
 		}
 
 		public void setId(Long id) {
@@ -104,13 +70,7 @@ public class CarDto {
 			this.year = year;
 		}
 
-		public void setCountry(String country) {
-			this.country = country;
-		}
-
-		public void setCity(String city) {
-			this.city = city;
-		}
+		
 
 		public void setTransmissionType(String transmissionType) {
 			this.transmissionType = transmissionType;
@@ -124,8 +84,59 @@ public class CarDto {
 			this.numberOfSeats = numberOfSeats;
 		}
 
-		public void setMainImageUrl(String mainImageUrl) {
-			this.mainImageUrl = mainImageUrl;
+		public void setDefaultImageUrl(String defaultImageUrl) {
+			this.defaultImageUrl = defaultImageUrl;
+		}
+
+		public String getFuelType() {
+			return fuelType;
+		}
+
+		public String getFeatures() {
+			return features;
+		}
+
+		public int getMileage() {
+			return mileage;
+		}
+
+		public int getPrice() {
+			return price;
+		}
+
+		public void setFuelType(String fuelType) {
+			this.fuelType = fuelType;
+		}
+
+		public void setFeatures(String features) {
+			this.features = features;
+		}
+
+		public void setMileage(int mileage) {
+			this.mileage = mileage;
+		}
+
+		public void setPrice(int price) {
+			this.price = price;
+		}
+
+		public String getLocationCountry() {
+			return locationCountry;
+		}
+
+
+		public String getLocationCity() {
+			return locationCity;
+		}
+
+		public void setLocationCountry(String locationCountry) {
+			this.locationCountry = locationCountry;
+		}
+
+
+
+		public void setLocationCity(String locationCity) {
+			this.locationCity = locationCity;
 		}
 
 		@Override
@@ -133,17 +144,23 @@ public class CarDto {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + ((carType == null) ? 0 : carType.hashCode());
-			result = prime * result + ((city == null) ? 0 : city.hashCode());
-			result = prime * result + ((country == null) ? 0 : country.hashCode());
+			result = prime * result + ((defaultImageUrl == null) ? 0 : defaultImageUrl.hashCode());
 			result = prime * result + ((description == null) ? 0 : description.hashCode());
+			result = prime * result + ((features == null) ? 0 : features.hashCode());
+			result = prime * result + ((fuelType == null) ? 0 : fuelType.hashCode());
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
-			result = prime * result + ((mainImageUrl == null) ? 0 : mainImageUrl.hashCode());
+			result = prime * result + ((locationCity == null) ? 0 : locationCity.hashCode());
+			result = prime * result + ((locationCountry == null) ? 0 : locationCountry.hashCode());
+			result = prime * result + mileage;
 			result = prime * result + ((name == null) ? 0 : name.hashCode());
 			result = prime * result + numberOfSeats;
+			result = prime * result + price;
 			result = prime * result + ((transmissionType == null) ? 0 : transmissionType.hashCode());
 			result = prime * result + year;
 			return result;
 		}
+
+
 
 		@Override
 		public boolean equals(Object obj) {
@@ -159,30 +176,42 @@ public class CarDto {
 					return false;
 			} else if (!carType.equals(other.carType))
 				return false;
-			if (city == null) {
-				if (other.city != null)
+			if (defaultImageUrl == null) {
+				if (other.defaultImageUrl != null)
 					return false;
-			} else if (!city.equals(other.city))
-				return false;
-			if (country == null) {
-				if (other.country != null)
-					return false;
-			} else if (!country.equals(other.country))
+			} else if (!defaultImageUrl.equals(other.defaultImageUrl))
 				return false;
 			if (description == null) {
 				if (other.description != null)
 					return false;
 			} else if (!description.equals(other.description))
 				return false;
+			if (features == null) {
+				if (other.features != null)
+					return false;
+			} else if (!features.equals(other.features))
+				return false;
+			if (fuelType == null) {
+				if (other.fuelType != null)
+					return false;
+			} else if (!fuelType.equals(other.fuelType))
+				return false;
 			if (id == null) {
 				if (other.id != null)
 					return false;
 			} else if (!id.equals(other.id))
 				return false;
-			if (mainImageUrl == null) {
-				if (other.mainImageUrl != null)
+			if (locationCity == null) {
+				if (other.locationCity != null)
 					return false;
-			} else if (!mainImageUrl.equals(other.mainImageUrl))
+			} else if (!locationCity.equals(other.locationCity))
+				return false;
+			if (locationCountry == null) {
+				if (other.locationCountry != null)
+					return false;
+			} else if (!locationCountry.equals(other.locationCountry))
+				return false;
+			if (mileage != other.mileage)
 				return false;
 			if (name == null) {
 				if (other.name != null)
@@ -190,6 +219,8 @@ public class CarDto {
 			} else if (!name.equals(other.name))
 				return false;
 			if (numberOfSeats != other.numberOfSeats)
+				return false;
+			if (price != other.price)
 				return false;
 			if (transmissionType == null) {
 				if (other.transmissionType != null)
@@ -201,14 +232,17 @@ public class CarDto {
 			return true;
 		}
 
+
+
 		@Override
 		public String toString() {
 			return "CarDto [id=" + id + ", name=" + name + ", description=" + description + ", year=" + year
-					+ ", country=" + country + ", city=" + city + ", transmissionType=" + transmissionType
-					+ ", carType=" + carType + ", numberOfSeats=" + numberOfSeats + ", mainImageUrl=" + mainImageUrl
-					+ "]";
+					+ ", transmissionType=" + transmissionType + ", fuelType=" + fuelType + ", numberOfSeats="
+					+ numberOfSeats + ", carType=" + carType + ", features=" + features + ", mileage=" + mileage
+					+ ", price=" + price + ", locationCountry=" + locationCountry + ", locationCity=" + locationCity
+					+ ", defaultImageUrl=" + defaultImageUrl + "]";
 		}
 
-				
-						
+		
+								
 }

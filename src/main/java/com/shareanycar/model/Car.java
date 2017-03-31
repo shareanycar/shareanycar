@@ -27,7 +27,7 @@ public class Car  {
 	@NotEmpty
 	private String description;
 	
-	private Integer milage;
+	private Integer mileage;
 	
 	private String features;
 	
@@ -180,8 +180,8 @@ public class Car  {
 		this.numberOfSeats = numberOfSeats;
 	}
 
-	public Integer getMilage() {
-		return milage;
+	public Integer getMileage() {
+		return mileage;
 	}
 
 	public String getFeatures() {
@@ -196,8 +196,8 @@ public class Car  {
 		return price;
 	}
 
-	public void setMilage(Integer milage) {
-		this.milage = milage;
+	public void setMileage(Integer milage) {
+		this.mileage = milage;
 	}
 
 	public void setFeatures(String features) {
@@ -212,4 +212,89 @@ public class Car  {
 		this.price = price;
 	}
 	
+	
+	public static class Builder{
+		
+		private String name;
+		private String description;
+		private Integer mileage;
+		private String features;
+		private String fuelType;
+		private Double price;
+		private Integer year;
+		private boolean status;
+		private String transmissionType; 
+		private String carType; 
+		private Integer numberOfSeats;
+		private String defaultImageUrl;
+		
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+		public Builder setDescription(String description) {
+			this.description = description;
+			return this;
+		}
+		public Builder setMileage(Integer mileage) {
+			this.mileage = mileage;
+			return this;
+		}
+		public Builder setFeatures(String features) {
+			this.features = features;
+			return this;
+		}
+		public Builder setFuelType(String fuelType) {
+			this.fuelType = fuelType;
+			return this;
+		}
+		public Builder setPrice(Double price) {
+			this.price = price;
+			return this;
+		}
+		public Builder setYear(Integer year) {
+			this.year = year;
+			return this;
+		}
+		public Builder setStatus(boolean status) {
+			this.status = status;
+			return this;
+		}
+		public Builder setTransmissionType(String transmissionType) {
+			this.transmissionType = transmissionType;
+			return this;
+		}
+		public Builder setCarType(String carType) {
+			this.carType = carType;
+			return this;
+		}
+		public Builder setNumberOfSeats(Integer numberOfSeats) {
+			this.numberOfSeats = numberOfSeats;
+			return this;
+		}
+		public Builder setDefaultImageUrl(String defaultImageUrl) {
+			this.defaultImageUrl = defaultImageUrl;
+			return this;
+		}
+		
+		public Car build(){
+			Car car = new Car();
+			
+			car.carType = this.carType;
+			car.defaultImageUrl = this.defaultImageUrl;
+			car.description = this.description;
+			car.features = this.features;
+			car.fuelType = this.fuelType;
+			car.name = this.name;
+			car.mileage = this.mileage;
+			car.numberOfSeats = this.numberOfSeats;
+			car.price = this.price;
+			car.transmissionType = this.transmissionType;
+			car.year = this.year;
+			car.status = this.status;
+			
+			return car;
+		}
+		
+	}
 }

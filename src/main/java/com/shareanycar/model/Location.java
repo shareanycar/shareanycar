@@ -20,6 +20,7 @@ public class Location {
 
 	@NotEmpty
 	private String country;
+	@NotEmpty
 	private String city;
 
 	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "location")
@@ -66,6 +67,27 @@ public class Location {
 
 	public void setOwners(Set<Owner> owners) {
 		this.owners = owners;
+	}
+
+	public static class Builder{
+		private String country;
+		private String city;
+		
+		public Builder setCountry(String country) {
+			this.country = country;
+			return this;
+		}
+		public Builder setCity(String city) {
+			this.city = city;
+			return this;
+		}
+		
+		public Location build(){
+			Location location = new Location();
+			location.country = this.country;
+			location.city = this.city;
+			return location;
+		}
 	}
 	
 

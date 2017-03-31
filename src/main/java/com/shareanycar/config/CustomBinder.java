@@ -5,6 +5,7 @@ package com.shareanycar.config;
 import javax.inject.Singleton;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.SimpleLogger;
@@ -57,7 +58,7 @@ public class CustomBinder extends AbstractBinder{
 		bind(AppConfig.class).to(AppConfig.class).in(Singleton.class);
 		bind(MiscUtils.class).to(MiscUtils.class).in(Singleton.class);
 
-		
+		bind(ModelMapper.class).to(ModelMapper.class).in(Singleton.class);
 		bind(LoggerFactory.getLogger(SimpleLogger.class)).to(Logger.class);
 		//bind(SimpleLogger.class).to(Logger.class).in(Singleton.class);
 

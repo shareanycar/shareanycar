@@ -17,11 +17,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 
 import com.shareanycar.annotation.SecuredOwner;
 import com.shareanycar.dto.CarDto;
 import com.shareanycar.model.Car;
+import com.shareanycar.model.Location;
 import com.shareanycar.model.Owner;
 import com.shareanycar.service.CarService;
 import com.shareanycar.service.OwnerService;
@@ -48,8 +50,11 @@ public class CarController {
 	public CarService carService;
 
 	@Inject
-	Logger logger;
+	public Logger logger;
 
+	@Inject
+	public ModelMapper modelMapper;
+	
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -58,10 +63,11 @@ public class CarController {
 		try {
 
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
-
-			carService.create(owner.getId(), carDto.getName(), carDto.getDescription(), carDto.getYear(),
-					carDto.getTransmissionType(), carDto.getCarType(), carDto.getNumberOfSeats(), carDto.getCountry(),
-					carDto.getCity());
+			Car car = modelMapper.map(carDto, Car.class);
+			Location location = modelMapper.map(carDto,Location.class);
+			
+			carService.create(owner.getId(), car, location);
+			
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error("error creating car: " + carDto);
@@ -79,9 +85,8 @@ public class CarController {
 			if (car == null) {
 				throw new Exception("error finding car:" + id);
 			}
-			CarDto carDto = new CarDto(id, car.getName(), car.getDescription(), car.getYear(),
-					car.getLocation().getCountry(), car.getLocation().getCity(), car.getTransmissionType(),
-					car.getCarType(), car.getNumberOfSeats());
+			CarDto carDto = modelMapper.map(car, CarDto.class);
+			
 			return Response.ok(carDto).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -97,18 +102,11 @@ public class CarController {
 	public Response update(CarDto carDto, @PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
-			Car car = carService.findCarById(id);
-			if (car == null) {
-				throw new Exception("can not find car with id: " + id);
-			}
-
-			if (car.getOwner().getId() != owner.getId()) {
-				throw new Exception("car does not belong to current user");
-			}
-
-			carService.update(owner.getId(), car.getId(), carDto.getName(), carDto.getDescription(), carDto.getYear(),
-					carDto.getTransmissionType(), carDto.getCarType(), carDto.getNumberOfSeats(), carDto.getCountry(),
-					carDto.getCity());
+			Car car = modelMapper.map(carDto, Car.class);
+			Location location = modelMapper.map(carDto, Location.class);
+			
+			carService.update(owner.getId(), id, car, location);
+						
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -124,12 +122,8 @@ public class CarController {
 	public Response delete(@PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
-			Car car = carService.findCarById(id);
-			if (car == null) {
-				throw new Exception("can not find car with id: " + id);
-			}
-
-			carService.delete(owner.getId(), car.getId());
+			
+			carService.delete(owner.getId(), id);
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -149,10 +143,8 @@ public class CarController {
 			Set<CarDto> carDtos = new HashSet<>();
 
 			for (Car car : owner.getCars()) {
-
-				carDtos.add(new CarDto(car.getId(), car.getName(), car.getDescription(), car.getYear(),
-						car.getLocation().getCountry(), car.getLocation().getCity(), car.getTransmissionType(),
-						car.getCarType(), car.getNumberOfSeats(), car.getDefaultImageUrl()));
+				CarDto carDto = modelMapper.map(car, CarDto.class);
+				carDtos.add(carDto);
 			}
 
 			return Response.ok(carDtos).build();

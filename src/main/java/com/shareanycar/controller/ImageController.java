@@ -20,6 +20,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 
 import com.shareanycar.annotation.SecuredOwner;
@@ -41,6 +42,9 @@ public class ImageController {
 	@Inject
 	public Logger logger;
 	
+	@Inject
+	public ModelMapper modelMapper;
+	
 	@GET
 	@Path("car/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -49,7 +53,8 @@ public class ImageController {
 			List<ImageDto> images = new LinkedList<>();
 
 			for (Image image : imageService.findImageByCarId(id)) {
-				images.add(new ImageDto(image.getId(), image.getCar().getId(), image.getName(), image.getUrlSmall(), image.getUrlLarge(), image.getUrlOrig()));
+				ImageDto imageDto = modelMapper.map(image, ImageDto.class);
+				images.add(imageDto);
 			}
 			return Response.ok(images).build();
 		} catch (Exception e) {
@@ -87,8 +92,7 @@ public class ImageController {
 			if(carId != image.getCar().getId()){
 				throw new Exception("image with id:" + imageId + " does not belong to car with id:" + carId);
 			}
-			
-			ImageDto imageDto = new ImageDto(image.getId(), image.getCar().getId(), image.getName(), image.getUrlSmall(), image.getUrlLarge(), image.getUrlOrig());
+			ImageDto imageDto = modelMapper.map(image, ImageDto.class);
 			return Response.ok(imageDto).build();
 		}catch(Exception e){
 			logger.error(e.getMessage());

@@ -3,10 +3,7 @@ package com.shareanycar.dao;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.jvnet.hk2.annotations.Service;
 
 import com.shareanycar.model.Location;

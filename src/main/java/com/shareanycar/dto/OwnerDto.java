@@ -8,25 +8,12 @@ public class OwnerDto {
 	private Long id;
 	private String firstName;
 	private String lastName;
-	private String country;
-	private String city;
+	private String locationCountry;
+	private String locationCity;
 	private String phone;
 	private String email;
 	private String password;
 	
-	public OwnerDto(){}
-	
-	public OwnerDto(Long id, String firstName, String lastName, String country, String city, String phone,
-			String email) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.country = country;
-		this.city = city;
-		this.phone = phone;
-		this.email = email;
-	}
 	
 	public Long getId() {
 		return id;
@@ -46,18 +33,7 @@ public class OwnerDto {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getCountry() {
-		return country;
-	}
-	public void setCountry(String country) {
-		this.country = country;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -79,24 +55,48 @@ public class OwnerDto {
 		this.password = password;
 	}
 
-	
 
-	
+
+	public String getLocationCountry() {
+		return locationCountry;
+	}
+
+
+
+	public String getLocationCity() {
+		return locationCity;
+	}
+
+
+
+	public void setLocationCountry(String locationCountry) {
+		this.locationCountry = locationCountry;
+	}
+
+
+
+	public void setLocationCity(String locationCity) {
+		this.locationCity = locationCity;
+	}
+
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((city == null) ? 0 : city.hashCode());
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((locationCity == null) ? 0 : locationCity.hashCode());
+		result = prime * result + ((locationCountry == null) ? 0 : locationCountry.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		return result;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -107,16 +107,6 @@ public class OwnerDto {
 		if (getClass() != obj.getClass())
 			return false;
 		OwnerDto other = (OwnerDto) obj;
-		if (city == null) {
-			if (other.city != null)
-				return false;
-		} else if (!city.equals(other.city))
-			return false;
-		if (country == null) {
-			if (other.country != null)
-				return false;
-		} else if (!country.equals(other.country))
-			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -137,6 +127,16 @@ public class OwnerDto {
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
+		if (locationCity == null) {
+			if (other.locationCity != null)
+				return false;
+		} else if (!locationCity.equals(other.locationCity))
+			return false;
+		if (locationCountry == null) {
+			if (other.locationCountry != null)
+				return false;
+		} else if (!locationCountry.equals(other.locationCountry))
+			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
@@ -150,11 +150,18 @@ public class OwnerDto {
 		return true;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "OwnerDto [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", country=" + country
-				+ ", city=" + city + ", phone=" + phone + ", email=" + email + ", password=" + password + "]";
+		return "OwnerDto [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", locationCountry="
+				+ locationCountry + ", locationCity=" + locationCity + ", phone=" + phone + ", email=" + email
+				+ ", password=" + password + "]";
 	}
+
 	
+
 	
+
+		
 }

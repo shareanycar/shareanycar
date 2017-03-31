@@ -127,6 +127,47 @@ public class Owner {
 		this.token = token;
 	}
 
+	public static class Builder{
+		private  String firstName;
+		private  String lastName;
+		private  String email;
+		private  String password;
+		private  String phone;
+		
+		public Builder setFirstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+		public Builder setLastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+		public Builder setEmail(String email) {
+			this.email = email;
+			return this;
+		}
+		public Builder setPassword(String password) {
+			this.password = password;
+			return this;
+		}
+		public Builder setPhone(String phone) {
+			this.phone = phone;
+			return this;
+		}
+		
+		public Owner build(){
+			Owner owner = new Owner();
+			owner.firstName = this.firstName;
+			owner.lastName = this.lastName;
+			owner.email = this.email;
+			owner.password = this.password;
+			owner.phone = this.phone;
+			return owner;
+		}
+		
+		
+	}
+
 	
 
 	

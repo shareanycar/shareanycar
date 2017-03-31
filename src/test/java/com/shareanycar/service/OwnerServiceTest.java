@@ -21,35 +21,35 @@ import com.shareanycar.dao.OwnerDao;
 import com.shareanycar.model.Location;
 import com.shareanycar.model.Owner;
 
-public class OwnerServiceTest extends HK2Runner{
-	
+public class OwnerServiceTest extends HK2Runner {
+
 	@Inject
-	public OwnerService ownerService ;
-	
+	public OwnerService ownerService;
+
 	@Inject
-	public OwnerDao ownerDao ;
-	
+	public OwnerDao ownerDao;
+
 	@Inject
-	public CarDao carDao ;
-	
+	public CarDao carDao;
+
 	@Inject
-	public ImageDao imageDao ;
-	
+	public ImageDao imageDao;
+
 	@Inject
-	public LocationDao locationDao ;
-	
+	public LocationDao locationDao;
+
 	@Inject
-	public ConversationDao conversationDao ;
-	
+	public ConversationDao conversationDao;
+
 	@Inject
-	public MessageDao messageDao ;
-	
+	public MessageDao messageDao;
+
 	@Inject
-	public CommentDao commentDao ;
-	
+	public CommentDao commentDao;
+
 	@Before
 	public void setUp() throws Exception {
-		
+
 		messageDao.deleteAll();
 		conversationDao.deleteAll();
 		imageDao.deleteAll();
@@ -57,7 +57,7 @@ public class OwnerServiceTest extends HK2Runner{
 		carDao.deleteAll();
 		ownerDao.deleteAll();
 		locationDao.deleteAll();
-		
+
 	}
 
 	@After
@@ -66,61 +66,81 @@ public class OwnerServiceTest extends HK2Runner{
 
 	@Test
 	public void ownerCreationTest() {
-		
+
 		Long id;
-		Owner owner;
+		Owner owner =  new Owner.Builder()
+							.setFirstName("First Name")
+							.setLastName("last name")
+							.setEmail("email")
+							.setPassword("letmein")
+							.setPhone("777777777")
+							.build();
+		
+		Location location = new Location.Builder()
+								.setCountry("USA")
+								.setCity("New York")
+								.build();
 		try {
-			id = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77", "test@test.com", "letmein");
+			id = ownerService.create(owner, location);
+			//id = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77", "test@test.com",
+			//		"letmein");
+			
+
 			owner = ownerService.findOwnerById(id);
 			assertEquals("user not created", owner.getPassword(), "letmein");
 
-			Location location = owner.getLocation();
+			location = owner.getLocation();
 			assertNotNull(location);
-			assertEquals("location created", "USA",location.getCountry());
-			
+			assertEquals("location created", "USA", location.getCountry());
+
 		} catch (Exception e1) {
 			fail("can not create owner");
 		}
 
 		try {
-			ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77", "test@test.com", "letmein");
+			Owner owner2 = new Owner.Builder().setEmail("email").build();
+			ownerService.create(owner2, location);
 			fail("able to create duplicate user, email is the same");
 		} catch (Exception e) {
 		}
-		
+
 	}
 
-	
-	
 	@Test
 	public void twoLocationsCreatedTest() {
-		
+
 		try {
-			ownerService.create("FirstName", "LastName", "USA", " New  York ", "7(777)777-77-77", "test@test1.com", "letmein");
-			ownerService.create("FirstName", "LastName", "USA", "Chicago", "7(777)777-77-77", "test@test2.com", "letmein");
+			Owner owner1 = new Owner.Builder().setEmail("email1").build();
+			Owner owner2 = new Owner.Builder().setEmail("email2").build();
 			
+			Location loc1 = new Location.Builder().setCountry("USA").setCity("New York").build();
+			Location loc2 = new Location.Builder().setCountry("USA").setCity("Chicago").build();
+			
+			ownerService.create(owner1, loc1);
+			ownerService.create(owner2, loc2);
+			
+	
 			Iterable<Location> locations = locationDao.findAll();
-			
+
 			int cnt = 0;
-			
-			for(Location loc : locations){
+
+			for (Location loc : locations) {
 				cnt++;
-				if(loc.getCity().equals("NEW YORK")){
+				if (loc.getCity().equals("New York")) {
 					continue;
 				}
-				
-				if(loc.getCity().equals("CHICAGO")){
+
+				if (loc.getCity().equals("Chicago")) {
 					continue;
 				}
 				fail("did not save location properly");
 			}
-			
+
 			assertEquals("2 locations expected", 2, cnt);
 		} catch (Exception e) {
 			fail("can not create owner");
 		}
-		
+
 	}
 
 }
-
