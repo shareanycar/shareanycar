@@ -21,6 +21,18 @@ public class FuelType {
 	@NotEmpty
 	private String name;
 	
+	
+	
+	public FuelType() {
+
+	}
+
+	
+	public FuelType(String name) {
+		this.name = name;
+	}
+
+
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "fuelType")
 	private Set<Car> cars;
 

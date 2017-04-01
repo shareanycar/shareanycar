@@ -34,13 +34,13 @@ public class OwnerService {
 			throw new Exception("user with such email already exists");
 		}
 		
-		Location setLocation = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
+		location = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
 		
-		if( setLocation == null){
-			setLocation = locationDao.save(location);
+		if( location == null){
+			throw new Exception("can not find location");
 		}
 		
-		owner.setLocation(setLocation);
+		owner.setLocation(location);
 		owner = ownerDao.save(owner);
 		
 		return owner.getId();
@@ -54,15 +54,15 @@ public class OwnerService {
 				throw new Exception("can not find owner with id:" + ownerId);
 		 }
 		 
-		 Location setLocation = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
+		 location = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
 			
-		 if( setLocation == null){
-			setLocation = locationDao.save(location);
+		 if( location == null){
+				throw new Exception("can not find location");
 		 }
 		 
 		 currentOwner.setFirstName(owner.getFirstName());
 		 currentOwner.setLastName(owner.getLastName());
-		 currentOwner.setLocation(setLocation);
+		 currentOwner.setLocation(location);
 		 currentOwner.setPhone(owner.getPhone());
 		 
 		 ownerDao.save(currentOwner);
@@ -85,12 +85,12 @@ public class OwnerService {
 	
 
 
-	public Owner findOwnerByEmail(String email) {
+	public Owner findByEmail(String email) {
 		return ownerDao.findOwnerByEmail(email);
 	}
 	
 	
-	public Owner findOwnerById(Long id){
+	public Owner findById(Long id){
 		return ownerDao.findOne(id);
 	}
 	

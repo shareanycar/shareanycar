@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -28,18 +29,8 @@ public class LocationController {
 	
 	@Inject
 	public OwnerService ownerService;
-
-	@GET @Path("/all")
-	@Produces({ MediaType.APPLICATION_JSON})
-	public Set<LocationDto> allLoctions(){
-		Set<LocationDto> locDto = new HashSet<>();
-		for(Location loc : locationService.findAll()){
-			locDto.add(new LocationDto(loc.getId(),loc.getCountry(),loc.getCity()));
-		}
-		return locDto;
-	}
 	
-	@GET @Path("/contries")
+	@GET @Path("/countries")
 	@Produces({ MediaType.APPLICATION_JSON})
 	public Set<LocationDto> countryLocations(){
 		Set<LocationDto> locDto = new HashSet<>();
@@ -49,9 +40,9 @@ public class LocationController {
 		return locDto;
 	}
 	
-	@GET @Path("/cities")
+	@GET @Path("/country/{country}/cities")
 	@Produces({ MediaType.APPLICATION_JSON})
-	public Set<LocationDto> cityLocations(){
+	public Set<LocationDto> cityLocations(@PathParam("country") String country){
 		Set<LocationDto> locDto = new HashSet<>();
 		for(Location l : locationService.findAll()){
 			locDto.add(new LocationDto(null, null, l.getCity()));

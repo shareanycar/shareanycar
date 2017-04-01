@@ -5,13 +5,19 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.shareanycar.dao.CarDao;
+import com.shareanycar.dao.CarTypeDao;
+import com.shareanycar.dao.FuelTypeDao;
 import com.shareanycar.dao.ImageDao;
 import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.OwnerDao;
+import com.shareanycar.dao.TransmissionTypeDao;
 import com.shareanycar.model.Car;
+import com.shareanycar.model.CarType;
+import com.shareanycar.model.FuelType;
 import com.shareanycar.model.Image;
 import com.shareanycar.model.Location;
 import com.shareanycar.model.Owner;
+import com.shareanycar.model.TransmissionType;
 
 public class CarService {
 
@@ -28,89 +34,99 @@ public class CarService {
 	public LocationDao locationDao;
 
 	@Inject
+	public FuelTypeDao fuelTypeDao;
+
+	@Inject
+	public TransmissionTypeDao transmissionTypeDao;
+
+	@Inject
+	public CarTypeDao carTypeDao;
+
+	@Inject
 	public ImageService imageService;
-		
 
 	@Inject
 	public ImageDao imageDao;
+
 	
-	
-	public Long create(Long ownerId, Car car, Location location) throws Exception{
-		Owner owner = ownerDao.findOne(ownerId);
+	private Car setCarProperties(Car car, Location location, TransmissionType transmissionType, CarType carType, FuelType fuelType) throws Exception{
+		location = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
+		carType = carTypeDao.findByName(carType.getName());
+		transmissionType = transmissionTypeDao.findByName(transmissionType.getName());
+		fuelType = fuelTypeDao.findByName(fuelType.getName());
+
+		if (location == null || carType == null || transmissionType == null || fuelType == null) {
+			throw new Exception("can not find car property");
+		}
+
+		car.setLocation(location);
+		car.setTransmissionType(transmissionType);
+		car.setCarType(carType);
+		car.setFuelType(fuelType);
 		
+		return car;
+	}
+	
+	public Long create(Long ownerId, Car car, Location location, TransmissionType transmissionType, CarType carType,
+			FuelType fuelType) throws Exception {
+		Owner owner = ownerDao.findOne(ownerId);
+
 		if (owner == null) {
 			throw new Exception("can not find owner with id: " + ownerId);
 		}
-		
-		Location setLocation = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
-		
-		if(setLocation == null){
-			setLocation = locationDao.save(location);
-		}
-		
-		car.setLocation(setLocation);
+
+		car = setCarProperties(car, location, transmissionType, carType, fuelType);
 		car.setOwner(owner);
 
 		car = carDao.save(car);
-		
+
 		return car.getId();
-		
+
 	}
-	
-	
 
-	public void update(Long ownerId, Long carId, Car car, Location location) throws Exception{
+	public void update(Long ownerId, Long carId, Car car, Location location, TransmissionType transmissionType, CarType carType, FuelType fuelType) throws Exception {
 
-		if(car == null){
+		if (car == null) {
 			throw new Exception("no update car provided");
 		}
-		
-		if(location == null){
+
+		if (location == null) {
 			throw new Exception("no update location provided");
 		}
-		
+
 		Car currentCar = carDao.findOne(carId);
 
-		if(currentCar == null){
+		if (currentCar == null) {
 			throw new Exception("can not find car");
 		}
-		
 
 		if (currentCar.getOwner().getId() != ownerId) {
 			throw new Exception("car does not belong to current owner id:" + ownerId);
 		}
 
-		Location setLocation = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
+		currentCar = setCarProperties(currentCar, location, transmissionType, carType, fuelType);
 
-		if(setLocation == null){
-			setLocation = locationDao.save(location);
-		}
-		
-		currentCar.setLocation(setLocation);
 		currentCar.setName(car.getName());
 		currentCar.setDescription(car.getDescription());
 		currentCar.setFeatures(car.getFeatures());
-		currentCar.setFuelType(car.getFuelType());
 		currentCar.setMileage(car.getMileage());
 		currentCar.setNumberOfSeats(car.getNumberOfSeats());
-		currentCar.setTransmissionType(car.getTransmissionType());
 		currentCar.setPrice(car.getPrice());
 		currentCar.setYear(car.getYear());
 		currentCar.setStatus(car.isStatus());
-		currentCar.setCarType(car.getCarType());
-		
+
 		currentCar = carDao.save(currentCar);
-		
+
 	}
-	
+
 	public void delete(Long ownerId, Long carId) throws Exception {
 		Car car = carDao.findOne(carId);
 
 		if (car.getOwner().getId() != ownerId) {
 			throw new Exception("car does not belong to current owner id:" + ownerId);
 		}
-		
-		for(Image image: car.getImages()){
+
+		for (Image image : car.getImages()) {
 			imageService.delete(image.getId(), car.getId(), ownerId, false);
 		}
 		carDao.delete(car);
@@ -123,10 +139,10 @@ public class CarService {
 			throw new Exception("can not find image with id:" + imageId);
 		}
 
-		if(image.getCar().getOwner().getId() != ownerId){
+		if (image.getCar().getOwner().getId() != ownerId) {
 			throw new Exception("image does not belong to current owner id:" + imageId);
 		}
-		
+
 		Car car = carDao.findOne(carId);
 
 		if (car == null) {
@@ -150,6 +166,5 @@ public class CarService {
 	public Car findCarById(Long id) {
 		return carDao.findOne(id);
 	}
-
 
 }

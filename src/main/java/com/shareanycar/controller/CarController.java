@@ -23,8 +23,11 @@ import org.slf4j.Logger;
 import com.shareanycar.annotation.SecuredOwner;
 import com.shareanycar.dto.CarDto;
 import com.shareanycar.model.Car;
+import com.shareanycar.model.CarType;
+import com.shareanycar.model.FuelType;
 import com.shareanycar.model.Location;
 import com.shareanycar.model.Owner;
+import com.shareanycar.model.TransmissionType;
 import com.shareanycar.service.CarService;
 import com.shareanycar.service.OwnerService;
 import com.shareanycar.util.ContextUtil;
@@ -64,9 +67,13 @@ public class CarController {
 
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
 			Car car = modelMapper.map(carDto, Car.class);
-			Location location = modelMapper.map(carDto,Location.class);
 			
-			carService.create(owner.getId(), car, location);
+			Location location = modelMapper.map(carDto,Location.class);
+			TransmissionType transmissionType = modelMapper.map(carDto, TransmissionType.class);
+			CarType carType = modelMapper.map(carDto, CarType.class);
+			FuelType fuelType = modelMapper.map(carDto, FuelType.class);
+						
+			carService.create(owner.getId(), car, location,transmissionType, carType, fuelType);
 			
 			return Response.ok().build();
 		} catch (Exception e) {
@@ -101,10 +108,14 @@ public class CarController {
 	public Response update(CarDto carDto, @PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
+			
 			Car car = modelMapper.map(carDto, Car.class);
 			Location location = modelMapper.map(carDto, Location.class);
+			CarType carType = modelMapper.map(carDto, CarType.class);
+			TransmissionType transmissionType = modelMapper.map(carDto, TransmissionType.class);
+			FuelType fuelType = modelMapper.map(carDto, FuelType.class);
 			
-			carService.update(owner.getId(), id, car, location);
+			carService.update(owner.getId(), id, car, location,transmissionType,carType, fuelType);
 						
 			return Response.ok().build();
 		} catch (Exception e) {

@@ -9,10 +9,10 @@ public class CarDto {
 		private String name;
 		private String description;
 		private int year;
-		private String transmissionType;
-		private String fuelType;
+		private String transmissionTypeName;
+		private String fuelTypeName;
+		private String carTypeName;
 		private int numberOfSeats;
-		private String carType;
 		private String features;
 		private int mileage;
 		private int price;
@@ -38,13 +38,7 @@ public class CarDto {
 			return year;
 		}
 
-		public String getTransmissionType() {
-			return transmissionType;
-		}
-
-		public String getCarType() {
-			return carType;
-		}
+		
 
 		public int getNumberOfSeats() {
 			return numberOfSeats;
@@ -70,16 +64,6 @@ public class CarDto {
 			this.year = year;
 		}
 
-		
-
-		public void setTransmissionType(String transmissionType) {
-			this.transmissionType = transmissionType;
-		}
-
-		public void setCarType(String carType) {
-			this.carType = carType;
-		}
-
 		public void setNumberOfSeats(int numberOfSeats) {
 			this.numberOfSeats = numberOfSeats;
 		}
@@ -88,10 +72,7 @@ public class CarDto {
 			this.defaultImageUrl = defaultImageUrl;
 		}
 
-		public String getFuelType() {
-			return fuelType;
-		}
-
+		
 		public String getFeatures() {
 			return features;
 		}
@@ -102,10 +83,6 @@ public class CarDto {
 
 		public int getPrice() {
 			return price;
-		}
-
-		public void setFuelType(String fuelType) {
-			this.fuelType = fuelType;
 		}
 
 		public void setFeatures(String features) {
@@ -133,21 +110,43 @@ public class CarDto {
 			this.locationCountry = locationCountry;
 		}
 
-
-
 		public void setLocationCity(String locationCity) {
 			this.locationCity = locationCity;
+		}
+
+		public String getTransmissionTypeName() {
+			return transmissionTypeName;
+		}
+
+		public String getFuelTypeName() {
+			return fuelTypeName;
+		}
+
+		public String getCarTypeName() {
+			return carTypeName;
+		}
+
+		public void setTransmissionTypeName(String transmissionTypeName) {
+			this.transmissionTypeName = transmissionTypeName;
+		}
+
+		public void setFuelTypeName(String fuelTypeName) {
+			this.fuelTypeName = fuelTypeName;
+		}
+
+		public void setCarTypeName(String carTypeName) {
+			this.carTypeName = carTypeName;
 		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((carType == null) ? 0 : carType.hashCode());
+			result = prime * result + ((carTypeName == null) ? 0 : carTypeName.hashCode());
 			result = prime * result + ((defaultImageUrl == null) ? 0 : defaultImageUrl.hashCode());
 			result = prime * result + ((description == null) ? 0 : description.hashCode());
 			result = prime * result + ((features == null) ? 0 : features.hashCode());
-			result = prime * result + ((fuelType == null) ? 0 : fuelType.hashCode());
+			result = prime * result + ((fuelTypeName == null) ? 0 : fuelTypeName.hashCode());
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
 			result = prime * result + ((locationCity == null) ? 0 : locationCity.hashCode());
 			result = prime * result + ((locationCountry == null) ? 0 : locationCountry.hashCode());
@@ -155,12 +154,10 @@ public class CarDto {
 			result = prime * result + ((name == null) ? 0 : name.hashCode());
 			result = prime * result + numberOfSeats;
 			result = prime * result + price;
-			result = prime * result + ((transmissionType == null) ? 0 : transmissionType.hashCode());
+			result = prime * result + ((transmissionTypeName == null) ? 0 : transmissionTypeName.hashCode());
 			result = prime * result + year;
 			return result;
 		}
-
-
 
 		@Override
 		public boolean equals(Object obj) {
@@ -171,10 +168,10 @@ public class CarDto {
 			if (getClass() != obj.getClass())
 				return false;
 			CarDto other = (CarDto) obj;
-			if (carType == null) {
-				if (other.carType != null)
+			if (carTypeName == null) {
+				if (other.carTypeName != null)
 					return false;
-			} else if (!carType.equals(other.carType))
+			} else if (!carTypeName.equals(other.carTypeName))
 				return false;
 			if (defaultImageUrl == null) {
 				if (other.defaultImageUrl != null)
@@ -191,10 +188,10 @@ public class CarDto {
 					return false;
 			} else if (!features.equals(other.features))
 				return false;
-			if (fuelType == null) {
-				if (other.fuelType != null)
+			if (fuelTypeName == null) {
+				if (other.fuelTypeName != null)
 					return false;
-			} else if (!fuelType.equals(other.fuelType))
+			} else if (!fuelTypeName.equals(other.fuelTypeName))
 				return false;
 			if (id == null) {
 				if (other.id != null)
@@ -222,27 +219,24 @@ public class CarDto {
 				return false;
 			if (price != other.price)
 				return false;
-			if (transmissionType == null) {
-				if (other.transmissionType != null)
+			if (transmissionTypeName == null) {
+				if (other.transmissionTypeName != null)
 					return false;
-			} else if (!transmissionType.equals(other.transmissionType))
+			} else if (!transmissionTypeName.equals(other.transmissionTypeName))
 				return false;
 			if (year != other.year)
 				return false;
 			return true;
 		}
 
-
-
 		@Override
 		public String toString() {
 			return "CarDto [id=" + id + ", name=" + name + ", description=" + description + ", year=" + year
-					+ ", transmissionType=" + transmissionType + ", fuelType=" + fuelType + ", numberOfSeats="
-					+ numberOfSeats + ", carType=" + carType + ", features=" + features + ", mileage=" + mileage
-					+ ", price=" + price + ", locationCountry=" + locationCountry + ", locationCity=" + locationCity
-					+ ", defaultImageUrl=" + defaultImageUrl + "]";
+					+ ", transmissionTypeName=" + transmissionTypeName + ", fuelTypeName=" + fuelTypeName
+					+ ", carTypeName=" + carTypeName + ", numberOfSeats=" + numberOfSeats + ", features=" + features
+					+ ", mileage=" + mileage + ", price=" + price + ", locationCountry=" + locationCountry
+					+ ", locationCity=" + locationCity + ", defaultImageUrl=" + defaultImageUrl + "]";
 		}
 
-		
-								
+									
 }

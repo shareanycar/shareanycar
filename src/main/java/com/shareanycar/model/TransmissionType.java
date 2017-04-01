@@ -21,6 +21,17 @@ public class TransmissionType {
 	@NotEmpty
 	private String name;
 	
+	public TransmissionType() {
+	}
+	
+	
+
+	public TransmissionType(String name) {
+		this.name = name;
+	}
+
+
+
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "transmissionType")
 	private Set<Car> cars;
 

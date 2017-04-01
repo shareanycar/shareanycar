@@ -2,7 +2,6 @@ package com.shareanycar.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
@@ -16,8 +15,11 @@ import com.shareanycar.dao.BookingDao;
 import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.OwnerDao;
 import com.shareanycar.model.Car;
+import com.shareanycar.model.CarType;
+import com.shareanycar.model.FuelType;
 import com.shareanycar.model.Location;
 import com.shareanycar.model.Owner;
+import com.shareanycar.model.TransmissionType;
 
 public class CarServiceTest extends HK2Runner {
 
@@ -41,6 +43,9 @@ public class CarServiceTest extends HK2Runner {
 	private Car car1;
 	private Car car2;
 	private Long owId;
+	private TransmissionType transmissionType;
+	private FuelType fuelType;
+	private CarType carType ;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -52,8 +57,11 @@ public class CarServiceTest extends HK2Runner {
 		owner = new Owner.Builder().setEmail("email").build();
 		car1 = new Car.Builder().setName("First Car").build();
 		car2 = new Car.Builder().setName("Second Car").build();
+		carType = new CarType("jeep");
+		transmissionType = new TransmissionType("manual");
+		fuelType = new FuelType("petrol");
 
-		loc = new Location.Builder().setCountry("USA").build();
+		loc = new Location.Builder().setCountry("Russia").setCity("Moscow").build();
 		owId = ownerService.create(owner, loc);
 	}
 
@@ -66,8 +74,8 @@ public class CarServiceTest extends HK2Runner {
 
 		try {
 			
-			Long id1 = carService.create(owId, car1, loc);
-			Long id2 = carService.create(owId, car2, loc);
+			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType);
+			Long id2 = carService.create(owId, car2, loc,transmissionType, carType, fuelType);
 			
 			car1 = carService.findCarById(id1);
 			car2 = carService.findCarById(id2);
@@ -86,12 +94,12 @@ public class CarServiceTest extends HK2Runner {
 	@Test
 	public void updateCarInfoTest() {
 		try {		
-			Long id1 = carService.create(owId, car1, loc);
+			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType);
 			car1 = carService.findCarById(id1);
 
 			assertEquals("First Car", "First Car", car1.getName());
 
-			carService.update(owId, id1, car2, loc);
+			carService.update(owId, id1, car2, loc, transmissionType, carType, fuelType);
 			
 
 			car1 = carService.findCarById(id1);
@@ -106,7 +114,7 @@ public class CarServiceTest extends HK2Runner {
 	@Test
 	public void removeCarTest() {
 		try {
-			Long id = carService.create(owId, car1, loc);
+			Long id = carService.create(owId, car1, loc,transmissionType, carType, fuelType);
 			Car car = carService.findCarById(id);
 			
 			assertNotNull("Car created", car);
@@ -121,4 +129,5 @@ public class CarServiceTest extends HK2Runner {
 	}
 
 }
+
 

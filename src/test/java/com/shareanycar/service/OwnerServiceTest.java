@@ -56,7 +56,7 @@ public class OwnerServiceTest extends HK2Runner {
 		commentDao.deleteAll();
 		carDao.deleteAll();
 		ownerDao.deleteAll();
-		locationDao.deleteAll();
+		//locationDao.deleteAll();
 
 	}
 
@@ -77,24 +77,21 @@ public class OwnerServiceTest extends HK2Runner {
 							.build();
 		
 		Location location = new Location.Builder()
-								.setCountry("USA")
-								.setCity("New York")
+								.setCountry("Russia")
+								.setCity("Moscow")
 								.build();
 		try {
 			id = ownerService.create(owner, location);
-			//id = ownerService.create("FirstName", "LastName", "USA", "New York", "7(777)777-77-77", "test@test.com",
-			//		"letmein");
 			
-
-			owner = ownerService.findOwnerById(id);
+			owner = ownerService.findById(id);
 			assertEquals("user not created", owner.getPassword(), "letmein");
 
 			location = owner.getLocation();
 			assertNotNull(location);
-			assertEquals("location created", "USA", location.getCountry());
+			assertEquals("location set", "Russia", location.getCountry());
 
 		} catch (Exception e1) {
-			fail("can not create owner");
+			fail(e1.getMessage());
 		}
 
 		try {
@@ -102,45 +99,10 @@ public class OwnerServiceTest extends HK2Runner {
 			ownerService.create(owner2, location);
 			fail("able to create duplicate user, email is the same");
 		} catch (Exception e) {
+			
 		}
 
 	}
 
-	@Test
-	public void twoLocationsCreatedTest() {
-
-		try {
-			Owner owner1 = new Owner.Builder().setEmail("email1").build();
-			Owner owner2 = new Owner.Builder().setEmail("email2").build();
-			
-			Location loc1 = new Location.Builder().setCountry("USA").setCity("New York").build();
-			Location loc2 = new Location.Builder().setCountry("USA").setCity("Chicago").build();
-			
-			ownerService.create(owner1, loc1);
-			ownerService.create(owner2, loc2);
-			
 	
-			Iterable<Location> locations = locationDao.findAll();
-
-			int cnt = 0;
-
-			for (Location loc : locations) {
-				cnt++;
-				if (loc.getCity().equals("New York")) {
-					continue;
-				}
-
-				if (loc.getCity().equals("Chicago")) {
-					continue;
-				}
-				fail("did not save location properly");
-			}
-
-			assertEquals("2 locations expected", 2, cnt);
-		} catch (Exception e) {
-			fail("can not create owner");
-		}
-
-	}
-
 }

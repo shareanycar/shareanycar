@@ -15,13 +15,20 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 public class CarType {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@NotEmpty
 	private String name;
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "carType")
+
+	public CarType(String name) {
+		this.name = name;
+	}
+
+	public CarType() {
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "carType")
 	private Set<Car> cars;
 
 	public Long getId() {
@@ -47,6 +54,5 @@ public class CarType {
 	public void setCars(Set<Car> cars) {
 		this.cars = cars;
 	}
-	
-	
+
 }

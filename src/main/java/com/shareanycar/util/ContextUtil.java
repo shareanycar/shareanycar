@@ -14,7 +14,7 @@ public class ContextUtil {
 	
 	public Owner getCurrentOwner(SecurityContext securityContext) throws Exception{
 		Principal principal = securityContext.getUserPrincipal();
-		Owner owner = ownerService.findOwnerByEmail(principal.getName());
+		Owner owner = ownerService.findByEmail(principal.getName());
 		if(owner == null){
 			throw new Exception("can not find current owner");
 		}
