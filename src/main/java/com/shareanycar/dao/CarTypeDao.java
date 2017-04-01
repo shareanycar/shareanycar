@@ -2,8 +2,11 @@ package com.shareanycar.dao;
 
 import javax.inject.Inject;
 
+import org.jvnet.hk2.annotations.Service;
+
 import com.shareanycar.model.CarType;
 
+@Service
 public class CarTypeDao extends BasicDao<CarType>{
 
 	@Inject

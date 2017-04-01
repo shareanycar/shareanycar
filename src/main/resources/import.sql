@@ -1,6 +1,8 @@
 -- locations
 insert into Location (country, city,id) values('Russia', 'Moscow',1);
 insert into Location (country, city,id) values('Russia', 'Alushta',2);
+insert into Location (country, city,id) values('USA', 'Chicago',3);
+insert into Location (country, city,id) values('USA', 'New York',4);
 
 -- car type
 insert into CarType(name,id) values('sedan',1);

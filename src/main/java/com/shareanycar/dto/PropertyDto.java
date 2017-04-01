@@ -1,29 +1,32 @@
 package com.shareanycar.dto;
 
-public class FuelTypeDto {
-	private Long id;
+public class PropertyDto {
 	private String name;
+
 	
-	public Long getId() {
-		return id;
+	
+	public PropertyDto() {}
+
+	public PropertyDto(String name) {
+		this.name = name;
 	}
+
 	public String getName() {
 		return name;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -32,12 +35,7 @@ public class FuelTypeDto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FuelTypeDto other = (FuelTypeDto) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
+		PropertyDto other = (PropertyDto) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -45,9 +43,10 @@ public class FuelTypeDto {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "FuelTypeDto [id=" + id + ", name=" + name + "]";
+		return "PropertyDto [name=" + name + "]";
 	}
 	
 	

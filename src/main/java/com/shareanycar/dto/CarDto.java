@@ -18,126 +18,91 @@ public class CarDto {
 		private int price;
 		private String locationCountry;
 		private String locationCity;
-		
 		private String defaultImageUrl;
-
-		
 		public Long getId() {
 			return id;
 		}
-
 		public String getName() {
 			return name;
 		}
-
 		public String getDescription() {
 			return description;
 		}
-
 		public int getYear() {
 			return year;
 		}
-
-		
-
-		public int getNumberOfSeats() {
-			return numberOfSeats;
-		}
-
-		public String getDefaultImageUrl() {
-			return defaultImageUrl;
-		}
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public void setDescription(String description) {
-			this.description = description;
-		}
-
-		public void setYear(int year) {
-			this.year = year;
-		}
-
-		public void setNumberOfSeats(int numberOfSeats) {
-			this.numberOfSeats = numberOfSeats;
-		}
-
-		public void setDefaultImageUrl(String defaultImageUrl) {
-			this.defaultImageUrl = defaultImageUrl;
-		}
-
-		
-		public String getFeatures() {
-			return features;
-		}
-
-		public int getMileage() {
-			return mileage;
-		}
-
-		public int getPrice() {
-			return price;
-		}
-
-		public void setFeatures(String features) {
-			this.features = features;
-		}
-
-		public void setMileage(int mileage) {
-			this.mileage = mileage;
-		}
-
-		public void setPrice(int price) {
-			this.price = price;
-		}
-
-		public String getLocationCountry() {
-			return locationCountry;
-		}
-
-
-		public String getLocationCity() {
-			return locationCity;
-		}
-
-		public void setLocationCountry(String locationCountry) {
-			this.locationCountry = locationCountry;
-		}
-
-		public void setLocationCity(String locationCity) {
-			this.locationCity = locationCity;
-		}
-
 		public String getTransmissionTypeName() {
 			return transmissionTypeName;
 		}
-
 		public String getFuelTypeName() {
 			return fuelTypeName;
 		}
-
 		public String getCarTypeName() {
 			return carTypeName;
 		}
-
+		public int getNumberOfSeats() {
+			return numberOfSeats;
+		}
+		public String getFeatures() {
+			return features;
+		}
+		public int getMileage() {
+			return mileage;
+		}
+		public int getPrice() {
+			return price;
+		}
+		public String getLocationCountry() {
+			return locationCountry;
+		}
+		public String getLocationCity() {
+			return locationCity;
+		}
+		public String getDefaultImageUrl() {
+			return defaultImageUrl;
+		}
+		public void setId(Long id) {
+			this.id = id;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public void setDescription(String description) {
+			this.description = description;
+		}
+		public void setYear(int year) {
+			this.year = year;
+		}
 		public void setTransmissionTypeName(String transmissionTypeName) {
 			this.transmissionTypeName = transmissionTypeName;
 		}
-
 		public void setFuelTypeName(String fuelTypeName) {
 			this.fuelTypeName = fuelTypeName;
 		}
-
 		public void setCarTypeName(String carTypeName) {
 			this.carTypeName = carTypeName;
 		}
-
+		public void setNumberOfSeats(int numberOfSeats) {
+			this.numberOfSeats = numberOfSeats;
+		}
+		public void setFeatures(String features) {
+			this.features = features;
+		}
+		public void setMileage(int mileage) {
+			this.mileage = mileage;
+		}
+		public void setPrice(int price) {
+			this.price = price;
+		}
+		public void setLocationCountry(String locationCountry) {
+			this.locationCountry = locationCountry;
+		}
+		public void setLocationCity(String locationCity) {
+			this.locationCity = locationCity;
+		}
+		public void setDefaultImageUrl(String defaultImageUrl) {
+			this.defaultImageUrl = defaultImageUrl;
+		}
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -158,7 +123,6 @@ public class CarDto {
 			result = prime * result + year;
 			return result;
 		}
-
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
@@ -228,7 +192,6 @@ public class CarDto {
 				return false;
 			return true;
 		}
-
 		@Override
 		public String toString() {
 			return "CarDto [id=" + id + ", name=" + name + ", description=" + description + ", year=" + year
@@ -237,6 +200,6 @@ public class CarDto {
 					+ ", mileage=" + mileage + ", price=" + price + ", locationCountry=" + locationCountry
 					+ ", locationCity=" + locationCity + ", defaultImageUrl=" + defaultImageUrl + "]";
 		}
-
-									
+		
+																	
 }

@@ -16,9 +16,7 @@ import org.slf4j.Logger;
 import com.shareanycar.dao.CarTypeDao;
 import com.shareanycar.dao.FuelTypeDao;
 import com.shareanycar.dao.TransmissionTypeDao;
-import com.shareanycar.dto.CarTypeDto;
-import com.shareanycar.dto.FuelTypeDto;
-import com.shareanycar.dto.TransmissionTypeDto;
+import com.shareanycar.dto.PropertyDto;
 import com.shareanycar.model.CarType;
 import com.shareanycar.model.FuelType;
 import com.shareanycar.model.TransmissionType;
@@ -46,11 +44,10 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response fuel() {
 		try {
-			List<FuelTypeDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new LinkedList<>();
 
 			for (FuelType f : fuelTypeDao.findAll()) {
-				FuelTypeDto propertyDto = modelMapper.map(f, FuelTypeDto.class);
-				properties.add(propertyDto);
+				properties.add(new PropertyDto(f.getName()));
 			}
 
 			return Response.ok(properties).build();
@@ -65,12 +62,10 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response transmission() {
 		try {
-			List<TransmissionTypeDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new LinkedList<>();
 
-			for (TransmissionType f : transmissionTypeDao.findAll()) {
-				
-				TransmissionTypeDto propertyDto = modelMapper.map(f, TransmissionTypeDto.class);
-				properties.add(propertyDto);
+			for (TransmissionType f : transmissionTypeDao.findAll()) {				
+				properties.add(new PropertyDto(f.getName()));
 			}
 
 			return Response.ok(properties).build();
@@ -85,11 +80,10 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response car() {
 		try {
-			List<CarTypeDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new LinkedList<>();
 
 			for (CarType f : carTypeDao.findAll()) {
-				CarTypeDto propertyDto = modelMapper.map(f, CarTypeDto.class);
-				properties.add(propertyDto);
+				properties.add(new PropertyDto(f.getName()));
 			}
 
 			return Response.ok(properties).build();

@@ -57,7 +57,7 @@ public class CarController {
 
 	@Inject
 	public ModelMapper modelMapper;
-	
+
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -67,17 +67,17 @@ public class CarController {
 
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
 			Car car = modelMapper.map(carDto, Car.class);
-			
-			Location location = modelMapper.map(carDto,Location.class);
-			TransmissionType transmissionType = modelMapper.map(carDto, TransmissionType.class);
-			CarType carType = modelMapper.map(carDto, CarType.class);
-			FuelType fuelType = modelMapper.map(carDto, FuelType.class);
-						
-			carService.create(owner.getId(), car, location,transmissionType, carType, fuelType);
-			
+
+			Location location = modelMapper.map(carDto, Location.class);
+			TransmissionType transmissionType = new TransmissionType(carDto.getTransmissionTypeName());
+			CarType carType = new CarType(carDto.getCarTypeName());
+			FuelType fuelType = new FuelType(carDto.getFuelTypeName());
+
+			carService.create(owner.getId(), car, location, transmissionType, carType, fuelType);
+
 			return Response.ok().build();
 		} catch (Exception e) {
-			logger.error("error creating car: " + carDto);
+			logger.error("error creating car: " + carDto + " " + e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
@@ -92,7 +92,7 @@ public class CarController {
 				throw new Exception("error finding car:" + id);
 			}
 			CarDto carDto = modelMapper.map(car, CarDto.class);
-			
+			System.out.println(carDto);
 			return Response.ok(carDto).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -108,15 +108,15 @@ public class CarController {
 	public Response update(CarDto carDto, @PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
-			
+
 			Car car = modelMapper.map(carDto, Car.class);
 			Location location = modelMapper.map(carDto, Location.class);
-			CarType carType = modelMapper.map(carDto, CarType.class);
-			TransmissionType transmissionType = modelMapper.map(carDto, TransmissionType.class);
-			FuelType fuelType = modelMapper.map(carDto, FuelType.class);
-			
-			carService.update(owner.getId(), id, car, location,transmissionType,carType, fuelType);
-						
+			TransmissionType transmissionType = new TransmissionType(carDto.getTransmissionTypeName());
+			CarType carType = new CarType(carDto.getCarTypeName());
+			FuelType fuelType = new FuelType(carDto.getFuelTypeName());
+
+			carService.update(owner.getId(), id, car, location, transmissionType, carType, fuelType);
+
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -132,7 +132,7 @@ public class CarController {
 	public Response delete(@PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			Owner owner = contextHelper.getCurrentOwner(securityContext);
-			
+
 			carService.delete(owner.getId(), id);
 			return Response.ok().build();
 		} catch (Exception e) {

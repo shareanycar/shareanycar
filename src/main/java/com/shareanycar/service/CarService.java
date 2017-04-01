@@ -50,6 +50,7 @@ public class CarService {
 
 	
 	private Car setCarProperties(Car car, Location location, TransmissionType transmissionType, CarType carType, FuelType fuelType) throws Exception{
+		
 		location = locationDao.findByCountryAndCity(location.getCountry(), location.getCity());
 		carType = carTypeDao.findByName(carType.getName());
 		transmissionType = transmissionTypeDao.findByName(transmissionType.getName());

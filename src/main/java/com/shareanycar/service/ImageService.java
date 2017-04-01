@@ -68,9 +68,7 @@ public class ImageService {
 
 			tag.getGraphics().drawImage(src.getScaledInstance(widthdist, heightdist, java.awt.Image.SCALE_SMOOTH), 0, 0,
 					null);
-			// tag.getGraphics().drawImage(src.getScaledInstance(widthdist,
-			// heightdist, Image.SCALE_AREA_AVERAGING), 0, 0, null);
-
+			
 			FileOutputStream out = new FileOutputStream(imgdist);
 			ImageIO.write(tag, type, out);
 			out.close();

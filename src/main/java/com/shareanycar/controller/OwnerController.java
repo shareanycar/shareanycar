@@ -1,15 +1,11 @@
 package com.shareanycar.controller;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -60,7 +56,7 @@ public class OwnerController {
 	@Produces({ MediaType.APPLICATION_JSON})
 	@Consumes({MediaType.APPLICATION_JSON})
 	public  Response create(OwnerDto ownerDto) {
-
+		
 		try{
 			Owner owner = modelMapper.map(ownerDto, Owner.class);
 			Location location = modelMapper.map(ownerDto, Location.class);
@@ -69,7 +65,7 @@ public class OwnerController {
 			
 			return Response.ok().build();
 		}catch(Exception e){
-			logger.error("error creating owner:" + ownerDto);
+			logger.error("error creating owner:" + ownerDto  + e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 		 

@@ -26,14 +26,9 @@ public class LocationDao extends BasicDao<Location> {
 			return null;
 		}
 	}
-
+	
 	public List<Location> findByCountry(String country) {
 		return (List<Location>) extDao.findListByParam("from Location where country = :country", "country", country);
-	}
-
-	public List<Location> findByCity(String city){
-		return (List<Location>) extDao.findListByParam("from Location where city = :city", "city", city);
-
 	}
 
 }
