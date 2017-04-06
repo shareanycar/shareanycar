@@ -6,15 +6,23 @@ import org.jvnet.hk2.annotations.Service;
 public class AppConfig {
 	final private String imageLocation = "/Users/slava/Documents/workspace/shareanycar-ui/src/assets/upload/";
 	final private String small = "small/";
-	final private String orig = "orig/";
+	final private String medium = "medium/";
 	final private String large = "large/";
 
-	final private int smallWidth = 320;
-	final private int smallHeight = 240;
+	final private int smallWidth = 160;
+	final private int smallHeight = 120;
+	
+	final private int mediumWidth = 320;
+	final private int mediumHeight = 240;
+	
 	final private int largeWidth = 640;
 	final private int largeHeight = 480;
 
 	final private String urlPrefix = "http://localhost:4200/assets/upload/";
+	
+	public String getImageLocation() {
+		return imageLocation;
+	}
 
 	public String getImageLocationSmall() {
 		return imageLocation + small ;
@@ -24,8 +32,8 @@ public class AppConfig {
 		return imageLocation + large ;
 	}
 
-	public String getImageLocationOrig() {
-		return imageLocation + orig ;
+	public String getImageLocationMedium() {
+		return imageLocation + medium ;
 	}
 	
 	public String getUrlPrefixSmall() {
@@ -36,8 +44,8 @@ public class AppConfig {
 		return urlPrefix + large;
 	}
 
-	public String getUrlPrefixOrig() {
-		return urlPrefix + orig ;
+	public String getUrlPrefixMedium() {
+		return urlPrefix + medium ;
 	}
 
 	public int getSmallWidth() {
@@ -46,6 +54,14 @@ public class AppConfig {
 
 	public int getSmallHeight() {
 		return smallHeight;
+	}
+	
+	public int getMediumWidth() {
+		return mediumWidth;
+	}
+
+	public int getMediumHeight() {
+		return mediumHeight;
 	}
 
 	public int getLargeWidth() {

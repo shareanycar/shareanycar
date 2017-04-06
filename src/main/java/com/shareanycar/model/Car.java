@@ -22,17 +22,18 @@ public class Car  {
 	private Long id;
 
 	@NotEmpty
-	private String name;
-
+	private String licensePlateNumber;
+	
+	@NotNull
+	private Integer numberOfSeats;
+	
 	@NotEmpty
 	private String description;
 	
+	@NotNull
 	private Integer mileage;
-	
-	private String features;
-	
-	
-	
+
+	@NotNull
 	private Double price;
 
 	@NotNull
@@ -40,6 +41,17 @@ public class Car  {
 	
 	@NotNull
 	private boolean status;
+	
+	@NotNull
+	private String modelName;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "manufacturer_id")
+	private Manufacturer manufacturer;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "insurer_id")
+	private Insurer insurer;	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "carType_id")
@@ -53,15 +65,9 @@ public class Car  {
 	@JoinColumn(name = "transmissionType_id")
 	private TransmissionType transmissionType; 
 	
-	
-	@NotNull
-	private Integer numberOfSeats;
-	
-	private String defaultImageUrl;
-
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "owner_id")
-	private Owner owner;
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "location_id")
@@ -69,137 +75,47 @@ public class Car  {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
 	private Set<Image> images;
-	
-	@OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
-	private Set<Booking> bookings;
-	
-	@OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
-	private Set<Comment> comments;
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public String getLicensePlateNumber() {
+		return licensePlateNumber;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public Integer getNumberOfSeats() {
+		return numberOfSeats;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
-	
-	public Owner getOwner() {
-		return owner;
-	}
-
-	public void setOwner(Owner owner) {
-		this.owner = owner;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
-	public Set<Image> getImages() {
-		return images;
-	}
-
-	public void setImages(Set<Image> images) {
-		this.images = images;
-	}
-
-	public Set<Booking> getBookings() {
-		return bookings;
-	}
-
-	public void setBookings(Set<Booking> bookings) {
-		this.bookings = bookings;
-	}
-
-	public Set<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public String getDefaultImageUrl() {
-		return defaultImageUrl;
-	}
-
-	public void setDefaultImageUrl(String defaultImageUrl) {
-		this.defaultImageUrl = defaultImageUrl;
-	}
-
-	
-
-	public Integer getNumberOfSeats() {
-		return numberOfSeats;
-	}
-
-	public void setNumberOfSeats(Integer numberOfSeats) {
-		this.numberOfSeats = numberOfSeats;
-	}
-
 	public Integer getMileage() {
 		return mileage;
-	}
-
-	public String getFeatures() {
-		return features;
 	}
 
 	public Double getPrice() {
 		return price;
 	}
 
-	public void setMileage(Integer milage) {
-		this.mileage = milage;
+	public Integer getYear() {
+		return year;
 	}
 
-	public void setFeatures(String features) {
-		this.features = features;
+	public boolean isStatus() {
+		return status;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
+	public Manufacturer getManufacturer() {
+		return manufacturer;
 	}
-	
-	
+
+	public Insurer getInsurer() {
+		return insurer;
+	}
+
 	public CarType getCarType() {
 		return carType;
 	}
@@ -210,6 +126,58 @@ public class Car  {
 
 	public TransmissionType getTransmissionType() {
 		return transmissionType;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public Set<Image> getImages() {
+		return images;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setLicensePlateNumber(String licensePlateNumber) {
+		this.licensePlateNumber = licensePlateNumber;
+	}
+
+	public void setNumberOfSeats(Integer numberOfSeats) {
+		this.numberOfSeats = numberOfSeats;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setMileage(Integer mileage) {
+		this.mileage = mileage;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public void setManufacturer(Manufacturer manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
+	public void setInsurer(Insurer insurer) {
+		this.insurer = insurer;
 	}
 
 	public void setCarType(CarType carType) {
@@ -224,91 +192,26 @@ public class Car  {
 		this.transmissionType = transmissionType;
 	}
 
-
-	public static class Builder{
-		
-		private String name;
-		private String description;
-		private Integer mileage;
-		private String features;
-		private Double price;
-		private Integer year;
-		private boolean status;
-		private TransmissionType transmissionType; 
-		private CarType carType; 
-		private FuelType fuelType;
-		private Integer numberOfSeats;
-		private String defaultImageUrl;
-		
-		public Builder setName(String name) {
-			this.name = name;
-			return this;
-		}
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
-		public Builder setMileage(Integer mileage) {
-			this.mileage = mileage;
-			return this;
-		}
-		public Builder setFeatures(String features) {
-			this.features = features;
-			return this;
-		}
-		public Builder setFuelType(FuelType fuelType) {
-			this.fuelType = fuelType;
-			return this;
-		}
-		public Builder setPrice(Double price) {
-			this.price = price;
-			return this;
-		}
-		public Builder setYear(Integer year) {
-			this.year = year;
-			return this;
-		}
-		public Builder setStatus(boolean status) {
-			this.status = status;
-			return this;
-		}
-		public Builder setTransmissionType(TransmissionType transmissionType) {
-			this.transmissionType = transmissionType;
-			return this;
-		}
-		
-		public Builder setCarType(CarType carType) {
-			this.carType = carType;
-			return this;
-		}
-		
-		public Builder setNumberOfSeats(Integer numberOfSeats) {
-			this.numberOfSeats = numberOfSeats;
-			return this;
-		}
-		public Builder setDefaultImageUrl(String defaultImageUrl) {
-			this.defaultImageUrl = defaultImageUrl;
-			return this;
-		}
-		
-		public Car build(){
-			Car car = new Car();
-			
-			car.carType = this.carType;
-			car.defaultImageUrl = this.defaultImageUrl;
-			car.description = this.description;
-			car.features = this.features;
-			car.fuelType = this.fuelType;
-			car.name = this.name;
-			car.mileage = this.mileage;
-			car.numberOfSeats = this.numberOfSeats;
-			car.price = this.price;
-			car.transmissionType = this.transmissionType;
-			car.year = this.year;
-			car.status = this.status;
-			
-			return car;
-		}
-		
+	public void setUser(User user) {
+		this.user = user;
 	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public void setImages(Set<Image> images) {
+		this.images = images;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	
+	
+		
 }

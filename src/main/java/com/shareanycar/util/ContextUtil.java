@@ -5,19 +5,25 @@ import java.security.Principal;
 import javax.inject.Inject;
 import javax.ws.rs.core.SecurityContext;
 
-import com.shareanycar.model.Owner;
-import com.shareanycar.service.OwnerService;
+import com.shareanycar.model.User;
+import com.shareanycar.service.UserService;
 
 public class ContextUtil {
-	@Inject
-	public OwnerService ownerService;
 	
-	public Owner getCurrentOwner(SecurityContext securityContext) throws Exception{
+
+	@Inject
+	public UserService userService;
+
+	
+
+	public User getCurrentUser(SecurityContext securityContext) throws Exception {
 		Principal principal = securityContext.getUserPrincipal();
-		Owner owner = ownerService.findByEmail(principal.getName());
-		if(owner == null){
-			throw new Exception("can not find current owner");
+		User user = userService.findByEmail(principal.getName());
+
+		if (user == null) {
+			throw new Exception("can not find current user");
 		}
-		return owner;
+
+		return user;
 	}
 }

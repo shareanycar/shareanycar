@@ -11,34 +11,33 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvnet.hk2.testing.junit.HK2Runner;
 
-import com.shareanycar.dao.BookingDao;
 import com.shareanycar.dao.CarDao;
-import com.shareanycar.dao.OwnerDao;
+import com.shareanycar.dao.UserDao;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.CarType;
 import com.shareanycar.model.FuelType;
+import com.shareanycar.model.Insurer;
 import com.shareanycar.model.Location;
-import com.shareanycar.model.Owner;
+import com.shareanycar.model.Manufacturer;
 import com.shareanycar.model.TransmissionType;
+import com.shareanycar.model.User;
 
 public class CarServiceTest extends HK2Runner {
 
 	@Inject
-	public OwnerDao ownerDao;
+	public UserDao userDao;
 
 	@Inject
 	public CarDao carDao;
 
-	@Inject
-	public BookingDao bookingDao;
+	
 
 	@Inject
-	public OwnerService ownerService;
+	public UserService userService;
 
 	@Inject
 	public CarService carService;
 	
-	private Owner owner;
 	private Location loc;
 	private Car car1;
 	private Car car2;
@@ -46,23 +45,31 @@ public class CarServiceTest extends HK2Runner {
 	private TransmissionType transmissionType;
 	private FuelType fuelType;
 	private CarType carType ;
+	private Manufacturer manufacturer;
+	private Insurer insurer;
+	private User user;
 	
 	@Before
 	public void setUp() throws Exception {
-		bookingDao.deleteAll();
+	
 		
 		carDao.deleteAll();
-		ownerDao.deleteAll();
+		userDao.deleteAll();
 		
-		owner = new Owner.Builder().setEmail("email").build();
-		car1 = new Car.Builder().setName("First Car").build();
-		car2 = new Car.Builder().setName("Second Car").build();
+		user = new User("First Name", "Last Name", "test@test.com", "letmein");
+		car1 = new Car();
+		car1.setLicensePlateNumber("abc");
+		car2 = new Car();
+		car2.setLicensePlateNumber("bcd");
 		carType = new CarType("jeep");
 		transmissionType = new TransmissionType("manual");
 		fuelType = new FuelType("petrol");
+		
+		insurer = new Insurer("Alpha");
+		manufacturer = new Manufacturer("BMW");
 
-		loc = new Location.Builder().setCountry("Russia").setCity("Moscow").build();
-		owId = ownerService.create(owner, loc);
+		loc = new Location("Russia", "Moscow");
+		owId = userService.create(user);
 	}
 
 	@After
@@ -74,8 +81,8 @@ public class CarServiceTest extends HK2Runner {
 
 		try {
 			
-			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType);
-			Long id2 = carService.create(owId, car2, loc,transmissionType, carType, fuelType);
+			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType,manufacturer,insurer);
+			Long id2 = carService.create(owId, car2, loc,transmissionType, carType, fuelType,manufacturer,insurer);
 			
 			car1 = carService.findCarById(id1);
 			car2 = carService.findCarById(id2);
@@ -83,8 +90,8 @@ public class CarServiceTest extends HK2Runner {
 			assertNotNull("First Car", car1);
 			assertNotNull("Second Car", car2);
 
-			assertEquals("First Car", "First Car", car1.getName());
-			assertEquals("Second Car", "Second Car", car2.getName());
+			assertEquals("First Car", "abc", car1.getLicensePlateNumber());
+			assertEquals("Second Car", "bcd", car2.getLicensePlateNumber());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -94,17 +101,17 @@ public class CarServiceTest extends HK2Runner {
 	@Test
 	public void updateCarInfoTest() {
 		try {		
-			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType);
+			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType,manufacturer,insurer);
 			car1 = carService.findCarById(id1);
 
-			assertEquals("First Car", "First Car", car1.getName());
+			assertEquals("First Car", "abc", car1.getLicensePlateNumber());
 
-			carService.update(owId, id1, car2, loc, transmissionType, carType, fuelType);
+			carService.update(owId, id1, car2, loc, transmissionType, carType, fuelType,manufacturer,insurer);
 			
 
 			car1 = carService.findCarById(id1);
 
-			assertEquals("Second Car", "Second Car", car1.getName());
+			assertEquals("Second Car", "bcd", car1.getLicensePlateNumber());
 		} catch (Exception e1) {
 			fail(e1.getMessage());
 		}
@@ -114,7 +121,7 @@ public class CarServiceTest extends HK2Runner {
 	@Test
 	public void removeCarTest() {
 		try {
-			Long id = carService.create(owId, car1, loc,transmissionType, carType, fuelType);
+			Long id = carService.create(owId, car1, loc,transmissionType, carType, fuelType,manufacturer,insurer);
 			Car car = carService.findCarById(id);
 			
 			assertNotNull("Car created", car);

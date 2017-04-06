@@ -20,16 +20,19 @@ import javax.ws.rs.core.SecurityContext;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 
-import com.shareanycar.annotation.SecuredOwner;
+import com.shareanycar.annotation.SecuredUser;
 import com.shareanycar.dto.CarDto;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.CarType;
 import com.shareanycar.model.FuelType;
+import com.shareanycar.model.Image;
+import com.shareanycar.model.Insurer;
 import com.shareanycar.model.Location;
-import com.shareanycar.model.Owner;
+import com.shareanycar.model.Manufacturer;
 import com.shareanycar.model.TransmissionType;
+import com.shareanycar.model.User;
 import com.shareanycar.service.CarService;
-import com.shareanycar.service.OwnerService;
+import com.shareanycar.service.ImageService;
 import com.shareanycar.util.ContextUtil;
 
 /*
@@ -44,13 +47,13 @@ import com.shareanycar.util.ContextUtil;
 public class CarController {
 
 	@Inject
-	public OwnerService ownerService;
-
-	@Inject
 	public ContextUtil contextHelper;
 
 	@Inject
 	public CarService carService;
+
+	@Inject
+	public ImageService imageService;
 
 	@Inject
 	public Logger logger;
@@ -61,21 +64,24 @@ public class CarController {
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@SecuredOwner
+	@SecuredUser
 	public Response create(CarDto carDto, @Context SecurityContext securityContext) {
 		try {
 
-			Owner owner = contextHelper.getCurrentOwner(securityContext);
+			User user = contextHelper.getCurrentUser(securityContext);
 			Car car = modelMapper.map(carDto, Car.class);
-
+			System.out.println("creating " + carDto);
 			Location location = modelMapper.map(carDto, Location.class);
 			TransmissionType transmissionType = new TransmissionType(carDto.getTransmissionTypeName());
 			CarType carType = new CarType(carDto.getCarTypeName());
 			FuelType fuelType = new FuelType(carDto.getFuelTypeName());
+			Manufacturer manufacturer = new Manufacturer(carDto.getManufacturerName());
+			Insurer insurer = new Insurer(carDto.getInsurerName());
 
-			carService.create(owner.getId(), car, location, transmissionType, carType, fuelType);
+			Long id = carService.create(user.getId(), car, location, transmissionType, carType, fuelType, manufacturer,
+					insurer);
 
-			return Response.ok().build();
+			return Response.ok(id).build();
 		} catch (Exception e) {
 			logger.error("error creating car: " + carDto + " " + e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
@@ -92,7 +98,6 @@ public class CarController {
 				throw new Exception("error finding car:" + id);
 			}
 			CarDto carDto = modelMapper.map(car, CarDto.class);
-			System.out.println(carDto);
 			return Response.ok(carDto).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -104,18 +109,21 @@ public class CarController {
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@SecuredOwner
+	@SecuredUser
 	public Response update(CarDto carDto, @PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
-			Owner owner = contextHelper.getCurrentOwner(securityContext);
+			User user = contextHelper.getCurrentUser(securityContext);
 
 			Car car = modelMapper.map(carDto, Car.class);
 			Location location = modelMapper.map(carDto, Location.class);
 			TransmissionType transmissionType = new TransmissionType(carDto.getTransmissionTypeName());
 			CarType carType = new CarType(carDto.getCarTypeName());
 			FuelType fuelType = new FuelType(carDto.getFuelTypeName());
+			Manufacturer manufacturer = new Manufacturer(carDto.getManufacturerName());
+			Insurer insurer = new Insurer(carDto.getInsurerName());
 
-			carService.update(owner.getId(), id, car, location, transmissionType, carType, fuelType);
+			carService.update(user.getId(), id, car, location, transmissionType, carType, fuelType, manufacturer,
+					insurer);
 
 			return Response.ok().build();
 		} catch (Exception e) {
@@ -128,12 +136,12 @@ public class CarController {
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@SecuredOwner
+	@SecuredUser
 	public Response delete(@PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
-			Owner owner = contextHelper.getCurrentOwner(securityContext);
+			User user = contextHelper.getCurrentUser(securityContext);
 
-			carService.delete(owner.getId(), id);
+			carService.delete(user.getId(), id);
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -146,14 +154,15 @@ public class CarController {
 	@Path("/all")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@SecuredOwner
+	@SecuredUser
 	public Response all(@Context SecurityContext securityContext) {
 		try {
-			Owner owner = contextHelper.getCurrentOwner(securityContext);
+			User user = contextHelper.getCurrentUser(securityContext);
 			Set<CarDto> carDtos = new HashSet<>();
 
-			for (Car car : owner.getCars()) {
+			for (Car car : user.getCars()) {
 				CarDto carDto = modelMapper.map(car, CarDto.class);
+				System.out.println(carDto);
 				carDtos.add(carDto);
 			}
 

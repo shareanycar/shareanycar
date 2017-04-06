@@ -14,16 +14,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import com.shareanycar.annotation.SecuredOwner;
-import com.shareanycar.model.Owner;
+import com.shareanycar.annotation.SecuredUser;
+import com.shareanycar.model.User;
 import com.shareanycar.service.AuthService;
 
-//Authorization: Bearer <token-goes-here>
-
-@SecuredOwner
+@SecuredUser
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class AuthenticationOwnerFilter implements ContainerRequestFilter {
+public class AuthenticationUserFilter  implements ContainerRequestFilter {
 
 	@Inject
 	AuthService authService;
@@ -45,18 +43,18 @@ public class AuthenticationOwnerFilter implements ContainerRequestFilter {
 
         try {
             // Validate the token
-            Owner owner = authService.authenticateOwner(token);
-            if(owner == null){
+            User user = authService.authenticateUser(token);
+            if(user == null){
             	throw new Exception();
             }
-            setSecurityContext(requestContext, owner);
+            setSecurityContext(requestContext, user);
         } catch (Exception e) {
             requestContext.abortWith(
                 Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }
     
-    private void setSecurityContext(ContainerRequestContext requestContext, final Owner owner){
+    private void setSecurityContext(ContainerRequestContext requestContext, final User user){
     	requestContext.setSecurityContext(new SecurityContext() {
 
     	    @Override
@@ -66,7 +64,7 @@ public class AuthenticationOwnerFilter implements ContainerRequestFilter {
 	            
 					@Override
 					public String getName() {
-						return owner.getEmail();
+						return user.getEmail();
 					}
     	        };
     	    }
@@ -91,5 +89,4 @@ public class AuthenticationOwnerFilter implements ContainerRequestFilter {
  	   
     	});
     }
-    
 }

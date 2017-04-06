@@ -16,8 +16,12 @@ import org.jvnet.hk2.annotations.Service;
 import com.shareanycar.config.AppConfig;
 import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.ImageDao;
+import com.shareanycar.dao.UserDao;
+import com.shareanycar.dao.UserImageDao;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.Image;
+import com.shareanycar.model.User;
+import com.shareanycar.model.UserImage;
 import com.shareanycar.util.MiscUtils;
 
 @Service
@@ -28,6 +32,12 @@ public class ImageService {
 
 	@Inject
 	public ImageDao imageDao;
+	
+	@Inject
+	public UserImageDao userImageDao;
+	
+	@Inject
+	public UserDao userDao;
 
 	@Inject
 	public AppConfig appConfig;
@@ -35,11 +45,10 @@ public class ImageService {
 	@Inject
 	public MiscUtils miscUtils;
 
-	private String saveFile(InputStream is) throws Exception {
+	private void saveFile(InputStream is, String fileName) throws Exception {
 
-		String uploadedFileLocation = appConfig.getImageLocationOrig();
-		String fileName = miscUtils.randonString();
-
+		String uploadedFileLocation = appConfig.getImageLocation();
+		
 		OutputStream out = new FileOutputStream(new File(uploadedFileLocation + fileName));
 
 		int read = 0;
@@ -51,8 +60,7 @@ public class ImageService {
 
 		out.flush();
 		out.close();
-
-		return fileName;
+		
 	}
 
 	private void reduceImg(String imgsrc, String imgdist, String type, int widthdist, int heightdist) {
@@ -78,7 +86,7 @@ public class ImageService {
 		}
 	}
 
-	public Image uploadImage(Long carId, Long ownerId, InputStream is) throws Exception {
+	public void uploadCarImage(Long carId, Long userId, InputStream is, boolean main) throws Exception {
 
 		Car car = carDao.findOne(carId);
 
@@ -86,37 +94,52 @@ public class ImageService {
 			throw new Exception("can not find car with id:" + carId);
 		}
 
-		if (car.getOwner().getId() != ownerId) {
+		if (car.getUser().getId() != userId) {
 			throw new Exception(
-					"can not load image, car does not belong to current owner id:" + ownerId + "; car id" + carId);
+					"can not load image, car does not belong to current owner id:" + userId + "; car id" + carId);
+		}
+		
+		Image image = new Image();
+		
+		String fileName ;
+		
+		if(main){
+			image = imageDao.findMainByCarId(carId);
+			if(image != null){
+				fileName = image.getName();
+			}else{
+				image = new Image();
+				fileName = miscUtils.randonString();
+			}
+		}else{
+			fileName = miscUtils.randonString();
 		}
 
-		String fileName = saveFile(is);
-		reduceImg(appConfig.getImageLocationOrig() + fileName, appConfig.getImageLocationLarge() + fileName, "jpg",
+		saveFile(is, fileName);
+		
+		reduceImg(appConfig.getImageLocation() + fileName, appConfig.getImageLocationLarge() + fileName, "jpg",
 				appConfig.getLargeWidth(), appConfig.getLargeHeight());
+		
+		reduceImg(appConfig.getImageLocation() + fileName, appConfig.getImageLocationMedium() + fileName, "jpg",
+				appConfig.getMediumWidth(), appConfig.getMediumHeight());
 
-		reduceImg(appConfig.getImageLocationOrig() + fileName, appConfig.getImageLocationSmall() + fileName, "jpg",
+		reduceImg(appConfig.getImageLocation() + fileName, appConfig.getImageLocationSmall() + fileName, "jpg",
 				appConfig.getSmallWidth(), appConfig.getSmallHeight());
-
-		Image image = new Image();
+		
+		File f = new File(appConfig.getImageLocation() + fileName);
+		f.delete();
 
 		image.setName(fileName);
 		image.setUrlLarge(appConfig.getUrlPrefixLarge() + fileName);
 		image.setUrlSmall(appConfig.getUrlPrefixSmall() + fileName);
-		image.setUrlOrig(appConfig.getUrlPrefixOrig() + fileName);
+		image.setUrlMedium(appConfig.getUrlPrefixMedium() + fileName);
+		image.setMain(main);
 		image.setCar(car);
 
 		image = imageDao.save(image);
-
-		if (car.getDefaultImageUrl() == null) {
-			car.setDefaultImageUrl(appConfig.getUrlPrefixSmall() + fileName);
-			carDao.save(car);
-		}
-
-		return image;
 	}
 
-	private void validateImage(Image image, Long carId, Long ownerId) throws Exception{
+	private void validateCarImage(Image image, Long carId, Long userId) throws Exception{
 		if(image == null){
 			throw new Exception("can not find image" );
 		}
@@ -125,25 +148,17 @@ public class ImageService {
 			throw new Exception("image does not belong to car");
 		}
 		
-		if (image.getCar().getOwner().getId() != ownerId) {
-			throw new Exception("image belongs to car that does not belong to current owner id:" + ownerId
+		if (image.getCar().getUser().getId() != userId) {
+			throw new Exception("image belongs to car that does not belong to current owner id:" + userId
 					+ "; image id" + image.getId());
 		}
 	}
-	public void setAsDefault(Long imageId, Long carId, Long ownerId) throws Exception{
-		Image image = imageDao.findOne(imageId);
-		validateImage(image, carId, ownerId);
-		
-		Car car = image.getCar();
-		car.setDefaultImageUrl(image.getUrlSmall());
-		carDao.save(car);
-	}
 	
-	public void delete(Long imageId,Long carId, Long ownerId, boolean clearTable) throws Exception {
+	public void deleteCarImage(Long imageId,Long carId, Long userId, boolean clearTable) throws Exception {
 		Image image = imageDao.findOne(imageId);
-		validateImage(image,carId,ownerId);
+		validateCarImage(image,carId,userId);
 
-		File f = new File(appConfig.getImageLocationOrig() + image.getName());
+		File f = new File(appConfig.getImageLocationMedium() + image.getName());
 		f.delete(); 
 		
 		f = new File(appConfig.getImageLocationSmall() + image.getName());
@@ -157,11 +172,81 @@ public class ImageService {
 		}
 	}
 
-	public List<Image> findImageByCarId(Long carId) {
-		return imageDao.findImageByCarId(carId);
+	public void uploadUserImage(Long userId, InputStream is) throws Exception{
+		User user = userDao.findOne(userId);
+		if(user == null){
+			throw new Exception("can not find user");
+		}
+		
+		UserImage userImage = user.getUserImage();
+		String fileName ;
+		
+		if(userImage == null){
+		 userImage = new UserImage(); 
+		}else{
+			deleteUserImage(user.getId(),false);
+		}
+		
+		fileName = miscUtils.randonString();
+		
+		saveFile(is, fileName);
+		
+		reduceImg(appConfig.getImageLocation() + fileName, appConfig.getImageLocationMedium() + fileName, "jpg",
+				appConfig.getMediumWidth(), appConfig.getMediumHeight());
+
+		reduceImg(appConfig.getImageLocation() + fileName, appConfig.getImageLocationSmall() + fileName, "jpg",
+				appConfig.getSmallWidth(), appConfig.getSmallHeight());
+		
+		
+		File f = new File(appConfig.getImageLocation() + fileName);
+		f.delete();
+		
+		userImage.setName(fileName);
+		userImage.setUrlMedium(appConfig.getUrlPrefixMedium() + fileName);
+		userImage.setUrlSmall(appConfig.getUrlPrefixSmall() + fileName);
+		userImage.setUser(user);
+		userImage = userImageDao.save(userImage);
+		
+		user.setUserImage(userImage);
+		user = userDao.save(user);
+		
 	}
 	
-	public Image findImageById(Long id){
+	public void deleteUserImage(Long userId, boolean clearTable) throws Exception{
+		User user = userDao.findOne(userId);
+		UserImage userImage = user.getUserImage();
+		
+		if(userImage == null){
+			throw new Exception("can not find user image");
+		}
+		
+		File f = new File(appConfig.getImageLocationMedium() + userImage.getName());
+		f.delete();
+		
+		f = new File(appConfig.getImageLocationSmall() + userImage.getName());
+		f.delete();
+		
+		if(clearTable){
+			user.setUserImage(null);
+			user = userDao.save(user);
+			userImageDao.delete(userImage);
+		}
+		
+	}
+	
+	public Image findMainByCarId(Long carId){
+		return imageDao.findMainByCarId(carId);
+	}
+	
+	public List<Image> findNotMainByCarId(Long carId){
+		return imageDao.findNotMainByCarId(carId);
+	}
+	
+	public List<Image> findByCarId(Long carId) {
+		return imageDao.findByCarId(carId);
+	}
+	
+	public Image findById(Long id){
 		return imageDao.findOne(id);
 	}
 }

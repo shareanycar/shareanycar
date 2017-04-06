@@ -15,10 +15,14 @@ import org.slf4j.Logger;
 
 import com.shareanycar.dao.CarTypeDao;
 import com.shareanycar.dao.FuelTypeDao;
+import com.shareanycar.dao.InsurerDao;
+import com.shareanycar.dao.ManufacturerDao;
 import com.shareanycar.dao.TransmissionTypeDao;
 import com.shareanycar.dto.PropertyDto;
 import com.shareanycar.model.CarType;
 import com.shareanycar.model.FuelType;
+import com.shareanycar.model.Insurer;
+import com.shareanycar.model.Manufacturer;
 import com.shareanycar.model.TransmissionType;
 
 @Path("property")
@@ -32,6 +36,13 @@ public class CarPropertyController {
 	
 	@Inject
 	public CarTypeDao carTypeDao;
+	
+	@Inject
+	public InsurerDao insurerDao;
+	
+	@Inject
+	public ManufacturerDao manufacturerDao;
+	
 
 	@Inject
 	public ModelMapper modelMapper;
@@ -65,6 +76,42 @@ public class CarPropertyController {
 			List<PropertyDto> properties = new LinkedList<>();
 
 			for (TransmissionType f : transmissionTypeDao.findAll()) {				
+				properties.add(new PropertyDto(f.getName()));
+			}
+
+			return Response.ok(properties).build();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+	
+	@GET
+	@Path("/insurer")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response insurer(){
+		try {
+			List<PropertyDto> properties = new LinkedList<>();
+
+			for (Insurer f : insurerDao.findAll()) {				
+				properties.add(new PropertyDto(f.getName()));
+			}
+
+			return Response.ok(properties).build();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+	
+	@GET
+	@Path("/manufacturer")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response manufacturer(){
+		try {
+			List<PropertyDto> properties = new LinkedList<>();
+
+			for (Manufacturer f : manufacturerDao.findAll()) {				
 				properties.add(new PropertyDto(f.getName()));
 			}
 

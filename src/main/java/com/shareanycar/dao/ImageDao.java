@@ -18,8 +18,16 @@ public class ImageDao extends BasicDao<Image>{
 		super("Image");
 	}
 	
-	public List<Image> findImageByCarId(Long id){
+	public List<Image> findByCarId(Long id){
 		return (List<Image>) extDao.findListByParam("from Image where car_id = :id", "id", id);
+	}
+	
+	public Image findMainByCarId(Long id){
+		return (Image) extDao.findOneByParam("from Image where car_id = :id and main = 1", "id", id);
+	}
+	
+	public List<Image> findNotMainByCarId(Long id){
+		return (List<Image>) extDao.findListByParam("from Image where car_id = :id and main = 0", "id", id);
 	}
 
 }

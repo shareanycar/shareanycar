@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.jvnet.hk2.annotations.Service;
 
 import com.shareanycar.model.Car;
@@ -24,8 +22,8 @@ public class CarDao extends BasicDao<Car>{
 		return (List<Car>) extDao.findListByParam("from Car where location_id = :locationId", "location_id", id);
 	}
 	
-	public List<Car> findCarByOwnerId(Long id){
-		return (List<Car>) extDao.findListByParam("from Car where owner_id = :ownerId", "owner_id", id);
+	public List<Car> findCarByUserId(Long id){
+		return (List<Car>) extDao.findListByParam("from Car where user_id = :userId", "user_id", id);
 	}
 	
 }

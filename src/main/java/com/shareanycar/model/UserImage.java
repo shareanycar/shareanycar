@@ -6,19 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-public class Image {
+public class UserImage {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "car_id")
-	private Car car;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	private User user;
 	
 	@NotEmpty
 	private String name;
@@ -28,19 +29,13 @@ public class Image {
 	
 	@NotEmpty
 	private String urlMedium;
-	
-	@NotEmpty
-	private String urlLarge;
-	
-	@NotEmpty
-	private boolean main;
 
 	public Long getId() {
 		return id;
 	}
 
-	public Car getCar() {
-		return car;
+	public User getUser() {
+		return user;
 	}
 
 	public String getName() {
@@ -55,20 +50,12 @@ public class Image {
 		return urlMedium;
 	}
 
-	public String getUrlLarge() {
-		return urlLarge;
-	}
-
-	public boolean isMain() {
-		return main;
-	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public void setCar(Car car) {
-		this.car = car;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setName(String name) {
@@ -83,13 +70,4 @@ public class Image {
 		this.urlMedium = urlMedium;
 	}
 
-	public void setUrlLarge(String urlLarge) {
-		this.urlLarge = urlLarge;
-	}
-
-	public void setMain(boolean main) {
-		this.main = main;
-	}
-
-	
 }

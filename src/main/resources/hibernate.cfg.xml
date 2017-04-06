@@ -21,18 +21,15 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
 
-
-  		<mapping class="com.shareanycar.model.Owner"/>
-  		<mapping class="com.shareanycar.model.Customer"/>
+		<mapping class="com.shareanycar.model.User"/>
+		<mapping class="com.shareanycar.model.UserImage"/>
   		<mapping class="com.shareanycar.model.Car"/>
+  		<mapping class="com.shareanycar.model.Insurer"/>
+  		<mapping class="com.shareanycar.model.Manufacturer"/>
   		<mapping class="com.shareanycar.model.CarType"/>
   		<mapping class="com.shareanycar.model.FuelType"/>
   		<mapping class="com.shareanycar.model.TransmissionType"/>
   		<mapping class="com.shareanycar.model.Location"/>
-  		<mapping class="com.shareanycar.model.Booking"/>
-  		<mapping class="com.shareanycar.model.Conversation"/>
-  		<mapping class="com.shareanycar.model.Message"/> 		
-  		<mapping class="com.shareanycar.model.Comment"/>
   		<mapping class="com.shareanycar.model.Image"/>
   		
   		

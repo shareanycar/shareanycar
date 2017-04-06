@@ -6,25 +6,29 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class CarDto {
 	
 		private Long id;
-		private String name;
 		private String description;
 		private int year;
 		private String transmissionTypeName;
 		private String fuelTypeName;
 		private String carTypeName;
+		private String licensePlateNumber;
+		private String manufacturerName;
+		private String insurerName;
+		private String modelName;
 		private int numberOfSeats;
 		private String features;
 		private int mileage;
 		private int price;
 		private String locationCountry;
 		private String locationCity;
-		private String defaultImageUrl;
+		private String imageUrlSmall;
+		private String imageUrlMedium;
+		private String imageUrlLarge;
+		
 		public Long getId() {
 			return id;
 		}
-		public String getName() {
-			return name;
-		}
+		
 		public String getDescription() {
 			return description;
 		}
@@ -58,15 +62,11 @@ public class CarDto {
 		public String getLocationCity() {
 			return locationCity;
 		}
-		public String getDefaultImageUrl() {
-			return defaultImageUrl;
-		}
+		
 		public void setId(Long id) {
 			this.id = id;
 		}
-		public void setName(String name) {
-			this.name = name;
-		}
+		
 		public void setDescription(String description) {
 			this.description = description;
 		}
@@ -100,29 +100,88 @@ public class CarDto {
 		public void setLocationCity(String locationCity) {
 			this.locationCity = locationCity;
 		}
-		public void setDefaultImageUrl(String defaultImageUrl) {
-			this.defaultImageUrl = defaultImageUrl;
+		public String getLicensePlateNumber() {
+			return licensePlateNumber;
 		}
+
+		public void setLicensePlateNumber(String licensePlateNumber) {
+			this.licensePlateNumber = licensePlateNumber;
+		}
+
+		public String getManufacturerName() {
+			return manufacturerName;
+		}
+
+		public String getInsurerName() {
+			return insurerName;
+		}
+
+		public void setManufacturerName(String manufacturerName) {
+			this.manufacturerName = manufacturerName;
+		}
+
+		public void setInsurerName(String insurerName) {
+			this.insurerName = insurerName;
+		}
+
+		public String getImageUrlSmall() {
+			return imageUrlSmall;
+		}
+
+		public String getImageUrlMedium() {
+			return imageUrlMedium;
+		}
+
+		public String getImageUrlLarge() {
+			return imageUrlLarge;
+		}
+
+		public void setImageUrlSmall(String imageUrlSmall) {
+			this.imageUrlSmall = imageUrlSmall;
+		}
+
+		public void setImageUrlMedium(String imageUrlMedium) {
+			this.imageUrlMedium = imageUrlMedium;
+		}
+
+		public void setImageUrlLarge(String imageUrlLarge) {
+			this.imageUrlLarge = imageUrlLarge;
+		}
+
+		public String getModelName() {
+			return modelName;
+		}
+
+		public void setModelName(String modelName) {
+			this.modelName = modelName;
+		}
+
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + ((carTypeName == null) ? 0 : carTypeName.hashCode());
-			result = prime * result + ((defaultImageUrl == null) ? 0 : defaultImageUrl.hashCode());
 			result = prime * result + ((description == null) ? 0 : description.hashCode());
 			result = prime * result + ((features == null) ? 0 : features.hashCode());
 			result = prime * result + ((fuelTypeName == null) ? 0 : fuelTypeName.hashCode());
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			result = prime * result + ((imageUrlLarge == null) ? 0 : imageUrlLarge.hashCode());
+			result = prime * result + ((imageUrlMedium == null) ? 0 : imageUrlMedium.hashCode());
+			result = prime * result + ((imageUrlSmall == null) ? 0 : imageUrlSmall.hashCode());
+			result = prime * result + ((insurerName == null) ? 0 : insurerName.hashCode());
+			result = prime * result + ((licensePlateNumber == null) ? 0 : licensePlateNumber.hashCode());
 			result = prime * result + ((locationCity == null) ? 0 : locationCity.hashCode());
 			result = prime * result + ((locationCountry == null) ? 0 : locationCountry.hashCode());
+			result = prime * result + ((manufacturerName == null) ? 0 : manufacturerName.hashCode());
 			result = prime * result + mileage;
-			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
 			result = prime * result + numberOfSeats;
 			result = prime * result + price;
 			result = prime * result + ((transmissionTypeName == null) ? 0 : transmissionTypeName.hashCode());
 			result = prime * result + year;
 			return result;
 		}
+
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
@@ -136,11 +195,6 @@ public class CarDto {
 				if (other.carTypeName != null)
 					return false;
 			} else if (!carTypeName.equals(other.carTypeName))
-				return false;
-			if (defaultImageUrl == null) {
-				if (other.defaultImageUrl != null)
-					return false;
-			} else if (!defaultImageUrl.equals(other.defaultImageUrl))
 				return false;
 			if (description == null) {
 				if (other.description != null)
@@ -162,6 +216,31 @@ public class CarDto {
 					return false;
 			} else if (!id.equals(other.id))
 				return false;
+			if (imageUrlLarge == null) {
+				if (other.imageUrlLarge != null)
+					return false;
+			} else if (!imageUrlLarge.equals(other.imageUrlLarge))
+				return false;
+			if (imageUrlMedium == null) {
+				if (other.imageUrlMedium != null)
+					return false;
+			} else if (!imageUrlMedium.equals(other.imageUrlMedium))
+				return false;
+			if (imageUrlSmall == null) {
+				if (other.imageUrlSmall != null)
+					return false;
+			} else if (!imageUrlSmall.equals(other.imageUrlSmall))
+				return false;
+			if (insurerName == null) {
+				if (other.insurerName != null)
+					return false;
+			} else if (!insurerName.equals(other.insurerName))
+				return false;
+			if (licensePlateNumber == null) {
+				if (other.licensePlateNumber != null)
+					return false;
+			} else if (!licensePlateNumber.equals(other.licensePlateNumber))
+				return false;
 			if (locationCity == null) {
 				if (other.locationCity != null)
 					return false;
@@ -172,12 +251,17 @@ public class CarDto {
 					return false;
 			} else if (!locationCountry.equals(other.locationCountry))
 				return false;
+			if (manufacturerName == null) {
+				if (other.manufacturerName != null)
+					return false;
+			} else if (!manufacturerName.equals(other.manufacturerName))
+				return false;
 			if (mileage != other.mileage)
 				return false;
-			if (name == null) {
-				if (other.name != null)
+			if (modelName == null) {
+				if (other.modelName != null)
 					return false;
-			} else if (!name.equals(other.name))
+			} else if (!modelName.equals(other.modelName))
 				return false;
 			if (numberOfSeats != other.numberOfSeats)
 				return false;
@@ -192,14 +276,17 @@ public class CarDto {
 				return false;
 			return true;
 		}
+
 		@Override
 		public String toString() {
-			return "CarDto [id=" + id + ", name=" + name + ", description=" + description + ", year=" + year
-					+ ", transmissionTypeName=" + transmissionTypeName + ", fuelTypeName=" + fuelTypeName
-					+ ", carTypeName=" + carTypeName + ", numberOfSeats=" + numberOfSeats + ", features=" + features
-					+ ", mileage=" + mileage + ", price=" + price + ", locationCountry=" + locationCountry
-					+ ", locationCity=" + locationCity + ", defaultImageUrl=" + defaultImageUrl + "]";
+			return "CarDto [id=" + id + ", description=" + description + ", year=" + year + ", transmissionTypeName="
+					+ transmissionTypeName + ", fuelTypeName=" + fuelTypeName + ", carTypeName=" + carTypeName
+					+ ", licensePlateNumber=" + licensePlateNumber + ", manufacturerName=" + manufacturerName
+					+ ", insurerName=" + insurerName + ", modelName=" + modelName + ", numberOfSeats=" + numberOfSeats
+					+ ", features=" + features + ", mileage=" + mileage + ", price=" + price + ", locationCountry="
+					+ locationCountry + ", locationCity=" + locationCity + ", imageUrlSmall=" + imageUrlSmall
+					+ ", imageUrlMedium=" + imageUrlMedium + ", imageUrlLarge=" + imageUrlLarge + "]";
 		}
-		
-																	
+
+																									
 }

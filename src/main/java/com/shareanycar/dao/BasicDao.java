@@ -6,8 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import com.shareanycar.model.Owner;
-
 public abstract class BasicDao<T> {
 	private String table;
 	
@@ -28,9 +26,9 @@ public abstract class BasicDao<T> {
     public List<T> findAll(){
         Session session = SessionUtil.getSession();    
         Query<T> query = session.createQuery("from " + table);
-        List<T> owners =  query.getResultList();
+        List<T> elems =  query.getResultList();
         session.close();
-        return owners;
+        return elems;
     }
  
     public void delete(T bean) {
