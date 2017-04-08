@@ -25,7 +25,6 @@ import com.shareanycar.dto.CarDto;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.CarType;
 import com.shareanycar.model.FuelType;
-import com.shareanycar.model.Image;
 import com.shareanycar.model.Insurer;
 import com.shareanycar.model.Location;
 import com.shareanycar.model.Manufacturer;
@@ -93,7 +92,7 @@ public class CarController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response detail(@PathParam("id") Long id) {
 		try {
-			Car car = carService.findCarById(id);
+			Car car = carService.findById(id);
 			if (car == null) {
 				throw new Exception("error finding car:" + id);
 			}
@@ -135,7 +134,6 @@ public class CarController {
 	@DELETE
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Consumes({ MediaType.APPLICATION_JSON })
 	@SecuredUser
 	public Response delete(@PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
@@ -153,7 +151,6 @@ public class CarController {
 	@GET
 	@Path("/all")
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Consumes({ MediaType.APPLICATION_JSON })
 	@SecuredUser
 	public Response all(@Context SecurityContext securityContext) {
 		try {
@@ -162,7 +159,6 @@ public class CarController {
 
 			for (Car car : user.getCars()) {
 				CarDto carDto = modelMapper.map(car, CarDto.class);
-				System.out.println(carDto);
 				carDtos.add(carDto);
 			}
 
@@ -172,4 +168,24 @@ public class CarController {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
+	
+	@GET
+	@Path("available")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response availableCars(){
+		try{
+			
+			Set<CarDto> carDtos = new HashSet<>();
+			for(Car car : carService.findAll()){
+				CarDto carDto = modelMapper.map(car, CarDto.class);
+				carDtos.add(carDto);
+			}
+			
+			return Response.ok(carDtos).build();
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+	
 }

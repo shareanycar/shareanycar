@@ -99,7 +99,7 @@ public class ImageService {
 					"can not load image, car does not belong to current owner id:" + userId + "; car id" + carId);
 		}
 		
-		Image image = new Image();
+		Image image;
 		
 		String fileName ;
 		
@@ -112,6 +112,7 @@ public class ImageService {
 				fileName = miscUtils.randonString();
 			}
 		}else{
+			image =  new Image();
 			fileName = miscUtils.randonString();
 		}
 

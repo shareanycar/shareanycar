@@ -19,6 +19,7 @@ public class CarConverter extends AbstractConverter<Car, CarDto>{
 				carDto.setImageUrlLarge(image.getUrlLarge());
 			}
 		}
+		carDto.setUserFirstName(source.getUser().getFirstName());
 		
 		return carDto;
 	}

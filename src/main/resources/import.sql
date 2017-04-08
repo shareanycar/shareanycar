@@ -24,3 +24,9 @@ insert into Manufacturer(name, id) values('BMW',1);
 
 -- insurer
 insert into Insurer(name, id) values('Alpha',1);
+
+--users
+insert into User(firstname, lastname, email, password, id) values('Tom', 'Cruz', 'e', 'pass',1);
+
+--cars
+insert into Car(insurer_id, fuelType_id, carType_id, manufacturer_id, transmissionType_id, location_id, user_id,status, id) values(1,1,1, 1, 2, 1, 1,1,1);

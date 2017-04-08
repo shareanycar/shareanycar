@@ -21,7 +21,9 @@ public class FactoryModelMapper implements Factory<ModelMapper>{
 	public ModelMapper provide() {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.addMappings(new UserDtoMap());
+		modelMapper.addMappings(new CarDtoMap());
 		modelMapper.addMappings(new CarMap());
+		
 		modelMapper.getTypeMap(Car.class, CarDto.class).setPreConverter(new CarConverter());
 		
 		return modelMapper;

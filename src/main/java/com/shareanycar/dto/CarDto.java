@@ -24,6 +24,9 @@ public class CarDto {
 		private String imageUrlSmall;
 		private String imageUrlMedium;
 		private String imageUrlLarge;
+		private String userFirstName;
+		private String userImageUrlSmall;
+		private String userImageUrlMedium;
 		
 		public Long getId() {
 			return id;
@@ -156,6 +159,30 @@ public class CarDto {
 			this.modelName = modelName;
 		}
 
+		public String getUserFirstName() {
+			return userFirstName;
+		}
+
+		public void setUserFirstName(String userFirstName) {
+			this.userFirstName = userFirstName;
+		}
+
+		public String getUserImageUrlSmall() {
+			return userImageUrlSmall;
+		}
+
+		public String getUserImageUrlMedium() {
+			return userImageUrlMedium;
+		}
+
+		public void setUserImageUrlSmall(String userImageUrlSmall) {
+			this.userImageUrlSmall = userImageUrlSmall;
+		}
+
+		public void setUserImageUrlMedium(String userImageUrlMedium) {
+			this.userImageUrlMedium = userImageUrlMedium;
+		}
+
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -178,6 +205,9 @@ public class CarDto {
 			result = prime * result + numberOfSeats;
 			result = prime * result + price;
 			result = prime * result + ((transmissionTypeName == null) ? 0 : transmissionTypeName.hashCode());
+			result = prime * result + ((userFirstName == null) ? 0 : userFirstName.hashCode());
+			result = prime * result + ((userImageUrlMedium == null) ? 0 : userImageUrlMedium.hashCode());
+			result = prime * result + ((userImageUrlSmall == null) ? 0 : userImageUrlSmall.hashCode());
 			result = prime * result + year;
 			return result;
 		}
@@ -272,6 +302,21 @@ public class CarDto {
 					return false;
 			} else if (!transmissionTypeName.equals(other.transmissionTypeName))
 				return false;
+			if (userFirstName == null) {
+				if (other.userFirstName != null)
+					return false;
+			} else if (!userFirstName.equals(other.userFirstName))
+				return false;
+			if (userImageUrlMedium == null) {
+				if (other.userImageUrlMedium != null)
+					return false;
+			} else if (!userImageUrlMedium.equals(other.userImageUrlMedium))
+				return false;
+			if (userImageUrlSmall == null) {
+				if (other.userImageUrlSmall != null)
+					return false;
+			} else if (!userImageUrlSmall.equals(other.userImageUrlSmall))
+				return false;
 			if (year != other.year)
 				return false;
 			return true;
@@ -285,8 +330,13 @@ public class CarDto {
 					+ ", insurerName=" + insurerName + ", modelName=" + modelName + ", numberOfSeats=" + numberOfSeats
 					+ ", features=" + features + ", mileage=" + mileage + ", price=" + price + ", locationCountry="
 					+ locationCountry + ", locationCity=" + locationCity + ", imageUrlSmall=" + imageUrlSmall
-					+ ", imageUrlMedium=" + imageUrlMedium + ", imageUrlLarge=" + imageUrlLarge + "]";
+					+ ", imageUrlMedium=" + imageUrlMedium + ", imageUrlLarge=" + imageUrlLarge + ", userFirstName="
+					+ userFirstName + ", userImageUrlSmall=" + userImageUrlSmall + ", userImageUrlMedium="
+					+ userImageUrlMedium + "]";
 		}
 
+		
+		
+		
 																									
 }

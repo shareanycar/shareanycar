@@ -177,12 +177,12 @@ public class CarService {
 
 	}
 
-	public List<Car> findCarByOwnerId(Long userId) {
-		return carDao.findCarByUserId(userId);
-	}
-
-	public Car findCarById(Long id) {
+	public Car findById(Long id) {
 		return carDao.findOne(id);
+	}
+	
+	public List<Car> findAll(){
+		return carDao.findAll();
 	}
 
 }
