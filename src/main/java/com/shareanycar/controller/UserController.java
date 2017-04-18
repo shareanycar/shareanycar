@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import com.shareanycar.annotation.SecuredUser;
 import com.shareanycar.dto.PasswordDto;
 import com.shareanycar.dto.UserDto;
+import com.shareanycar.dto.UserInfoDto;
 import com.shareanycar.model.User;
 import com.shareanycar.service.UserService;
 import com.shareanycar.util.ContextUtil;
@@ -61,10 +63,26 @@ public class UserController {
 			User user = context.getCurrentUser(securityContext);
 			UserDto userDto = modelMapper.map(user, UserDto.class);
 			userDto.setPassword(null);// hide sensitive field
-			
+
 			return Response.ok(userDto).build();
 		} catch (Exception e) {
 			logger.error("error getting user details:" + e.getMessage());
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+
+	@GET
+	@Path("{id}/info")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response info(@PathParam("id") Long id) {
+		try {
+			User user = userService.findById(id);
+			
+			UserInfoDto userInfo = modelMapper.map(user, UserInfoDto.class);
+			
+			return Response.ok(userInfo).build();
+		} catch (Exception e) {
+			logger.error("error getting user info:" + e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}

@@ -20,6 +20,7 @@ public class CarConverter extends AbstractConverter<Car, CarDto>{
 			}
 		}
 		carDto.setUserFirstName(source.getUser().getFirstName());
+		carDto.setUserId(source.getUser().getId());
 		
 		return carDto;
 	}

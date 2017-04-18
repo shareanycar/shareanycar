@@ -1,5 +1,6 @@
 package com.shareanycar.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,6 +33,8 @@ public class User {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
 	private Set<Car> cars;
+	
+	private List<Message> messages;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_image_id")

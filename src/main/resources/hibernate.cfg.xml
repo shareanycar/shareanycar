@@ -24,14 +24,14 @@
 		<mapping class="com.shareanycar.model.User"/>
 		<mapping class="com.shareanycar.model.UserImage"/>
   		<mapping class="com.shareanycar.model.Car"/>
+  		<mapping class="com.shareanycar.model.Image"/>
   		<mapping class="com.shareanycar.model.Insurer"/>
   		<mapping class="com.shareanycar.model.Manufacturer"/>
   		<mapping class="com.shareanycar.model.CarType"/>
   		<mapping class="com.shareanycar.model.FuelType"/>
   		<mapping class="com.shareanycar.model.TransmissionType"/>
   		<mapping class="com.shareanycar.model.Location"/>
-  		<mapping class="com.shareanycar.model.Image"/>
-  		
+  		<mapping class="com.shareanycar.model.Message"/>
   		
   </session-factory>
 </hibernate-configuration>
