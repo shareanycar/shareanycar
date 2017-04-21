@@ -6,7 +6,7 @@ import com.shareanycar.dto.CarDto;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.Image;
 
-public class CarConverter extends AbstractConverter<Car, CarDto>{
+public class Car2CarDtoConv extends AbstractConverter<Car, CarDto>{
 	
 	@Override
 	protected CarDto convert(Car source) {

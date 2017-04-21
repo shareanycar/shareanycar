@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 public class CarType {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotEmpty

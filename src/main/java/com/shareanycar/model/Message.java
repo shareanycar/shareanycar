@@ -15,16 +15,17 @@ import com.shareanycar.enums.MessageStatus;
 @Entity
 public class Message {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private LocalDateTime messageDate;
 
 	private String title;
 
 	private String text;
-	
-	
+
+	public Message() {
+	}
 
 	public Message(String title, String text, User fromUser, User toUser) {
 		this.title = title;
@@ -34,11 +35,11 @@ public class Message {
 		this.messageStatus = MessageStatus.NEW;
 	}
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "from_user_id")
 	private User fromUser;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "to_user_id")
 	private User toUser;
 

@@ -85,9 +85,8 @@ public class MessageController {
 	public Response incoming(@Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
-			List<Message> msgs = messageService.incoming(user.getId());
 			List<MessageInfoDto> msgInfoDtos = new LinkedList<>();
-			for (Message m : msgs) {
+			for (Message m : user.getIncoming()) {
 				MessageInfoDto dto = modelMapper.map(m, MessageInfoDto.class);
 				msgInfoDtos.add(dto);
 			}
@@ -105,9 +104,8 @@ public class MessageController {
 	public Response outgoing(@Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
-			List<Message> msgs = messageService.outgoing(user.getId());
 			List<MessageInfoDto> msgInfoDtos = new LinkedList<>();
-			for (Message m : msgs) {
+			for (Message m : user.getOutgoing()) {
 				MessageInfoDto dto = modelMapper.map(m, MessageInfoDto.class);
 				msgInfoDtos.add(dto);
 			}

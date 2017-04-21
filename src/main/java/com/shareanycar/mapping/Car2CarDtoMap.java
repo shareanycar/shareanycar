@@ -5,7 +5,7 @@ import org.modelmapper.PropertyMap;
 import com.shareanycar.dto.CarDto;
 import com.shareanycar.model.Car;
 
-public class CarMap extends PropertyMap<Car, CarDto>{
+public class Car2CarDtoMap extends PropertyMap<Car, CarDto>{
 
 	@Override
 	protected void configure() {

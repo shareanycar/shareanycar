@@ -1,7 +1,5 @@
 package com.shareanycar.service;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.jvnet.hk2.annotations.Service;
@@ -19,15 +17,8 @@ public class MessageService {
 	
 	public void send(User fromUser, Message message){
 		message.setFromUser(fromUser);
+		message.setMessageStatus(MessageStatus.NEW);
 		messageDao.save(message);
-	}
-	
-	public List<Message> incoming(Long toUserId){
-		return messageDao.findByToUserId(toUserId);
-	}
-	
-	public List<Message> outgoing(Long fromUserId){
-		return messageDao.findByFromUserId(fromUserId);
 	}
 	
 	public Message read(User user, Long messageId) throws Exception{

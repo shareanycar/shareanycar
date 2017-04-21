@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String firstName;
@@ -34,7 +34,11 @@ public class User {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
 	private Set<Car> cars;
 	
-	private List<Message> messages;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "toUser")
+	private Set<Message> incoming;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "fromUser")
+	private Set<Message> outgoing;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_image_id")
@@ -153,5 +157,23 @@ public class User {
 	public void setUserImage(UserImage userImage) {
 		this.userImage = userImage;
 	}
+
+	public Set<Message> getIncoming() {
+		return incoming;
+	}
+
+	public Set<Message> getOutgoing() {
+		return outgoing;
+	}
+
+	public void setIncoming(Set<Message> incoming) {
+		this.incoming = incoming;
+	}
+
+	public void setOutgoing(Set<Message> outgoing) {
+		this.outgoing = outgoing;
+	}
+
+	
 
 }

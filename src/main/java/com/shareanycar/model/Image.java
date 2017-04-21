@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 public class Image {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
