@@ -1,10 +1,13 @@
 package com.shareanycar.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,6 +24,7 @@ import org.slf4j.Logger;
 import com.shareanycar.annotation.SecuredUser;
 import com.shareanycar.dto.MessageDto;
 import com.shareanycar.dto.MessageInfoDto;
+import com.shareanycar.enums.MessageStatus;
 import com.shareanycar.model.Message;
 import com.shareanycar.model.User;
 import com.shareanycar.service.MessageService;
@@ -81,16 +85,31 @@ public class MessageController {
 
 	@GET
 	@Path("/incoming")
+	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredUser
 	public Response incoming(@Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
 			List<MessageInfoDto> msgInfoDtos = new LinkedList<>();
-			for (Message m : user.getIncoming()) {
-				MessageInfoDto dto = modelMapper.map(m, MessageInfoDto.class);
-				msgInfoDtos.add(dto);
-			}
 
+			for (Message m : user.getIncoming()) {
+				if (m.getMessageStatus() != MessageStatus.SENT) {
+					MessageInfoDto dto = modelMapper.map(m, MessageInfoDto.class);
+					msgInfoDtos.add(dto);
+				}
+			}
+			Collections.sort(msgInfoDtos, new Comparator<MessageInfoDto>() {
+				@Override
+				public int compare(MessageInfoDto o1, MessageInfoDto o2) {
+					if (o1.getId() < o2.getId()) {
+						return 1;
+					} else if (o1.getId() > o2.getId()) {
+						return -1;
+					} else {
+						return 0;
+					}
+				}
+			});
 			return Response.ok(msgInfoDtos).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -100,20 +119,59 @@ public class MessageController {
 
 	@GET
 	@Path("/outgoing")
+	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredUser
 	public Response outgoing(@Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
 			List<MessageInfoDto> msgInfoDtos = new LinkedList<>();
 			for (Message m : user.getOutgoing()) {
-				MessageInfoDto dto = modelMapper.map(m, MessageInfoDto.class);
-				msgInfoDtos.add(dto);
+				if (m.getMessageStatus() == MessageStatus.SENT) {
+					MessageInfoDto dto = modelMapper.map(m, MessageInfoDto.class);
+					msgInfoDtos.add(dto);
+				}
 			}
+
+			Collections.sort(msgInfoDtos, new Comparator<MessageInfoDto>() {
+				@Override
+				public int compare(MessageInfoDto o1, MessageInfoDto o2) {
+					if (o1.getId() < o2.getId()) {
+						return 1;
+					} else if (o1.getId() > o2.getId()) {
+						return -1;
+					} else {
+						return 0;
+					}
+				}
+			});
+
 			return Response.ok(msgInfoDtos).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
+	}
+
+	@POST
+	@Path("/delete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@SecuredUser
+	public Response delete(MessageInfoDto[] msgInfoDtos, @Context SecurityContext securityContext) {
+		try {
+			User user = context.getCurrentUser(securityContext);
+			List<Message> messages = new LinkedList<>();
+			for (MessageInfoDto m : msgInfoDtos) {
+				messages.add(modelMapper.map(m, Message.class));
+			}
+			messageService.delete(user, messages);
+
+			return Response.ok().build();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+
 	}
 
 }

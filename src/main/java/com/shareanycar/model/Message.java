@@ -26,13 +26,13 @@ public class Message {
 
 	public Message() {
 	}
-
-	public Message(String title, String text, User fromUser, User toUser) {
+	
+	public Message(String title, String text, User fromUser, User toUser, MessageStatus messageStatus) {
 		this.title = title;
 		this.text = text;
 		this.fromUser = fromUser;
 		this.toUser = toUser;
-		this.messageStatus = MessageStatus.NEW;
+		this.messageStatus = messageStatus;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
