@@ -13,7 +13,7 @@ public class MessageInfoDto {
 	private String toUserName;
 	private String title;
 	private MessageStatus messageStatus;
-	private LocalDateTime messageDate;
+	private String messageDate;
 
 	public Long getId() {
 		return id;
@@ -43,7 +43,7 @@ public class MessageInfoDto {
 		return messageStatus;
 	}
 
-	public LocalDateTime getMessageDate() {
+	public String getMessageDate() {
 		return messageDate;
 	}
 
@@ -75,7 +75,7 @@ public class MessageInfoDto {
 		this.messageStatus = messageStatus;
 	}
 
-	public void setMessageDate(LocalDateTime messageDate) {
+	public void setMessageDate(String messageDate) {
 		this.messageDate = messageDate;
 	}
 
@@ -92,4 +92,6 @@ public class MessageInfoDto {
 		}
 
 	}
+
+	
 }

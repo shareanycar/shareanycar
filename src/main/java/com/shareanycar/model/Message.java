@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import com.shareanycar.enums.MessageStatus;
 
@@ -18,6 +19,7 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotNull
 	private LocalDateTime messageDate;
 
 	private String title;
@@ -33,6 +35,7 @@ public class Message {
 		this.fromUser = fromUser;
 		this.toUser = toUser;
 		this.messageStatus = messageStatus;
+		this.messageDate = LocalDateTime.now();
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)

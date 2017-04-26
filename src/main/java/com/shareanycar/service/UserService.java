@@ -5,20 +5,27 @@ import javax.inject.Inject;
 import org.jvnet.hk2.annotations.Service;
 
 import com.shareanycar.dao.UserDao;
+import com.shareanycar.enums.UserStatus;
 import com.shareanycar.model.User;
+import com.shareanycar.util.MiscUtils;
 
 @Service
 public class UserService {
 	
 	@Inject
 	public UserDao userDao;
-
+	
+	@Inject 
+	public MiscUtils miscUtils;
+	
 	public Long create(User user) throws Exception {
 
 		if (userDao.findByEmail(user.getEmail()) != null) {
 			throw new Exception("user with such email already exists");
 		}
-
+		
+		user.setUserStatus(UserStatus.NEW);
+		user.setActivationToken(miscUtils.randonString());
 		user = userDao.save(user);
 
 		return user.getId();
@@ -54,6 +61,18 @@ public class UserService {
 		
 		user.setPassword(newPassword);
 		userDao.save(user);			
+	}
+	
+	public Long  activate(String activationToken) throws Exception{
+		User user = userDao.findByActivationToken(activationToken);
+		
+		if(user == null){
+			throw new Exception("can not find user");
+		}
+		
+		user.setUserStatus(UserStatus.ACTIVATED);
+		user = userDao.save(user);
+		return user.getId();
 	}
 	
 	public User findByEmail(String email) {

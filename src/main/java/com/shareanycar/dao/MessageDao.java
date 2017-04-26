@@ -22,5 +22,7 @@ public class MessageDao extends BasicDao<Message>{
 	public List<Message> findByFromUserId(Long id){
 		return (List<Message>) extDao.findListByParam("from Message where from_user_id = :id", "id", id);
 	}
+	
+	
 
 }

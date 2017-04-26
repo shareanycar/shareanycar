@@ -22,9 +22,10 @@ public class MessageService {
 
 		Message messageTo = new Message(message.getTitle(), message.getText(), message.getFromUser(),
 				message.getToUser(), MessageStatus.SENT);
+		
 		Message messageFrom = new Message(message.getTitle(), message.getText(), message.getFromUser(),
 				message.getToUser(), MessageStatus.NEW);
-
+		
 		messageDao.save(messageTo);
 		messageDao.save(messageFrom);
 	}

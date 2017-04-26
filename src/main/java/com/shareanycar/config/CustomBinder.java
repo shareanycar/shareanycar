@@ -28,6 +28,7 @@ import com.shareanycar.service.CarService;
 import com.shareanycar.service.ImageService;
 import com.shareanycar.service.LocationService;
 import com.shareanycar.service.MessageService;
+import com.shareanycar.service.NotificationService;
 import com.shareanycar.service.UserService;
 import com.shareanycar.util.ContextUtil;
 import com.shareanycar.util.MiscUtils;
@@ -56,6 +57,7 @@ public class CustomBinder extends AbstractBinder{
 		bind(AuthService.class).to(AuthService.class).in(Singleton.class);
 		bind(ImageService.class).to(ImageService.class).in(Singleton.class);
 		bind(MessageService.class).to(MessageService.class).in(Singleton.class);
+		bind(NotificationService.class).to(NotificationService.class).in(Singleton.class);
 		
 		bind(ContextUtil.class).to(ContextUtil.class).in(Singleton.class);
 		bind(AppConfig.class).to(AppConfig.class).in(Singleton.class);

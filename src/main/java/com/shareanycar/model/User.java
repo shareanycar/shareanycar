@@ -1,6 +1,5 @@
 package com.shareanycar.model;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.shareanycar.enums.UserStatus;
 
 @Entity
 public class User {
@@ -30,6 +31,9 @@ public class User {
 	private String drivingLicense;
 	private String description;
 	private String token;
+	private String activationToken;
+	private UserStatus userStatus;
+	
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
 	private Set<Car> cars;
@@ -172,6 +176,22 @@ public class User {
 
 	public void setOutgoing(Set<Message> outgoing) {
 		this.outgoing = outgoing;
+	}
+
+	public UserStatus getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(UserStatus userStatus) {
+		this.userStatus = userStatus;
+	}
+
+	public String getActivationToken() {
+		return activationToken;
+	}
+
+	public void setActivationToken(String activationToken) {
+		this.activationToken = activationToken;
 	}
 
 	

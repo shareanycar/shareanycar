@@ -21,6 +21,7 @@ import com.shareanycar.dto.PasswordDto;
 import com.shareanycar.dto.UserDto;
 import com.shareanycar.dto.UserInfoDto;
 import com.shareanycar.model.User;
+import com.shareanycar.service.NotificationService;
 import com.shareanycar.service.UserService;
 import com.shareanycar.util.ContextUtil;
 
@@ -31,7 +32,10 @@ public class UserController {
 
 	@Inject
 	public Logger logger;
-
+	
+	@Inject
+	public NotificationService notificationService;
+	
 	@Inject
 	public ModelMapper modelMapper;
 
@@ -46,8 +50,9 @@ public class UserController {
 		try {
 			User user = modelMapper.map(userDto, User.class);
 
-			userService.create(user);
-
+			Long id = userService.create(user);
+			notificationService.notifyActivateAccount(id);
+			
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error("error creating user:" + userDto + e.getMessage());
@@ -120,5 +125,20 @@ public class UserController {
 			logger.error("error updating password:" + passwordDto + " " + e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
+	}
+	
+	@GET
+	@Path("/activate/{token}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response activate(@PathParam("token") String activationToken){
+		try{
+			Long id = userService.activate(activationToken);
+			notificationService.notifyAccountActivated(id);
+			
+			return Response.ok().build();
+		}catch(Exception e){
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		
 	}
 }
