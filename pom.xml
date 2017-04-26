@@ -5,7 +5,7 @@
 
     <groupId>com.shareanycar</groupId>
     <artifactId>shareanycar</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>shareanycar</name>
 
@@ -91,6 +91,14 @@
         	<groupId>mysql</groupId>
         	<artifactId>mysql-connector-java</artifactId>
         	<version>6.0.6</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.glassfish.jersey.containers</groupId>
+        	<artifactId>jersey-container-servlet-core</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.glassfish.jersey.containers</groupId>
+        	<artifactId>jersey-container-servlet</artifactId>
         </dependency>
     </dependencies>
 
