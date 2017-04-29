@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.SimpleLogger;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.CarTypeDao;
 import com.shareanycar.dao.ExtDao;
@@ -22,7 +23,9 @@ import com.shareanycar.dao.MessageDao;
 import com.shareanycar.dao.TransmissionTypeDao;
 import com.shareanycar.dao.UserDao;
 import com.shareanycar.dao.UserImageDao;
-import com.shareanycar.mapping.FactoryModelMapper;
+import com.shareanycar.providers.FactoryAmazonS3;
+import com.shareanycar.providers.FactoryModelMapper;
+import com.shareanycar.service.AmazonService;
 import com.shareanycar.service.AuthService;
 import com.shareanycar.service.CarService;
 import com.shareanycar.service.ImageService;
@@ -51,6 +54,7 @@ public class CustomBinder extends AbstractBinder{
 		bind(MessageDao.class).to(MessageDao.class).in(Singleton.class);
 		bind(ExtDao.class).to(ExtDao.class).in(Singleton.class);
 
+		bind(AmazonService.class).to(AmazonService.class).in(Singleton.class);
 		bind(UserService.class).to(UserService.class).in(Singleton.class);
 		bind(LocationService.class).to(LocationService.class).in(Singleton.class);
 		bind(CarService.class).to(CarService.class).in(Singleton.class);
@@ -63,6 +67,7 @@ public class CustomBinder extends AbstractBinder{
 		bind(AppConfig.class).to(AppConfig.class).in(Singleton.class);
 		bind(MiscUtils.class).to(MiscUtils.class).in(Singleton.class);
 		bindFactory(FactoryModelMapper.class).to(ModelMapper.class).in(Singleton.class);
+		bindFactory(FactoryAmazonS3.class).to(AmazonS3.class).in(Singleton.class);
 		bind(LoggerFactory.getLogger(SimpleLogger.class)).to(Logger.class);
 		
 	}

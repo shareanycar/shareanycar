@@ -1,4 +1,4 @@
-package com.shareanycar.mapping;
+package com.shareanycar.providers;
 
 import javax.inject.Singleton;
 
@@ -8,6 +8,14 @@ import org.modelmapper.ModelMapper;
 import com.shareanycar.dto.CarDto;
 import com.shareanycar.dto.MessageDto;
 import com.shareanycar.dto.MessageInfoDto;
+import com.shareanycar.mapping.Car2CarDtoConv;
+import com.shareanycar.mapping.Car2CarDtoMap;
+import com.shareanycar.mapping.CarDto2CarMap;
+import com.shareanycar.mapping.Msg2MsgDtoConv;
+import com.shareanycar.mapping.Msg2MsgDtoMap;
+import com.shareanycar.mapping.Msg2MsgInfoDtoConv;
+import com.shareanycar.mapping.Msg2MsgInfoDtoMap;
+import com.shareanycar.mapping.UserDto2UserMap;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.Message;
 

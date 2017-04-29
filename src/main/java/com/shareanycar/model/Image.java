@@ -32,7 +32,6 @@ public class Image {
 	@NotEmpty
 	private String urlLarge;
 	
-	@NotEmpty
 	private boolean main;
 
 	public Long getId() {
@@ -90,6 +89,5 @@ public class Image {
 	public void setMain(boolean main) {
 		this.main = main;
 	}
-
 	
 }
