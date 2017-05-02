@@ -1,100 +1,90 @@
 package com.shareanycar.config;
 
+import javax.inject.Inject;
+
 import org.jvnet.hk2.annotations.Service;
 
 @Service
 public class AppConfig {
-	final private String serviceUrl = "http://localhost:8080/shareanycar/api/" ;
-	final private String corsUrl = "http://localhost:4200" ;
 	
-	final private String rootLocation = "/Users/slava/Documents/workspace/shareanycar-ui/src/assets/upload/";
-	final private String tmpLocation = "/Users/slava/Documents/workspace/tmp/";
-	final private String smallLocation = "small/";
-	final private String mediumLocation = "medium/";
-	final private String largeLocation = "large/";
-
-	final private int smallWidth = 160;
-	final private int smallHeight = 120;
+	@Inject
+	public ConfigReader configReader ;
 	
-	final private int mediumWidth = 320;
-	final private int mediumHeight = 240;
+	public String getAmazonKey(){
+		return configReader.getProperty("amazon.key");
+	}
 	
-	final private int largeWidth = 640;
-	final private int largeHeight = 480;
-
-	final private String urlPrefix = "http://localhost:4200/assets/upload/";
-	final private String amazonUrlPrefix = "https://s3-eu-west-1.amazonaws.com/shareanycar-bucket/";
-	
-	final private String s3BucketName = "shareanycar-bucket"; 
-	
-	final private boolean local = false;
+	public String getAmazonSecret(){
+		return configReader.getProperty("amazon.secret");
+	}
 	
 	public String getAmazonUrlPrefix() {
-		return amazonUrlPrefix;
+		return configReader.getProperty("amazon.url.prefix");
 	}
 
 	public String getCorsUrl() {
-		return corsUrl;
+		return configReader.getProperty("service.url.cors");
 	}
 
 	public String getTmpLocation() {
-		return tmpLocation;
+		return configReader.getProperty("image.tmp.location");
 	}
 
 	public boolean isLocal() {
-		return local;
+		return Boolean.valueOf(configReader.getProperty("service.local"));
+		
 	}
 
 	public String getServiceUrl() {
-		return serviceUrl;
+		return configReader.getProperty("service.url");
 	}
 
 	public String getS3BucketName() {
-		return s3BucketName;
+		return configReader.getProperty("amazon.bucket.name");
 	}
 
 	public String getRootLocation() {
-		return rootLocation;
+		return configReader.getProperty("image.root.location");
 	}
 
 	public String getSmallLocation() {
-		return smallLocation;
+		return configReader.getProperty("image.small.location");
 	}
 
 	public String getMediumLocation() {
-		return mediumLocation;
+		return configReader.getProperty("image.medium.location");
 	}
 
 	public String getLargeLocation() {
-		return largeLocation;
+		return configReader.getProperty("image.large.location");
 	}
 	
 	public int getSmallWidth() {
-		return smallWidth;
+		return Integer.valueOf(configReader.getProperty("image.small.width"));
 	}
 
 	public int getSmallHeight() {
-		return smallHeight;
+		return Integer.valueOf(configReader.getProperty("image.small.height"));
 	}
 	
 	public int getMediumWidth() {
-		return mediumWidth;
+		return Integer.valueOf(configReader.getProperty("image.medium.width"));
 	}
 
 	public int getMediumHeight() {
-		return mediumHeight;
+		return Integer.valueOf(configReader.getProperty("image.medium.height"));
 	}
 
 	public int getLargeWidth() {
-		return largeWidth;
+		return Integer.valueOf(configReader.getProperty("image.large.width"));
 	}
 
 	public int getLargeHeight() {
-		return largeHeight;
+		return Integer.valueOf(configReader.getProperty("image.large.height"));
 	}
 
 	public String getUrlPrefix() {
-		return urlPrefix;
+		return configReader.getProperty("image.url.prefix");
 	}
 
 }

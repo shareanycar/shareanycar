@@ -1,7 +1,5 @@
 package com.shareanycar.config;
 
-
-
 import javax.inject.Singleton;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -36,13 +34,13 @@ import com.shareanycar.service.UserService;
 import com.shareanycar.util.ContextUtil;
 import com.shareanycar.util.MiscUtils;
 
-public class CustomBinder extends AbstractBinder{
+public class CustomBinder extends AbstractBinder {
 
 	@Override
 	protected void configure() {
-		
+
 		bind(UserDao.class).to(UserDao.class).in(Singleton.class);
-		bind(LocationDao.class).to(LocationDao.class).in(Singleton.class);		
+		bind(LocationDao.class).to(LocationDao.class).in(Singleton.class);
 		bind(CarDao.class).to(CarDao.class).in(Singleton.class);
 		bind(CarTypeDao.class).to(CarTypeDao.class).in(Singleton.class);
 		bind(TransmissionTypeDao.class).to(TransmissionTypeDao.class).in(Singleton.class);
@@ -62,14 +60,15 @@ public class CustomBinder extends AbstractBinder{
 		bind(ImageService.class).to(ImageService.class).in(Singleton.class);
 		bind(MessageService.class).to(MessageService.class).in(Singleton.class);
 		bind(NotificationService.class).to(NotificationService.class).in(Singleton.class);
-		
+
 		bind(ContextUtil.class).to(ContextUtil.class).in(Singleton.class);
 		bind(AppConfig.class).to(AppConfig.class).in(Singleton.class);
 		bind(MiscUtils.class).to(MiscUtils.class).in(Singleton.class);
+		bind(ConfigReader.class).to(ConfigReader.class).in(Singleton.class);
 		bindFactory(FactoryModelMapper.class).to(ModelMapper.class).in(Singleton.class);
 		bindFactory(FactoryAmazonS3.class).to(AmazonS3.class).in(Singleton.class);
 		bind(LoggerFactory.getLogger(SimpleLogger.class)).to(Logger.class);
-		
+
 	}
 
 }

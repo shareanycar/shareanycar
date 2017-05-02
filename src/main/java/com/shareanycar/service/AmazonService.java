@@ -28,6 +28,10 @@ public class AmazonService {
 	public void removeFile(String key){
 		s3.deleteObject(appConfig.getS3BucketName(), key);
 	}
+	
+	public String getUrl(String key){
+		return s3.getUrl(appConfig.getS3BucketName(), key).toString();
+	}
 
 	public static void main(String[] args) {
 		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAIEN4MG53ZMCZHWBA",
