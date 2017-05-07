@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.shareanycar.enums.CarStatus;
+
 @Entity
 public class Car  {
 	@Id
@@ -40,7 +42,7 @@ public class Car  {
 	private Integer year;
 	
 	@NotNull
-	private boolean status;
+	private CarStatus status;
 	
 	@NotNull
 	private String modelName;
@@ -104,10 +106,6 @@ public class Car  {
 		return year;
 	}
 
-	public boolean isStatus() {
-		return status;
-	}
-
 	public Manufacturer getManufacturer() {
 		return manufacturer;
 	}
@@ -168,10 +166,6 @@ public class Car  {
 		this.year = year;
 	}
 
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
 	public void setManufacturer(Manufacturer manufacturer) {
 		this.manufacturer = manufacturer;
 	}
@@ -210,6 +204,14 @@ public class Car  {
 
 	public void setModelName(String modelName) {
 		this.modelName = modelName;
+	}
+
+	public CarStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(CarStatus status) {
+		this.status = status;
 	}
 	
 	

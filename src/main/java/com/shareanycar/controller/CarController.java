@@ -176,7 +176,7 @@ public class CarController {
 		try{
 			
 			Set<CarDto> carDtos = new HashSet<>();
-			for(Car car : carService.findAll()){
+			for(Car car : carService.findAvailable()){
 				CarDto carDto = modelMapper.map(car, CarDto.class);
 				carDtos.add(carDto);
 			}

@@ -139,4 +139,22 @@ public class CarPropertyController {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
+	
+	@GET
+	@Path("/status")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response status(){
+		
+		try{
+			List<PropertyDto> properties = new LinkedList<>();
+			
+			properties.add(new PropertyDto("ACTIVE"));
+			properties.add(new PropertyDto("INACTIVE"));
+			
+			return Response.ok(properties).build();
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
 }

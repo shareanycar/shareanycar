@@ -13,6 +13,7 @@ import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.ManufacturerDao;
 import com.shareanycar.dao.TransmissionTypeDao;
 import com.shareanycar.dao.UserDao;
+import com.shareanycar.enums.CarStatus;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.CarType;
 import com.shareanycar.model.FuelType;
@@ -88,6 +89,7 @@ public class CarService {
 
 	public Long create(Long userId, Car car, Location location, TransmissionType transmissionType, CarType carType,
 			FuelType fuelType, Manufacturer manufacturer, Insurer insurer) throws Exception {
+		
 		User user = userDao.findOne(userId);
 
 		if (user == null) {
@@ -95,6 +97,7 @@ public class CarService {
 		}
 
 		car = setCarProperties(car, location, transmissionType, carType, fuelType, manufacturer, insurer);
+		car.setStatus(CarStatus.NEW);
 		car.setUser(user);
 
 		car = carDao.save(car);
@@ -132,8 +135,8 @@ public class CarService {
 		currentCar.setPrice(car.getPrice());
 		currentCar.setYear(car.getYear());
 		currentCar.setModelName(car.getModelName());
-		currentCar.setStatus(car.isStatus());
 		currentCar.setLicensePlateNumber(car.getLicensePlateNumber());
+		currentCar.setStatus(car.getStatus());
 
 		currentCar = carDao.save(currentCar);
 
@@ -167,7 +170,6 @@ public class CarService {
 
 		if (car == null) {
 			throw new Exception("can not find car with id:" + carId);
-
 		}
 
 		if (car.getUser().getId() != userId) {
@@ -179,6 +181,10 @@ public class CarService {
 
 	public Car findById(Long id) {
 		return carDao.findOne(id);
+	}
+	
+	public List<Car> findAvailable(){
+		return carDao.findAvailable();
 	}
 	
 	public List<Car> findAll(){

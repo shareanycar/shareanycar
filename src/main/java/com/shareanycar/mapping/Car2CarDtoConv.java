@@ -21,6 +21,7 @@ public class Car2CarDtoConv extends AbstractConverter<Car, CarDto>{
 		}
 		carDto.setUserFirstName(source.getUser().getFirstName());
 		carDto.setUserId(source.getUser().getId());
+		carDto.setNumberOfImages(source.getImages().size());
 		
 		return carDto;
 	}

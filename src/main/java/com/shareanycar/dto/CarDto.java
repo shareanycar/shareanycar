@@ -28,6 +28,8 @@ public class CarDto {
 	private String userFirstName;
 	private String userImageUrlSmall;
 	private String userImageUrlMedium;
+	private int numberOfImages;
+	private String status;
 
 	public Long getId() {
 		return id;
@@ -213,6 +215,22 @@ public class CarDto {
 		this.userId = userId;
 	}
 
+	public int getNumberOfImages() {
+		return numberOfImages;
+	}
+
+	public void setNumberOfImages(int numberOfImages) {
+		this.numberOfImages = numberOfImages;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -232,8 +250,10 @@ public class CarDto {
 		result = prime * result + ((manufacturerName == null) ? 0 : manufacturerName.hashCode());
 		result = prime * result + mileage;
 		result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
+		result = prime * result + numberOfImages;
 		result = prime * result + numberOfSeats;
 		result = prime * result + price;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((transmissionTypeName == null) ? 0 : transmissionTypeName.hashCode());
 		result = prime * result + ((userFirstName == null) ? 0 : userFirstName.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
@@ -324,9 +344,16 @@ public class CarDto {
 				return false;
 		} else if (!modelName.equals(other.modelName))
 			return false;
+		if (numberOfImages != other.numberOfImages)
+			return false;
 		if (numberOfSeats != other.numberOfSeats)
 			return false;
 		if (price != other.price)
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
 			return false;
 		if (transmissionTypeName == null) {
 			if (other.transmissionTypeName != null)
@@ -358,18 +385,5 @@ public class CarDto {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "CarDto [id=" + id + ", description=" + description + ", year=" + year + ", transmissionTypeName="
-				+ transmissionTypeName + ", fuelTypeName=" + fuelTypeName + ", carTypeName=" + carTypeName
-				+ ", licensePlateNumber=" + licensePlateNumber + ", manufacturerName=" + manufacturerName
-				+ ", insurerName=" + insurerName + ", modelName=" + modelName + ", numberOfSeats=" + numberOfSeats
-				+ ", features=" + features + ", mileage=" + mileage + ", price=" + price + ", locationCountry="
-				+ locationCountry + ", locationCity=" + locationCity + ", imageUrlSmall=" + imageUrlSmall
-				+ ", imageUrlMedium=" + imageUrlMedium + ", imageUrlLarge=" + imageUrlLarge + ", userId=" + userId
-				+ ", userFirstName=" + userFirstName + ", userImageUrlSmall=" + userImageUrlSmall
-				+ ", userImageUrlMedium=" + userImageUrlMedium + "]";
-	}
-
-	
+		
 }
