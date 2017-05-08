@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 
-import com.shareanycar.dto.Credentials;
+import com.shareanycar.dto.CredentialsDto;
 import com.shareanycar.dto.TokenDto;
 import com.shareanycar.model.User;
 import com.shareanycar.service.AuthService;
@@ -28,7 +28,7 @@ public class AuthController {
 	@Path("/user")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response userAuth(Credentials userCredentials) {
+	public Response userAuth(CredentialsDto userCredentials) {
 		try {
 			User user = authService.authenticateUser(userCredentials.getEmail(), userCredentials.getPassword());
 			if (user != null) {

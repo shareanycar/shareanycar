@@ -3,7 +3,7 @@ package com.shareanycar.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Credentials {
+public class CredentialsDto {
 	private String email;
 	private String password;
 	
