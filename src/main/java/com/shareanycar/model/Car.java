@@ -77,6 +77,10 @@ public class Car  {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
 	private Set<Image> images;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
+	private Set<Booking> bookings;
+	
 
 	public Long getId() {
 		return id;
@@ -212,6 +216,14 @@ public class Car  {
 
 	public void setStatus(CarStatus status) {
 		this.status = status;
+	}
+
+	public Set<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(Set<Booking> bookings) {
+		this.bookings = bookings;
 	}
 	
 	

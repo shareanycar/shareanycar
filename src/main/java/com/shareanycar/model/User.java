@@ -43,6 +43,9 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "fromUser")
 	private Set<Message> outgoing;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+	private Set<Booking> bookings;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_image_id")
@@ -194,6 +197,13 @@ public class User {
 		this.activationToken = activationToken;
 	}
 
-	
+	public Set<Booking> getBookings() {
+		return bookings;
+	}
 
+	public void setBookings(Set<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	
 }
