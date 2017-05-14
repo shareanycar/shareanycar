@@ -94,6 +94,12 @@ public class Booking {
 		this.note = note;
 	}
 
+	@Override
+	public String toString() {
+		return "Booking [id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", status=" + status + ", car="
+				+ car + ", user=" + user + ", note=" + note + "]";
+	}
+
 		
 	
 }

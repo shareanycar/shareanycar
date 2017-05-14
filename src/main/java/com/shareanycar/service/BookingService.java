@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.jvnet.hk2.annotations.Service;
 
 import com.shareanycar.dao.BookingDao;
+import com.shareanycar.enums.BookingStatus;
 import com.shareanycar.model.Booking;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.User;
@@ -33,7 +34,8 @@ public class BookingService {
 
 		booking.setUser(user);
 		booking.setCar(car);
-
+		booking.setStatus(BookingStatus.NEW);
+		
 		booking = bookingDao.save(booking);
 	}
 
@@ -64,6 +66,50 @@ public class BookingService {
 
 	public List<Booking> clientBookings(User user) {
 		return bookingDao.clientBookings(user.getId());
+	}
+
+	public void confirmBooking(Long id, User user) throws Exception {
+		Booking booking = bookingDao.findOne(id);
+
+		if (booking.getCar().getUser().getId() != user.getId()) {
+			throw new Exception("current user is not allowed to confirm this booking");
+		}
+
+		if (booking.getStatus() == BookingStatus.NEW) {
+			booking.setStatus(BookingStatus.CONFIRMED);
+			booking = bookingDao.save(booking);
+		} else {
+			throw new Exception("can not confirm booking with such status");
+		}
+	}
+
+	public void cancelBooking(Long id, User user) throws Exception {
+		Booking booking = bookingDao.findOne(id);
+
+		if (booking.getUser().getId() != user.getId()) {
+			throw new Exception("current user is not allowed to cancel this booking");
+		}
+
+		if (booking.getStatus() == BookingStatus.NEW || booking.getStatus() == BookingStatus.CONFIRMED) {
+			booking.setStatus(BookingStatus.CANCELED);
+			booking = bookingDao.save(booking);
+		}else{
+			throw new Exception("can not cancel booking with such status");
+		}
+	}
+
+	public Booking viewBooking(Long id, User user) throws Exception {
+		Booking booking = bookingDao.findOne(id);
+		
+		if(booking.getUser().getId() == user.getId()){
+			return booking;
+		}
+		
+		if(booking.getCar().getId() == user.getId()){
+			return booking;
+		}
+		
+		throw new Exception("current user is not allowed to view this booking");
 	}
 
 }
