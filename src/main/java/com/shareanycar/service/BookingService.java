@@ -1,6 +1,8 @@
 package com.shareanycar.service;
 
-import java.util.LinkedList;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,8 +23,13 @@ public class BookingService {
 	@Inject
 	public CarService carService;
 
+	private int calcNumberOfDays(LocalDate dateFrom, LocalDate dateTo) {
+
+		return dateFrom.until(dateTo).getDays() + 1;
+	}
+
 	public void book(Booking booking, User user, Long carId) throws Exception {
-		if (booking.getDateFrom().compareTo(booking.getDateTo()) > 0) {
+		if (booking.getDateFrom().compareTo(booking.getDateTo()) >= 0) {
 			throw new Exception("incorrent dateFrom and dateTo dates");
 		}
 
@@ -35,7 +42,11 @@ public class BookingService {
 		booking.setUser(user);
 		booking.setCar(car);
 		booking.setStatus(BookingStatus.NEW);
-		
+
+		int numberOfDays = calcNumberOfDays(booking.getDateFrom(), booking.getDateTo());
+		booking.setNumberOfDays(numberOfDays);
+		booking.setTotalPrice(numberOfDays * car.getPrice());
+
 		booking = bookingDao.save(booking);
 	}
 
@@ -49,27 +60,32 @@ public class BookingService {
 			throw new Exception("car does not belong to current user:" + user.getId());
 		}
 
-		LinkedList<Booking> bookings = new LinkedList<>(car.getBookings());
+		List<Booking> bookings = new ArrayList<>(car.getBookings());
+
+		Collections.sort(bookings, Collections.reverseOrder());
 
 		return bookings;
 	}
 
 	public List<Booking> ownerBookings(User user) {
-		List<Booking> bookings = new LinkedList<>();
+		List<Booking> bookings = new ArrayList<>();
 
 		for (Car c : user.getCars()) {
 			bookings.addAll(c.getBookings());
 		}
 
+		Collections.sort(bookings, Collections.reverseOrder());
 		return bookings;
 	}
 
 	public List<Booking> clientBookings(User user) {
-		return bookingDao.clientBookings(user.getId());
+		List<Booking> bookings = bookingDao.clientBookings(user.getId());
+		Collections.sort(bookings, Collections.reverseOrder());
+
+		return bookings;
 	}
 
-	public void confirmBooking(Long id, User user) throws Exception {
-		Booking booking = bookingDao.findOne(id);
+	public void confirmBooking(Booking booking, User user) throws Exception {
 
 		if (booking.getCar().getUser().getId() != user.getId()) {
 			throw new Exception("current user is not allowed to confirm this booking");
@@ -83,8 +99,7 @@ public class BookingService {
 		}
 	}
 
-	public void cancelBooking(Long id, User user) throws Exception {
-		Booking booking = bookingDao.findOne(id);
+	public void cancelBooking(Booking booking, User user) throws Exception {
 
 		if (booking.getUser().getId() != user.getId()) {
 			throw new Exception("current user is not allowed to cancel this booking");
@@ -93,23 +108,27 @@ public class BookingService {
 		if (booking.getStatus() == BookingStatus.NEW || booking.getStatus() == BookingStatus.CONFIRMED) {
 			booking.setStatus(BookingStatus.CANCELED);
 			booking = bookingDao.save(booking);
-		}else{
+		} else {
 			throw new Exception("can not cancel booking with such status");
 		}
 	}
 
 	public Booking viewBooking(Long id, User user) throws Exception {
 		Booking booking = bookingDao.findOne(id);
-		
-		if(booking.getUser().getId() == user.getId()){
+
+		if (booking.getUser().getId() == user.getId()) {
 			return booking;
 		}
-		
-		if(booking.getCar().getId() == user.getId()){
+
+		if (booking.getCar().getId() == user.getId()) {
 			return booking;
 		}
-		
+
 		throw new Exception("current user is not allowed to view this booking");
+	}
+
+	public Booking findOne(Long id) {
+		return bookingDao.findOne(id);
 	}
 
 }

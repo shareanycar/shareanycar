@@ -8,6 +8,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import com.shareanycar.dao.MessageDao;
 import com.shareanycar.enums.MessageStatus;
+import com.shareanycar.model.Booking;
 import com.shareanycar.model.Message;
 import com.shareanycar.model.User;
 
@@ -22,10 +23,10 @@ public class MessageService {
 
 		Message messageTo = new Message(message.getTitle(), message.getText(), message.getFromUser(),
 				message.getToUser(), MessageStatus.SENT);
-		
+
 		Message messageFrom = new Message(message.getTitle(), message.getText(), message.getFromUser(),
 				message.getToUser(), MessageStatus.NEW);
-		
+
 		messageDao.save(messageTo);
 		messageDao.save(messageFrom);
 	}
@@ -46,16 +47,54 @@ public class MessageService {
 		}
 		return message;
 	}
-	
-	public void delete(User user, List<Message> messages) throws Exception{
-		for(Message m: messages){
-			if(user.getId() != m.getFromUser().getId() && user.getId() != m.getToUser().getId()){
+
+	public void delete(User user, List<Message> messages) throws Exception {
+		for (Message m : messages) {
+			if (user.getId() != m.getFromUser().getId() && user.getId() != m.getToUser().getId()) {
 				throw new Exception("some messages do not belong to current user");
 			}
 		}
-		
-		for(Message m : messages){
+
+		for (Message m : messages) {
 			messageDao.delete(m);
 		}
+	}
+
+	public void bookingMessage(String msgTitlePrefix, Booking booking) throws Exception {
+
+		if (booking.getCar() == null) {
+			throw new Exception("car is not set");
+		}
+
+		String title = msgTitlePrefix + " [" + booking.getCar().getManufacturer().getName() + " "
+				+ booking.getCar().getModelName() + "] " + booking.getDateFrom() + " - " + booking.getDateTo();
+
+		String note = booking.getNote() == null ? " empty tex" : booking.getNote();
+
+		String text = "note from " + booking.getUser().getFirstName() + " " + booking.getUser().getLastName() + ": "
+				+ note;
+
+		User fromUser = booking.getCar().getUser();
+		User toUser = booking.getUser();
+
+		if (fromUser == null || toUser == null) {
+			throw new Exception("owner or client is not set");
+		}
+
+		Message message = new Message(title, text, fromUser, toUser, MessageStatus.NEW);
+		send(fromUser, message);
+
+	}
+
+	public void carBooked(Booking booking) throws Exception {
+		bookingMessage("Car booked:", booking);
+	}
+
+	public void bookingConfirmed(Booking booking) throws Exception {
+		bookingMessage("Booking has been confirmed:", booking);
+	}
+
+	public void bookingCanceled(Booking booking) throws Exception {
+		bookingMessage("Booking has been canceled:", booking);
 	}
 }

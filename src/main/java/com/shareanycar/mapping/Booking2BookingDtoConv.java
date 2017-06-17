@@ -1,7 +1,5 @@
 package com.shareanycar.mapping;
 
-import java.time.format.DateTimeFormatter;
-
 import org.modelmapper.AbstractConverter;
 
 import com.shareanycar.dto.BookingDto;
@@ -13,16 +11,20 @@ public class Booking2BookingDtoConv extends AbstractConverter<Booking,BookingDto
 	protected BookingDto convert(Booking source) {
 		BookingDto bookingDto = new BookingDto();
 		
-		bookingDto.setDateFrom(source.getDateFrom().format(DateTimeFormatter.ISO_DATE));
-		bookingDto.setDateTo(source.getDateTo().format(DateTimeFormatter.ISO_DATE));
+		bookingDto.setDateFrom(source.getDateFrom().plusDays(1).toString());
+		bookingDto.setDateTo(source.getDateTo().plusDays(1).toString());
 		bookingDto.setCarId(source.getCar().getId());
-		bookingDto.setUserId(source.getUser().getId());
-		bookingDto.setClientName(source.getUser().getFirstName());
-		bookingDto.setOwnerName(source.getCar().getUser().getFirstName());
+		bookingDto.setClientId(source.getUser().getId());
+		bookingDto.setClientName(source.getUser().getFirstName() + " " + source.getUser().getLastName());
+		bookingDto.setOwnerId(source.getCar().getUser().getId());
+		bookingDto.setOwnerName(source.getCar().getUser().getFirstName() + " " + source.getCar().getUser().getLastName());
 		bookingDto.setManufacturer(source.getCar().getManufacturer().getName());
 		bookingDto.setModel(source.getCar().getModelName());
 		bookingDto.setTransmissionType(source.getCar().getTransmissionType().getName());
 		bookingDto.setStatus(source.getStatus());
+		bookingDto.setCarMakeYear(source.getCar().getYear());
+		bookingDto.setTotalPrice(source.getTotalPrice());
+		bookingDto.setNumberOfDays(source.getNumberOfDays());
 		
 		return bookingDto;
 	}

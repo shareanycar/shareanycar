@@ -1,7 +1,7 @@
 package com.shareanycar.controller;
 
 import java.io.InputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,7 +49,7 @@ public class ImageController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response carImages(@PathParam("id") Long id) {
 		try {
-			List<ImageDto> images = new LinkedList<>();
+			List<ImageDto> images = new ArrayList<>();
 
 			for (Image image : imageService.findNotMainByCarId(id)) {
 				ImageDto imageDto = modelMapper.map(image, ImageDto.class);

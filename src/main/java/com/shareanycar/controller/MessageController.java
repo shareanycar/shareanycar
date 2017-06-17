@@ -1,7 +1,7 @@
 package com.shareanycar.controller;
 
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -88,7 +88,7 @@ public class MessageController {
 	public Response incoming(@Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
-			List<MessageInfoDto> msgInfoDtos = new LinkedList<>();
+			List<MessageInfoDto> msgInfoDtos = new ArrayList<>();
 
 			for (Message m : user.getIncoming()) {
 				if (m.getMessageStatus() != MessageStatus.SENT) {
@@ -111,7 +111,7 @@ public class MessageController {
 	public Response outgoing(@Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
-			List<MessageInfoDto> msgInfoDtos = new LinkedList<>();
+			List<MessageInfoDto> msgInfoDtos = new ArrayList<>();
 			for (Message m : user.getOutgoing()) {
 				if (m.getMessageStatus() == MessageStatus.SENT) {
 					MessageInfoDto dto = modelMapper.map(m, MessageInfoDto.class);
@@ -136,7 +136,7 @@ public class MessageController {
 	public Response delete(MessageInfoDto[] msgInfoDtos, @Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
-			List<Message> messages = new LinkedList<>();
+			List<Message> messages = new ArrayList<>();
 			for (MessageInfoDto m : msgInfoDtos) {
 				messages.add(modelMapper.map(m, Message.class));
 			}
@@ -157,7 +157,7 @@ public class MessageController {
 	public Response newMessages(@Context SecurityContext securityContext) {
 		try {
 			User user = context.getCurrentUser(securityContext);
-			List<MessageInfoDto> messages = new LinkedList<>();
+			List<MessageInfoDto> messages = new ArrayList<>();
 			for(Message m: user.getIncoming()){
 				if(m.getMessageStatus() == MessageStatus.NEW){
 					messages.add(modelMapper.map(m, MessageInfoDto.class));

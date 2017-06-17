@@ -1,6 +1,6 @@
 package com.shareanycar.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,19 +14,23 @@ import javax.validation.constraints.NotNull;
 import com.shareanycar.enums.BookingStatus;
 
 @Entity
-public class Booking {
+public class Booking implements Comparable<Booking>{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotNull
-	private LocalDateTime dateFrom;
+	private LocalDate dateFrom;
 	
 	@NotNull
-	private LocalDateTime dateTo;
+	private LocalDate dateTo;
 	
 	@NotNull
 	private BookingStatus status;
+	
+	private Double totalPrice;
+	
+	private Integer numberOfDays;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "car_id")
@@ -42,11 +46,11 @@ public class Booking {
 		return id;
 	}
 
-	public LocalDateTime getDateFrom() {
+	public LocalDate getDateFrom() {
 		return dateFrom;
 	}
 
-	public LocalDateTime getDateTo() {
+	public LocalDate getDateTo() {
 		return dateTo;
 	}
 
@@ -70,11 +74,11 @@ public class Booking {
 		this.id = id;
 	}
 
-	public void setDateFrom(LocalDateTime dateFrom) {
+	public void setDateFrom(LocalDate dateFrom) {
 		this.dateFrom = dateFrom;
 	}
 
-	public void setDateTo(LocalDateTime dateTo) {
+	public void setDateTo(LocalDate dateTo) {
 		this.dateTo = dateTo;
 	}
 
@@ -94,12 +98,31 @@ public class Booking {
 		this.note = note;
 	}
 
-	@Override
-	public String toString() {
-		return "Booking [id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", status=" + status + ", car="
-				+ car + ", user=" + user + ", note=" + note + "]";
+	public Double getTotalPrice() {
+		return totalPrice;
 	}
 
-		
-	
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public Integer getNumberOfDays() {
+		return numberOfDays;
+	}
+
+	public void setNumberOfDays(Integer numberOfDays) {
+		this.numberOfDays = numberOfDays;
+	}
+
+	@Override
+	public String toString() {
+		return "Booking [id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", status=" + status
+				+ ", totalPrice=" + totalPrice + ", numberOfDays=" + numberOfDays + ", car=" + car + ", user=" + user
+				+ ", note=" + note + "]";
+	}
+
+	@Override
+	public int compareTo(Booking o) {
+		return this.dateFrom.compareTo(o.dateFrom);
+	}
 }

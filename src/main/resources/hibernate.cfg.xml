@@ -31,6 +31,7 @@
 		<mapping class="com.shareanycar.model.TransmissionType" />
 		<mapping class="com.shareanycar.model.Location" />
 		<mapping class="com.shareanycar.model.Message" />
+		<mapping class="com.shareanycar.model.CarAvailability" />
 
 	</session-factory>
 </hibernate-configuration>

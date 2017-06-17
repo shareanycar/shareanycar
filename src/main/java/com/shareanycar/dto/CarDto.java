@@ -30,6 +30,7 @@ public class CarDto {
 	private String userImageUrlMedium;
 	private int numberOfImages;
 	private String status;
+	private String defaultAvailability;
 
 	public Long getId() {
 		return id;
@@ -231,11 +232,20 @@ public class CarDto {
 		this.status = status;
 	}
 
+	public String getDefaultAvailability() {
+		return defaultAvailability;
+	}
+
+	public void setDefaultAvailability(String defaultAvailability) {
+		this.defaultAvailability = defaultAvailability;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((carTypeName == null) ? 0 : carTypeName.hashCode());
+		result = prime * result + ((defaultAvailability == null) ? 0 : defaultAvailability.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((features == null) ? 0 : features.hashCode());
 		result = prime * result + ((fuelTypeName == null) ? 0 : fuelTypeName.hashCode());
@@ -276,6 +286,11 @@ public class CarDto {
 			if (other.carTypeName != null)
 				return false;
 		} else if (!carTypeName.equals(other.carTypeName))
+			return false;
+		if (defaultAvailability == null) {
+			if (other.defaultAvailability != null)
+				return false;
+		} else if (!defaultAvailability.equals(other.defaultAvailability))
 			return false;
 		if (description == null) {
 			if (other.description != null)
@@ -384,6 +399,5 @@ public class CarDto {
 			return false;
 		return true;
 	}
-
 		
 }

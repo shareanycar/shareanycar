@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.shareanycar.enums.AvailabilityStatus;
 import com.shareanycar.enums.CarStatus;
 
 @Entity
@@ -46,6 +47,9 @@ public class Car  {
 	
 	@NotNull
 	private String modelName;
+	
+	@NotNull
+	private AvailabilityStatus defaultAvailability;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "manufacturer_id")
@@ -81,7 +85,9 @@ public class Car  {
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
 	private Set<Booking> bookings;
 	
-
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
+	private Set<CarAvailability> carAvailability;
+	
 	public Long getId() {
 		return id;
 	}
@@ -224,6 +230,22 @@ public class Car  {
 
 	public void setBookings(Set<Booking> bookings) {
 		this.bookings = bookings;
+	}
+
+	public Set<CarAvailability> getCarAvailability() {
+		return carAvailability;
+	}
+
+	public void setCarAvailability(Set<CarAvailability> carAvailability) {
+		this.carAvailability = carAvailability;
+	}
+
+	public AvailabilityStatus getDefaultAvailability() {
+		return defaultAvailability;
+	}
+
+	public void setDefaultAvailability(AvailabilityStatus defaultAvailability) {
+		this.defaultAvailability = defaultAvailability;
 	}
 	
 	

@@ -1,6 +1,6 @@
 package com.shareanycar.mapping;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.modelmapper.AbstractConverter;
@@ -15,8 +15,8 @@ public class BookingDto2BookingConv extends AbstractConverter<BookingDto, Bookin
 		Booking booking = new Booking();
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-		booking.setDateFrom(LocalDateTime.parse(source.getDateFrom(),formatter));
-		booking.setDateTo(LocalDateTime.parse(source.getDateTo(),formatter));
+		booking.setDateFrom(LocalDate.parse(source.getDateFrom(),formatter).plusDays(1));
+		booking.setDateTo(LocalDate.parse(source.getDateTo(),formatter).plusDays(1));
 		
 		return booking;
 	}

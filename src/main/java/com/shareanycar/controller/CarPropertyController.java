@@ -1,6 +1,6 @@
 package com.shareanycar.controller;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,7 +55,7 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response fuel() {
 		try {
-			List<PropertyDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new ArrayList<>();
 
 			for (FuelType f : fuelTypeDao.findAll()) {
 				properties.add(new PropertyDto(f.getName()));
@@ -73,7 +73,7 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response transmission() {
 		try {
-			List<PropertyDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new ArrayList<>();
 
 			for (TransmissionType f : transmissionTypeDao.findAll()) {				
 				properties.add(new PropertyDto(f.getName()));
@@ -91,7 +91,7 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response insurer(){
 		try {
-			List<PropertyDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new ArrayList<>();
 
 			for (Insurer f : insurerDao.findAll()) {				
 				properties.add(new PropertyDto(f.getName()));
@@ -109,7 +109,7 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response manufacturer(){
 		try {
-			List<PropertyDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new ArrayList<>();
 
 			for (Manufacturer f : manufacturerDao.findAll()) {				
 				properties.add(new PropertyDto(f.getName()));
@@ -127,7 +127,7 @@ public class CarPropertyController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response car() {
 		try {
-			List<PropertyDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new ArrayList<>();
 
 			for (CarType f : carTypeDao.findAll()) {
 				properties.add(new PropertyDto(f.getName()));
@@ -146,7 +146,7 @@ public class CarPropertyController {
 	public Response status(){
 		
 		try{
-			List<PropertyDto> properties = new LinkedList<>();
+			List<PropertyDto> properties = new ArrayList<>();
 			
 			properties.add(new PropertyDto("ACTIVE"));
 			properties.add(new PropertyDto("INACTIVE"));

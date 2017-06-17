@@ -10,6 +10,7 @@ import org.slf4j.impl.SimpleLogger;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.shareanycar.dao.BookingDao;
+import com.shareanycar.dao.CarAvailabilityDao;
 import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.CarTypeDao;
 import com.shareanycar.dao.ExtDao;
@@ -27,6 +28,7 @@ import com.shareanycar.providers.FactoryModelMapper;
 import com.shareanycar.service.AmazonService;
 import com.shareanycar.service.AuthService;
 import com.shareanycar.service.BookingService;
+import com.shareanycar.service.CarAvailabilityService;
 import com.shareanycar.service.CarService;
 import com.shareanycar.service.ImageService;
 import com.shareanycar.service.LocationService;
@@ -53,6 +55,7 @@ public class CustomBinder extends AbstractBinder {
 		bind(UserImageDao.class).to(UserImageDao.class).in(Singleton.class);
 		bind(MessageDao.class).to(MessageDao.class).in(Singleton.class);
 		bind(BookingDao.class).to(BookingDao.class).in(Singleton.class);
+		bind(CarAvailabilityDao.class).to(CarAvailabilityDao.class).in(Singleton.class);
 		bind(ExtDao.class).to(ExtDao.class).in(Singleton.class);
 
 		bind(AmazonService.class).to(AmazonService.class).in(Singleton.class);
@@ -64,6 +67,7 @@ public class CustomBinder extends AbstractBinder {
 		bind(MessageService.class).to(MessageService.class).in(Singleton.class);
 		bind(NotificationService.class).to(NotificationService.class).in(Singleton.class);
 		bind(BookingService.class).to(BookingService.class).in(Singleton.class);
+		bind(CarAvailabilityService.class).to(CarAvailabilityService.class).in(Singleton.class);
 
 		bind(ContextUtil.class).to(ContextUtil.class).in(Singleton.class);
 		bind(AppConfig.class).to(AppConfig.class).in(Singleton.class);

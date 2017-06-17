@@ -1,6 +1,6 @@
 package com.shareanycar.controller;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,6 +25,8 @@ import com.shareanycar.dto.BookingDto;
 import com.shareanycar.model.Booking;
 import com.shareanycar.model.User;
 import com.shareanycar.service.BookingService;
+import com.shareanycar.service.MessageService;
+import com.shareanycar.service.NotificationService;
 import com.shareanycar.util.ContextUtil;
 
 @Path("/book")
@@ -41,6 +43,12 @@ public class BookingController {
 
 	@Inject
 	public ContextUtil contextUtil;
+	
+	@Inject
+	public NotificationService notificationService;
+	
+	@Inject
+	public MessageService messageService;
 
 	@POST
 	@Path("/car/{carId}")
@@ -53,6 +61,8 @@ public class BookingController {
 			User user = contextUtil.getCurrentUser(securityContext);
 			Booking booking = modelMapper.map(bookingDto, Booking.class);
 			bookingService.book(booking, user, carId);
+			notificationService.notifyCarBooked( booking);
+			messageService.carBooked(booking);
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -67,7 +77,7 @@ public class BookingController {
 	public Response carBookings(@PathParam("carId") Long carId, @Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
-			List<BookingDto> bookingDtos = new LinkedList<>();
+			List<BookingDto> bookingDtos = new ArrayList<>();
 			for(Booking b: bookingService.carBookings(carId, user)){
 				bookingDtos.add(modelMapper.map(b, BookingDto.class));
 			}
@@ -82,10 +92,11 @@ public class BookingController {
 	@Path("/owner")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredUser
-	public Response ownerBookings(@PathParam("carId") Long carId, @Context SecurityContext securityContext) {
+	public Response ownerBookings( @Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
-			List<BookingDto> bookingDtos = new LinkedList<>();
+			List<BookingDto> bookingDtos = new ArrayList<>();
+			
 			for(Booking b: bookingService.ownerBookings(user)){
 				bookingDtos.add(modelMapper.map(b, BookingDto.class));
 			}
@@ -101,10 +112,10 @@ public class BookingController {
 	@Path("/client")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredUser
-	public Response clientBookings(@PathParam("carId") Long carId, @Context SecurityContext securityContext) {
+	public Response clientBookings( @Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
-			List<BookingDto> bookingDtos = new LinkedList<>();
+			List<BookingDto> bookingDtos = new ArrayList<>();
 			for(Booking b: bookingService.clientBookings(user)){
 				bookingDtos.add(modelMapper.map(b, BookingDto.class));
 			}
@@ -137,7 +148,10 @@ public class BookingController {
 	public Response confirmBooking(@PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
-			bookingService.confirmBooking(id, user);
+			Booking booking = bookingService.findOne(id);
+			bookingService.confirmBooking(booking, user);
+			notificationService.notifyBookingConfirmed(booking);
+			messageService.bookingConfirmed(booking);
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -152,7 +166,10 @@ public class BookingController {
 	public Response cancelBooking(@PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
-			bookingService.cancelBooking(id, user);
+			Booking booking = bookingService.findOne(id);
+			bookingService.cancelBooking(booking, user);
+			notificationService.notifyBookingCanceled(booking);
+			messageService.bookingCanceled(booking);
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
