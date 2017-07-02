@@ -21,7 +21,11 @@ public class NotificationService {
 
 	public void notifyAccountActivated(Long userId) {
 		User user = userService.findById(userId);
-		System.out.print("account has been activated:" + user.getEmail());
+		System.out.println("account has been activated:" + user.getEmail());
+	}
+	
+	public void notifyAccountRemoved(String email){
+		System.out.println("your account has been removed: " + email);
 	}
 
 	public void notifyBookingConfirmed(Booking booking) {

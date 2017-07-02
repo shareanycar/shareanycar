@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.shareanycar.dao.CarAvailabilityDao;
+import com.shareanycar.dao.CarDao;
 import com.shareanycar.enums.AvailabilityStatus;
 import com.shareanycar.model.Car;
 import com.shareanycar.model.CarAvailability;
@@ -15,12 +16,28 @@ public class CarAvailabilityService {
 
 	@Inject
 	public CarAvailabilityDao carAvailabilityDao;
+	
+	@Inject
+	public CarDao carDao;
 
-	private void setCarAvailability(Car car, List<LocalDate> dates, AvailabilityStatus availability) {
+	private List<LocalDate> prepareDates(LocalDate dateFrom, LocalDate dateTo) {
+		List<LocalDate> dates = new ArrayList<>();
+
+		LocalDate tmpDate = dateFrom.plusDays(1);
+		while (tmpDate.compareTo(dateTo) <= 1) {
+			dates.add(tmpDate);
+			tmpDate = tmpDate.plusDays(1);
+		}
+		return dates;
+	}
+	
+	private void setCarAvailability(Long carId, List<LocalDate> dates, AvailabilityStatus availability) {
 		for (LocalDate date : dates) {
 
-			CarAvailability carAvailability = carAvailabilityDao.findCarAvailabilityByParams(car.getId(), date);
+			CarAvailability carAvailability = carAvailabilityDao.findCarAvailabilityByParams(carId, date);
+			
 			if (carAvailability == null) {
+				Car car = carDao.findOne(carId);
 				carAvailability = new CarAvailability(date, availability, car);
 			} else {
 				carAvailability.setAvailability(availability);
@@ -30,21 +47,18 @@ public class CarAvailabilityService {
 		}
 	}
 
-	private List<LocalDate> prepareDates(LocalDate dateFrom, LocalDate dateTo) {
-		List<LocalDate> dates = new ArrayList<>();
-
-		LocalDate tmpDate = dateFrom.plusDays(0);
-		while (tmpDate.compareTo(dateTo) <= 0) {
-			dates.add(tmpDate);
-			tmpDate = tmpDate.plusDays(1);
-		}
-		return dates;
-	}
-
-	public boolean isAvailable(Car car, LocalDate dateFrom, LocalDate dateTo) {
+	public boolean isAvailable(Long carId, LocalDate dateFrom, LocalDate dateTo) {
+		
 		List<LocalDate> dates = prepareDates(dateFrom, dateTo);
+		Car car = carDao.findOne(carId);
+
 		for (LocalDate date : dates) {
-			CarAvailability carAvailability = carAvailabilityDao.findCarAvailabilityByParams(car.getId(), date);
+			CarAvailability carAvailability = carAvailabilityDao.findCarAvailabilityByParams(carId, date);
+			
+			if(carAvailability == null && car.getDefaultAvailability() != AvailabilityStatus.AVAILABLE){
+				return false;
+			}
+			
 			if (carAvailability != null && carAvailability.getAvailability() != AvailabilityStatus.AVAILABLE) {
 				return false;
 			}
@@ -52,19 +66,34 @@ public class CarAvailabilityService {
 		return true;
 	}
 
-	public void setCarBooked(Car car, LocalDate dateFrom, LocalDate dateTo) {
+	private  List<CarAvailability> carAvailability(Car car){
+		List<CarAvailability> list = new ArrayList<>();
+		list.addAll(car.getCarAvailability());
+		return list;
+	}
+	
+	public List<CarAvailability> getAvailability(Car car){
+		return carAvailability(car);
+	}
+	
+	public List<CarAvailability> getAvailability(Long carId){
+		Car car = carDao.findOne(carId);
+		return carAvailability(car);
+	} 
+	
+	public void setCarBooked(Long carId, LocalDate dateFrom, LocalDate dateTo) {
 		List<LocalDate> dates = prepareDates(dateFrom, dateTo);
-		setCarAvailability(car, dates, AvailabilityStatus.BOOKED);
+		setCarAvailability(carId, dates, AvailabilityStatus.BOOKED);
 	}
 
-	public void setCarAvailable(Car car, LocalDate dateFrom, LocalDate dateTo) {
+	public void setCarAvailable(Long carId, LocalDate dateFrom, LocalDate dateTo) {
 		List<LocalDate> dates = prepareDates(dateFrom, dateTo);
-		setCarAvailability(car, dates, AvailabilityStatus.AVAILABLE);
+		setCarAvailability(carId, dates, AvailabilityStatus.AVAILABLE);
 	}
 
-	public void setCarUnavailable(Car car, LocalDate dateFrom, LocalDate dateTo) {
+	public void setCarUnavailable(Long carId, LocalDate dateFrom, LocalDate dateTo) {
 		List<LocalDate> dates = prepareDates(dateFrom, dateTo);
-		setCarAvailability(car, dates, AvailabilityStatus.NOTAVAILABLE);
+		setCarAvailability(carId, dates, AvailabilityStatus.NOTAVAILABLE);
 	}
 
 }

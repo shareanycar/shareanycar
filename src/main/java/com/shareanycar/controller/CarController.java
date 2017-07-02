@@ -69,14 +69,13 @@ public class CarController {
 
 			User user = contextHelper.getCurrentUser(securityContext);
 			Car car = modelMapper.map(carDto, Car.class);
-			System.out.println("creating " + carDto);
 			Location location = modelMapper.map(carDto, Location.class);
 			TransmissionType transmissionType = new TransmissionType(carDto.getTransmissionTypeName());
 			CarType carType = new CarType(carDto.getCarTypeName());
 			FuelType fuelType = new FuelType(carDto.getFuelTypeName());
 			Manufacturer manufacturer = new Manufacturer(carDto.getManufacturerName());
 			Insurer insurer = new Insurer(carDto.getInsurerName());
-
+			
 			Long id = carService.create(user.getId(), car, location, transmissionType, carType, fuelType, manufacturer,
 					insurer);
 

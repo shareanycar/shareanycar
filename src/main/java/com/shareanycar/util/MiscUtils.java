@@ -2,6 +2,8 @@ package com.shareanycar.util;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 import org.jvnet.hk2.annotations.Service;
@@ -15,5 +17,8 @@ public class MiscUtils {
 		return hash;
 	}
 
-	
+	public LocalDate String2LocalDate(String date){
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+		return LocalDate.parse(date,formatter).plusDays(1);
+	}
 }

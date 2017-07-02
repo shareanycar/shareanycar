@@ -58,10 +58,10 @@ public class ExtDao<T> {
 		return elem;	
 	}
 	
-	public List<T> findListByParams(String sql, String[] params, Object[] values) throws Exception{
+	public List<T> findListByParams(String sql, String[] params, Object[] values) {
 		
 		if(params.length != values.length){
-			throw new Exception("length of params does not match length of values");
+			throw new IllegalArgumentException("length of params does not match length of values");
 		}
 		
 		Session session = SessionUtil.getSession();

@@ -23,8 +23,11 @@ import org.slf4j.Logger;
 import com.shareanycar.annotation.SecuredUser;
 import com.shareanycar.dto.BookingDto;
 import com.shareanycar.model.Booking;
+import com.shareanycar.model.Car;
 import com.shareanycar.model.User;
 import com.shareanycar.service.BookingService;
+import com.shareanycar.service.CarAvailabilityService;
+import com.shareanycar.service.CarService;
 import com.shareanycar.service.MessageService;
 import com.shareanycar.service.NotificationService;
 import com.shareanycar.util.ContextUtil;
@@ -43,12 +46,18 @@ public class BookingController {
 
 	@Inject
 	public ContextUtil contextUtil;
-	
+
 	@Inject
 	public NotificationService notificationService;
-	
+
 	@Inject
 	public MessageService messageService;
+
+	@Inject
+	public CarAvailabilityService carAvailabilityService;
+
+	@Inject
+	public CarService carService;
 
 	@POST
 	@Path("/car/{carId}")
@@ -60,9 +69,16 @@ public class BookingController {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
 			Booking booking = modelMapper.map(bookingDto, Booking.class);
-			bookingService.book(booking, user, carId);
-			notificationService.notifyCarBooked( booking);
-			messageService.carBooked(booking);
+
+			if (carAvailabilityService.isAvailable(carId, booking.getDateFrom(), booking.getDateTo())) {
+				bookingService.book(booking, user, carId);
+				carAvailabilityService.setCarBooked(carId, booking.getDateFrom(), booking.getDateTo());
+				notificationService.notifyCarBooked(booking);
+				messageService.carBooked(booking);
+			}else{
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			}
+
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -78,7 +94,7 @@ public class BookingController {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
 			List<BookingDto> bookingDtos = new ArrayList<>();
-			for(Booking b: bookingService.carBookings(carId, user)){
+			for (Booking b : bookingService.carBookings(carId, user)) {
 				bookingDtos.add(modelMapper.map(b, BookingDto.class));
 			}
 			return Response.ok(bookingDtos).build();
@@ -92,15 +108,15 @@ public class BookingController {
 	@Path("/owner")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredUser
-	public Response ownerBookings( @Context SecurityContext securityContext) {
+	public Response ownerBookings(@Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
 			List<BookingDto> bookingDtos = new ArrayList<>();
-			
-			for(Booking b: bookingService.ownerBookings(user)){
+
+			for (Booking b : bookingService.ownerBookings(user)) {
 				bookingDtos.add(modelMapper.map(b, BookingDto.class));
 			}
-			
+
 			return Response.ok(bookingDtos).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -112,11 +128,11 @@ public class BookingController {
 	@Path("/client")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SecuredUser
-	public Response clientBookings( @Context SecurityContext securityContext) {
+	public Response clientBookings(@Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
 			List<BookingDto> bookingDtos = new ArrayList<>();
-			for(Booking b: bookingService.clientBookings(user)){
+			for (Booking b : bookingService.clientBookings(user)) {
 				bookingDtos.add(modelMapper.map(b, BookingDto.class));
 			}
 			return Response.ok(bookingDtos).build();
@@ -133,14 +149,14 @@ public class BookingController {
 	public Response viewBooking(@PathParam("id") Long id, @Context SecurityContext securityContext) {
 		try {
 			User user = contextUtil.getCurrentUser(securityContext);
-			BookingDto booking = modelMapper.map(bookingService.viewBooking(id, user),BookingDto.class);
+			BookingDto booking = modelMapper.map(bookingService.viewBooking(id, user), BookingDto.class);
 			return Response.ok(booking).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-	
+
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -2,6 +2,7 @@ package com.shareanycar.controller;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -59,7 +60,23 @@ public class UserController {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-
+	
+	@DELETE
+	@Produces({ MediaType.APPLICATION_JSON })
+	@SecuredUser
+	public Response delete(@Context SecurityContext securityContext){
+		try{
+			User user = context.getCurrentUser(securityContext);
+			String email = user.getEmail();
+			userService.delete(user);
+			notificationService.notifyAccountRemoved(email);
+			return Response.ok().build();
+		}catch(Exception e){
+			logger.error("error removing user");
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+	
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@SecuredUser
