@@ -1,7 +1,5 @@
 package com.shareanycar.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,17 +38,21 @@ public class CarAvailabilityController {
 	public MiscUtils miscUtils;
 
 	@GET
-	@Path("/{carId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response availability(@PathParam("carId") Long carId) {
+	@Path("/{carId}/{fromDate}/{toDate}")
+	public Response availability(@PathParam("carId") Long carId, @PathParam("fromDate") String fromDate,
+			@PathParam("toDate") String toDate) {
+
 		try {
 			List<CarAvailabilityDto> carAvailability = new ArrayList<>();
-			
-			for (CarAvailability a : carAvailabilityService.getAvailability(carId)) {
+
+			for (CarAvailability a : carAvailabilityService.getAvailability(carId, miscUtils.String2LocalDate(fromDate),
+					miscUtils.String2LocalDate(toDate))) {
+
 				carAvailability.add(modelMapper.map(a, CarAvailabilityDto.class));
 			}
 
 			return Response.ok(carAvailability).build();
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
