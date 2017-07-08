@@ -2,7 +2,11 @@ package com.shareanycar.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -30,42 +34,46 @@ public class CarAvailabilityService {
 
 	private void setCarAvailability(Long carId, LocalDate fromDate, LocalDate toDate, AvailabilityStatus availability) {
 
-		Car car = carDao.findOne(carId);
-		List<CarAvailability> list = carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate);
 		List<LocalDate> dates = miscUtils.listOfDates(fromDate, toDate);
 
-		for (int i = 0; i < dates.size(); i++) {
-			if (list.size() <= i) {
-				CarAvailability e = new CarAvailability(dates.get(i), availability, car);
-				list.add(e);
-				continue;
-			}
+		Map<LocalDate, CarAvailability> availabilityMap = new HashMap<>();
+		for (CarAvailability a : carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate)) {
+			availabilityMap.put(a.getDate(), a);
+		}
 
-			if(dates.get(i).equals(list.get(i).getDate())){
-				list.get(i).setAvailability(availability);
-			}else{
-				CarAvailability e = new CarAvailability(dates.get(i), availability, car);
-				list.add(i,e);
+		Car car = carDao.findOne(carId);
+		List<CarAvailability> list = new ArrayList<>();
+		for (LocalDate d : dates) {
+			if (availabilityMap.containsKey(d)) {
+				list.add(availabilityMap.get(d));
+			} else {
+				list.add(new CarAvailability(d, availability, car));
 			}
 		}
-		
+
 		carAvailabilityDao.saveAll(list);
 	}
 
-	public boolean isAvailable(Long carId, LocalDate dateFrom, LocalDate dateTo) {
+	public boolean isAvailable(Long carId, LocalDate fromDate, LocalDate toDate) {
 
-		List<LocalDate> dates = miscUtils.listOfDates(dateFrom, dateTo);
+		List<LocalDate> dates = miscUtils.listOfDates(fromDate, toDate);
+		
+		Map<LocalDate,CarAvailability> availabilityMap = new HashMap<>();
+		for(CarAvailability a : carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate)){
+			availabilityMap.put(a.getDate(), a);
+		}
+
 		Car car = carDao.findOne(carId);
 
-		for (LocalDate date : dates) {
-			CarAvailability carAvailability = carAvailabilityDao.findCarAvailabilityByParams(carId, date);
-
-			if (carAvailability == null && car.getDefaultAvailability() != AvailabilityStatus.AVAILABLE) {
-				return false;
-			}
-
-			if (carAvailability != null && carAvailability.getAvailability() != AvailabilityStatus.AVAILABLE) {
-				return false;
+		for (LocalDate d : dates) {
+			if(availabilityMap.containsKey(d)){
+				if(availabilityMap.get(d).getAvailability() != AvailabilityStatus.AVAILABLE){
+					return false;
+				}
+			}else{
+				if(car.getDefaultAvailability() != AvailabilityStatus.AVAILABLE){
+					return false;
+				}
 			}
 		}
 		return true;
@@ -97,16 +105,16 @@ public class CarAvailabilityService {
 		List<CarAvailability> list = carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate);
 
 		if (dates.size() != list.size()) {
-			for (int i = 0; i < dates.size(); i++) {
-				if (list.size() <= i) {
-					CarAvailability e = new CarAvailability(dates.get(i), car.getDefaultAvailability(), car);
-					list.add(e);
-					continue;
-				}
+			Set<LocalDate> availabilityDates = new HashSet<>();
 
-				if (!dates.get(i).equals(list.get(i).getDate())) {
-					CarAvailability e = new CarAvailability(dates.get(i), car.getDefaultAvailability(), car);
-					list.add(i, e);
+			for (CarAvailability a : list) {
+				availabilityDates.add(a.getDate());
+			}
+
+			for (LocalDate d : dates) {
+				if (!availabilityDates.contains(d)) {
+					CarAvailability e = new CarAvailability(d, car.getDefaultAvailability(), car);
+					list.add(e);
 				}
 			}
 			carAvailabilityDao.saveAll(list);
