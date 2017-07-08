@@ -33,7 +33,7 @@ public class BookingService {
 			throw new Exception("incorrent dateFrom and dateTo dates");
 		}
 
-		Car car = carService.findById(carId);
+		Car car = carService.findOne(carId);
 
 		if (car == null) {
 			throw new Exception("can not find such car:" + carId);
@@ -51,7 +51,7 @@ public class BookingService {
 	}
 
 	public List<Booking> carBookings(Long carId, User user) throws Exception {
-		Car car = carService.findById(carId);
+		Car car = carService.findOne(carId);
 		if (car == null) {
 			throw new Exception("can not find such car:" + carId);
 		}

@@ -1,5 +1,6 @@
 package com.shareanycar.model;
 
+
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ public class CarAvailability {
 
 	private AvailabilityStatus availability;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "car_id")
 	private Car car;
 
@@ -66,5 +67,5 @@ public class CarAvailability {
 	public void setAvailability(AvailabilityStatus availability) {
 		this.availability = availability;
 	}
-
+	
 }

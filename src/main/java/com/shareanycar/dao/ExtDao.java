@@ -8,10 +8,9 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jvnet.hk2.annotations.Service;
 
-import com.shareanycar.model.Car;
-
 @Service
 public class ExtDao<T> {
+	@SuppressWarnings("unchecked")
 	public T findOneByParam(String sql, String param, Object value){
 		Session session = SessionUtil.getSession();
 		Query<T> query = session.createQuery(sql);
@@ -26,6 +25,7 @@ public class ExtDao<T> {
 		return elem;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<T> findListByParam(String sql, String param, Object value){
 		Session session = SessionUtil.getSession();
 		Query<T> query = session.createQuery(sql);
@@ -35,9 +35,10 @@ public class ExtDao<T> {
 		return elems;
 	}
 	
-	public T findOneByParams(String sql, String[] params, Object[] values) throws Exception{
+	@SuppressWarnings("unchecked")
+	public T findOneByParams(String sql, String[] params, Object[] values) {
 		if(params.length != values.length){
-			throw new Exception("length of params does not match length of values");
+			throw new IllegalArgumentException("length of params does not match length of values");
 		}
 		
 		Session session = SessionUtil.getSession();
@@ -58,6 +59,7 @@ public class ExtDao<T> {
 		return elem;	
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<T> findListByParams(String sql, String[] params, Object[] values) {
 		
 		if(params.length != values.length){

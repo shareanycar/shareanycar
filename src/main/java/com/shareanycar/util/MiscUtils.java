@@ -12,29 +12,31 @@ import org.jvnet.hk2.annotations.Service;
 
 @Service
 public class MiscUtils {
-	
-	public String randonString(){
+
+	public String randonString() {
 		Random random = new SecureRandom();
 		String hash = new BigInteger(130, random).toString(32);
 		return hash;
 	}
 
-	public LocalDate String2LocalDate(String date){
-		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-		return LocalDate.parse(date,formatter).plusDays(1);
+	public LocalDate String2LocalDate(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+		return LocalDate.parse(date, formatter);
 	}
-	
-	public List<LocalDate> listOfDates(LocalDate dateFrom, LocalDate dateTo) {
-		if(dateFrom.compareTo( dateTo) >= 0)
-			throw new IllegalArgumentException("date from: " +dateFrom.toString() + "; date to: " + dateTo.toString());
-		
+
+	public List<LocalDate> listOfDates(LocalDate fromDate, LocalDate toDate) {
+		if (fromDate.compareTo(toDate) >= 0)
+			throw new IllegalArgumentException("date from: " + fromDate.toString() + "; date to: " + toDate.toString());
+
 		List<LocalDate> dates = new ArrayList<>();
 
-		LocalDate tmpDate = dateFrom.plusDays(1);
-		while (tmpDate.compareTo(dateTo) <= 1) {
+		LocalDate tmpDate = fromDate;
+		while (tmpDate.compareTo(toDate) <= 0) {
 			dates.add(tmpDate);
 			tmpDate = tmpDate.plusDays(1);
 		}
 		return dates;
-	} 
+	}
+
+	
 }

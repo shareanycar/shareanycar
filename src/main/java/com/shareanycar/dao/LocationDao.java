@@ -27,6 +27,7 @@ public class LocationDao extends BasicDao<Location> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Location> findByCountry(String country) {
 		return (List<Location>) extDao.findListByParam("from Location where country = :country", "country", country);
 	}

@@ -15,10 +15,12 @@ public class MessageDao extends BasicDao<Message>{
 		super("Message");
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Message> findByToUserId(Long id){
 		return (List<Message>) extDao.findListByParam("from Message where to_user_id = :id", "id", id);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Message> findByFromUserId(Long id){
 		return (List<Message>) extDao.findListByParam("from Message where from_user_id = :id", "id", id);
 	}

@@ -84,8 +84,8 @@ public class CarServiceTest extends HK2Runner {
 			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType,manufacturer,insurer);
 			Long id2 = carService.create(owId, car2, loc,transmissionType, carType, fuelType,manufacturer,insurer);
 			
-			car1 = carService.findById(id1);
-			car2 = carService.findById(id2);
+			car1 = carService.findOne(id1);
+			car2 = carService.findOne(id2);
 
 			assertNotNull("First Car", car1);
 			assertNotNull("Second Car", car2);
@@ -102,14 +102,14 @@ public class CarServiceTest extends HK2Runner {
 	public void updateCarInfoTest() {
 		try {		
 			Long id1 = carService.create(owId, car1, loc,transmissionType, carType, fuelType,manufacturer,insurer);
-			car1 = carService.findById(id1);
+			car1 = carService.findOne(id1);
 
 			assertEquals("First Car", "abc", car1.getLicensePlateNumber());
 
 			carService.update(owId, id1, car2, loc, transmissionType, carType, fuelType,manufacturer,insurer);
 			
 
-			car1 = carService.findById(id1);
+			car1 = carService.findOne(id1);
 
 			assertEquals("Second Car", "bcd", car1.getLicensePlateNumber());
 		} catch (Exception e1) {
@@ -122,7 +122,7 @@ public class CarServiceTest extends HK2Runner {
 	public void removeCarTest() {
 		try {
 			Long id = carService.create(owId, car1, loc,transmissionType, carType, fuelType,manufacturer,insurer);
-			Car car = carService.findById(id);
+			Car car = carService.findOne(id);
 			
 			assertNotNull("Car created", car);
 

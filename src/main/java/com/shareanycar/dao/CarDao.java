@@ -19,6 +19,7 @@ public class CarDao extends BasicDao<Car>{
 	@Inject
 	public ExtDao<?> extDao;
 	
+	@SuppressWarnings("unchecked")
 	public List<Car> findAvailable(){
 		return (List<Car>) extDao.findListByParam("from Car where status = :status", "status", CarStatus.ACTIVE);
 	}

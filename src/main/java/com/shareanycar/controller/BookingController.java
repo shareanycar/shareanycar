@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import com.shareanycar.annotation.SecuredUser;
 import com.shareanycar.dto.BookingDto;
 import com.shareanycar.model.Booking;
-import com.shareanycar.model.Car;
 import com.shareanycar.model.User;
 import com.shareanycar.service.BookingService;
 import com.shareanycar.service.CarAvailabilityService;

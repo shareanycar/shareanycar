@@ -91,7 +91,7 @@ public class CarController {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response detail(@PathParam("id") Long id) {
 		try {
-			Car car = carService.findById(id);
+			Car car = carService.findOne(id);
 			if (car == null) {
 				throw new Exception("error finding car:" + id);
 			}

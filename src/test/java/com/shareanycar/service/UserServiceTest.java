@@ -1,10 +1,7 @@
 package com.shareanycar.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-
-import java.security.acl.Owner;
 
 import javax.inject.Inject;
 
@@ -17,7 +14,6 @@ import com.shareanycar.dao.CarDao;
 import com.shareanycar.dao.ImageDao;
 import com.shareanycar.dao.LocationDao;
 import com.shareanycar.dao.UserDao;
-import com.shareanycar.model.Location;
 import com.shareanycar.model.User;
 
 public class UserServiceTest extends HK2Runner {

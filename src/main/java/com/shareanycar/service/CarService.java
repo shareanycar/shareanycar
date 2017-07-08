@@ -178,8 +178,33 @@ public class CarService {
 		carDao.save(car);
 
 	}
-
-	public Car findById(Long id) {
+	
+	public boolean belongsTo(User user, Car car){
+		if(user == null ){
+			throw new IllegalArgumentException("user is null");
+		}
+		if(car == null){
+			throw new IllegalArgumentException("car is null");
+		}
+		
+		return car.getUser().getId() == user.getId();
+	}
+	
+	public boolean belongsTo(User user, Long carId){
+		if(user == null){
+			throw new IllegalArgumentException("user is null");
+		}
+		Car car = carDao.findOne(carId);
+		
+		if(car == null){
+			throw new IllegalArgumentException("can not find car with id:" + carId);
+		}
+		
+		return car.getUser().getId() == user.getId();
+		
+	}
+	
+	public Car findOne(Long id) {
 		return carDao.findOne(id);
 	}
 	

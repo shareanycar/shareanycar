@@ -32,7 +32,8 @@ public class MyResourceTest {
         target = c.target(Main.BASE_URI);
     }
 
-    @After
+    @SuppressWarnings("deprecation")
+	@After
     public void tearDown() throws Exception {
         server.stop();
     }

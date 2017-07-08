@@ -15,6 +15,7 @@ public class BookingDao extends BasicDao<Booking>{
 		super("Booking");
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Booking> clientBookings(Long userId){
 		return (List<Booking>) extDao.findListByParam("from Booking where user_id = :userId", "userId", userId);
 	}
