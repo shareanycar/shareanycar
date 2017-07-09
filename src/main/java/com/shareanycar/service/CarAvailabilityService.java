@@ -2,6 +2,8 @@ package com.shareanycar.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,53 +47,38 @@ public class CarAvailabilityService {
 		List<CarAvailability> list = new ArrayList<>();
 		for (LocalDate d : dates) {
 			if (availabilityMap.containsKey(d)) {
+				availabilityMap.get(d).setAvailability(availability);
 				list.add(availabilityMap.get(d));
 			} else {
 				list.add(new CarAvailability(d, availability, car));
 			}
 		}
-
 		carAvailabilityDao.saveAll(list);
 	}
 
 	public boolean isAvailable(Long carId, LocalDate fromDate, LocalDate toDate) {
 
 		List<LocalDate> dates = miscUtils.listOfDates(fromDate, toDate);
-		
-		Map<LocalDate,CarAvailability> availabilityMap = new HashMap<>();
-		for(CarAvailability a : carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate)){
+
+		Map<LocalDate, CarAvailability> availabilityMap = new HashMap<>();
+		for (CarAvailability a : carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate)) {
 			availabilityMap.put(a.getDate(), a);
 		}
 
 		Car car = carDao.findOne(carId);
 
 		for (LocalDate d : dates) {
-			if(availabilityMap.containsKey(d)){
-				if(availabilityMap.get(d).getAvailability() != AvailabilityStatus.AVAILABLE){
+			if (availabilityMap.containsKey(d)) {
+				if (availabilityMap.get(d).getAvailability() != AvailabilityStatus.AVAILABLE) {
 					return false;
 				}
-			}else{
-				if(car.getDefaultAvailability() != AvailabilityStatus.AVAILABLE){
+			} else {
+				if (car.getDefaultAvailability() != AvailabilityStatus.AVAILABLE) {
 					return false;
 				}
 			}
 		}
 		return true;
-	}
-
-	private List<CarAvailability> carAvailability(Car car) {
-		List<CarAvailability> list = new ArrayList<>();
-		list.addAll(car.getCarAvailability());
-		return list;
-	}
-
-	public List<CarAvailability> getAvailability(Car car) {
-		return carAvailability(car);
-	}
-
-	public List<CarAvailability> getAvailability(Long carId) {
-		Car car = carDao.findOne(carId);
-		return carAvailability(car);
 	}
 
 	public List<CarAvailability> getAvailability(Long carId, LocalDate fromDate, LocalDate toDate) throws Exception {
@@ -120,7 +107,14 @@ public class CarAvailabilityService {
 			carAvailabilityDao.saveAll(list);
 			list = carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate);
 		}
-
+		
+		Collections.sort(list, new Comparator<CarAvailability>() {
+			@Override
+			public int compare(CarAvailability o1, CarAvailability o2) {
+				return o1.getDate().compareTo(o2.getDate());
+			}
+		});
+		
 		return list;
 	}
 

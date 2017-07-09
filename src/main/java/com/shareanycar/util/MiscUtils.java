@@ -25,7 +25,7 @@ public class MiscUtils {
 	}
 
 	public List<LocalDate> listOfDates(LocalDate fromDate, LocalDate toDate) {
-		if (fromDate.compareTo(toDate) >= 0)
+		if (fromDate.compareTo(toDate) > 0)
 			throw new IllegalArgumentException("date from: " + fromDate.toString() + "; date to: " + toDate.toString());
 
 		List<LocalDate> dates = new ArrayList<>();

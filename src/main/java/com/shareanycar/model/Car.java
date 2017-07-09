@@ -85,7 +85,7 @@ public class Car  {
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
 	private Set<Booking> bookings;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "car")
 	private Set<CarAvailability> carAvailability;
 	
 	public Long getId() {

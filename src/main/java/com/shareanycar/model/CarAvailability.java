@@ -67,5 +67,11 @@ public class CarAvailability {
 	public void setAvailability(AvailabilityStatus availability) {
 		this.availability = availability;
 	}
+
+	@Override
+	public String toString() {
+		return "CarAvailability [id=" + id + ", date=" + date + ", availability=" + availability + ", car=" + car + "]";
+	}
+	
 	
 }

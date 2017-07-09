@@ -113,6 +113,7 @@ public class BookingController {
 			List<BookingDto> bookingDtos = new ArrayList<>();
 
 			for (Booking b : bookingService.ownerBookings(user)) {
+				System.out.println("bd: " + b.getDateFrom() + ":" + b.getDateTo());
 				bookingDtos.add(modelMapper.map(b, BookingDto.class));
 			}
 

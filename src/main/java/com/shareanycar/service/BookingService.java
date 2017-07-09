@@ -29,7 +29,7 @@ public class BookingService {
 	}
 
 	public void book(Booking booking, User user, Long carId) throws Exception {
-		if (booking.getDateFrom().compareTo(booking.getDateTo()) >= 0) {
+		if (booking.getDateFrom().compareTo(booking.getDateTo()) > 0) {
 			throw new Exception("incorrent dateFrom and dateTo dates");
 		}
 

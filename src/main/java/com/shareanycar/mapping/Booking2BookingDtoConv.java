@@ -11,8 +11,8 @@ public class Booking2BookingDtoConv extends AbstractConverter<Booking,BookingDto
 	protected BookingDto convert(Booking source) {
 		BookingDto bookingDto = new BookingDto();
 		
-		bookingDto.setDateFrom(source.getDateFrom().plusDays(1).toString());
-		bookingDto.setDateTo(source.getDateTo().plusDays(1).toString());
+		bookingDto.setDateFrom(source.getDateFrom().toString());
+		bookingDto.setDateTo(source.getDateTo().toString());
 		bookingDto.setCarId(source.getCar().getId());
 		bookingDto.setClientId(source.getUser().getId());
 		bookingDto.setClientName(source.getUser().getFirstName() + " " + source.getUser().getLastName());
