@@ -33,6 +33,7 @@ import com.shareanycar.model.User;
 import com.shareanycar.service.CarService;
 import com.shareanycar.service.ImageService;
 import com.shareanycar.util.ContextUtil;
+import com.shareanycar.util.MiscUtils;
 
 /*
  * services:
@@ -60,6 +61,9 @@ public class CarController {
 	@Inject
 	public ModelMapper modelMapper;
 
+	@Inject
+	public MiscUtils mistUtils;
+
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -75,7 +79,7 @@ public class CarController {
 			FuelType fuelType = new FuelType(carDto.getFuelTypeName());
 			Manufacturer manufacturer = new Manufacturer(carDto.getManufacturerName());
 			Insurer insurer = new Insurer(carDto.getInsurerName());
-			
+
 			Long id = carService.create(user.getId(), car, location, transmissionType, carType, fuelType, manufacturer,
 					insurer);
 
@@ -167,24 +171,40 @@ public class CarController {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-	
+
 	@GET
 	@Path("available")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response availableCars(){
-		try{
-			
+	public Response availableCars() {
+		try {
 			Set<CarDto> carDtos = new HashSet<>();
-			for(Car car : carService.findAvailable()){
-				CarDto carDto = modelMapper.map(car, CarDto.class);
-				carDtos.add(carDto);
+			for (Car car : carService.findAvailable()) {
+				carDtos.add(modelMapper.map(car, CarDto.class));
 			}
-			
 			return Response.ok(carDtos).build();
-		}catch(Exception e){
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-	
+
+	@GET
+	@Path("available/{fromDate}/{toDate}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response availableCars(@PathParam("fromDate") String fromDate, @PathParam("toDate") String toDate) {
+		try {
+			Set<CarDto> carDtos = new HashSet<>();
+
+			for (Car car : carService.findAvailable(mistUtils.String2LocalDate(fromDate),
+					mistUtils.String2LocalDate(toDate))) {
+
+				carDtos.add(modelMapper.map(car, CarDto.class));
+			}
+			return Response.ok().build();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+
 }

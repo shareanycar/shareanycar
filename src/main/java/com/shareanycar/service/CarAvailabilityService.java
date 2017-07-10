@@ -29,9 +29,6 @@ public class CarAvailabilityService {
 	public CarDao carDao;
 
 	@Inject
-	public CarService carService;
-
-	@Inject
 	public MiscUtils miscUtils;
 
 	private void setCarAvailability(Long carId, LocalDate fromDate, LocalDate toDate, AvailabilityStatus availability) {
@@ -55,17 +52,14 @@ public class CarAvailabilityService {
 		}
 		carAvailabilityDao.saveAll(list);
 	}
-
-	public boolean isAvailable(Long carId, LocalDate fromDate, LocalDate toDate) {
-
+	
+	public boolean isAvailable(Car car, LocalDate fromDate, LocalDate toDate){
 		List<LocalDate> dates = miscUtils.listOfDates(fromDate, toDate);
 
 		Map<LocalDate, CarAvailability> availabilityMap = new HashMap<>();
-		for (CarAvailability a : carAvailabilityDao.findCarAvailablityByParams(carId, fromDate, toDate)) {
+		for (CarAvailability a : carAvailabilityDao.findCarAvailablityByParams(car.getId(), fromDate, toDate)) {
 			availabilityMap.put(a.getDate(), a);
 		}
-
-		Car car = carDao.findOne(carId);
 
 		for (LocalDate d : dates) {
 			if (availabilityMap.containsKey(d)) {
@@ -79,6 +73,11 @@ public class CarAvailabilityService {
 			}
 		}
 		return true;
+	}
+	
+	public boolean isAvailable(Long carId, LocalDate fromDate, LocalDate toDate) {
+		Car car = carDao.findOne(carId);
+		return isAvailable(car, fromDate, toDate);
 	}
 
 	public List<CarAvailability> getAvailability(Long carId, LocalDate fromDate, LocalDate toDate) throws Exception {
@@ -123,7 +122,7 @@ public class CarAvailabilityService {
 	}
 
 	public void setCarAvailable(User user, Long carId, LocalDate fromDate, LocalDate toDate) throws Exception {
-		if (carService.belongsTo(user, carId)) {
+		if (carDao.findOne(carId).getUser().getId() == user.getId()) {
 			setCarAvailability(carId, fromDate, toDate, AvailabilityStatus.AVAILABLE);
 		} else {
 			throw new Exception("car does not belong to user");
@@ -131,7 +130,7 @@ public class CarAvailabilityService {
 	}
 
 	public void setCarUnavailable(User user, Long carId, LocalDate fromDate, LocalDate toDate) throws Exception {
-		if (carService.belongsTo(user, carId)) {
+		if (carDao.findOne(carId).getUser().getId() == user.getId()) {
 			setCarAvailability(carId, fromDate, toDate, AvailabilityStatus.NOTAVAILABLE);
 		} else {
 			throw new Exception("car does not belong to user");

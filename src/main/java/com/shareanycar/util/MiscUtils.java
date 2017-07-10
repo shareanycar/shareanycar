@@ -8,11 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
+
 import org.jvnet.hk2.annotations.Service;
+
+import com.shareanycar.dao.CarDao;
+import com.shareanycar.model.Car;
+import com.shareanycar.model.User;
 
 @Service
 public class MiscUtils {
 
+	@Inject
+	public CarDao carDao;
+	
 	public String randonString() {
 		Random random = new SecureRandom();
 		String hash = new BigInteger(130, random).toString(32);
@@ -37,6 +46,5 @@ public class MiscUtils {
 		}
 		return dates;
 	}
-
-	
+		
 }
